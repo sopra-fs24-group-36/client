@@ -1,4 +1,4 @@
-# SoPra FS24 - Client Template with build pack: Test to deploy
+# SoPra FS24 - Client Template with build pack: Test
 
 ## Getting started
 

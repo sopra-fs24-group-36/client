@@ -3,9 +3,11 @@ import { api, handleError } from "helpers/api";
 import User from "models/User";
 import {useNavigate} from "react-router-dom";
 import { Button } from "components/ui/Button";
-import "styles/views/Login.scss";
-import BaseContainer from "components/ui/BaseContainer";
+import "styles/views/jasmine.scss";
+import BaseContainer_new from "components/ui/BaseContainer_new";
+import Dashboard from "components/ui/Dashboard";
 import PropTypes from "prop-types";
+import Footer from "components/ui/footer"
 
 /*
 It is possible to add multiple components inside a single file,
@@ -58,41 +60,38 @@ const Login = () => {
     }
   };
 
-  const jasmine = async() => {
-    navigate("/jasmine")
-  }
 
   return (
-    <BaseContainer>
-      <div className="login container">
-        <div className="login form">
-          <FormField
-            label="Username"
-            value={username}
-            onChange={(un: string) => setUsername(un)}
-          />
-          <FormField
-            label="Name"
-            value={name}
-            onChange={(n) => setName(n)}
-          />
-          <div className="login button-container">
-            <Button
-              disabled={!username || !name}
-              width="100%"
-              onClick={() => doLogin()}
-            >
-              Login
-            </Button>
-          </div>
-          <div  className="login button-container">
-            <Button onClick={() => jasmine()}>
-              Jasmine UI
-            </Button>
-          </div>
+    <div>
+        <Dashboard>
+        </Dashboard>
+        <BaseContainer_new>
+        <div className="login container">
+            <div className="login form">
+            <FormField
+                label="Username"
+                value={username}
+                onChange={(un: string) => setUsername(un)}
+            />
+            <FormField
+                label="Name"
+                value={name}
+                onChange={(n) => setName(n)}
+            />
+            <div className="login button-container">
+                <Button
+                disabled={!username || !name}
+                width="100%"
+                onClick={() => doLogin()}
+                >
+                Login
+                </Button>
+            </div>
+            </div>
         </div>
-      </div>
-    </BaseContainer>
+        </BaseContainer_new>
+        <Footer></Footer>
+    </div>
   );
 };
 

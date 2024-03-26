@@ -4,6 +4,7 @@ import {GameGuard} from "../routeProtectors/GameGuard";
 import GameRouter from "./GameRouter";
 import {LoginGuard} from "../routeProtectors/LoginGuard";
 import Login from "../../views/Login";
+import Jasmine from "../../views/jasmine" /*TO BE REMOVED*/
 
 /**
  * Main router of your application.
@@ -14,11 +15,14 @@ import Login from "../../views/Login";
  * /game renders a Router that contains other sub-routes that render in turn other react components
  * Documentation about routing in React: https://reactrouter.com/en/main/start/tutorial 
  */
+
+/*** JASMINE ROUTE TO BE REMOVED - JUST FOR UI COMPONENT TESTING ***/
 const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
-
+        <Route path="/jasmine" element={<Jasmine/>} /> 
+        
         <Route path="/game/*" element={<GameGuard />}>
           <Route path="/game/*" element={<GameRouter base="/game"/>} />
         </Route>

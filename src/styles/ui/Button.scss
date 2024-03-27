@@ -12,43 +12,24 @@
     }
   }
   padding: 6px;
-  font-weight: 700;
-  font-size: 13px;
+  font-weight: 600;
+  font-size: 15px;
   text-align: center;
   height: 35px;
-  border: none;
-  border-radius: $borderRadius;
   cursor: pointer;
+  border: none; 
+  border-radius: $borderRadius;
   opacity: 1;
   color: $textColor;
   background-color: $dark_pink;
   transition: all 0.3s ease;
 }
 .db{ /*dashboard buttons*/ 
-  &:hover {
-    transform: translateY(-2px);
-  }
-  &:disabled {
-    cursor: default;
-    opacity: 0.4;
-    &:hover {
-      transform: none;
-    }
-  }
-  padding: 6px;
-  width: calc(100%);
-  font-weight: 700;
-  font-size: 15px;
-  text-align: center;
+  width: 100%;
   height: 40px;
-  border: none;
-  border-radius: $borderRadius;
-  cursor: pointer;
   color: $textColor;
   background-color: $dark_green;
-  transition: all 0.3s ease; 
   display: block;
-  font-weight: 600;
 
   &.invitations{
     background-color: $dark_pink;
@@ -65,9 +46,28 @@
   background-color: $container_dark;
   display: flex; 
   align-items: center;
-  text-align: center;
-  font-size: 15px;
-  font-weight: 700; 
   padding: 15px;
-
 }
+.Home{
+  &.personalRecipes{
+    display: block;
+    padding-left: 15px; 
+    padding-right: 15px;
+    background-color: $light_pink;
+    color: $container_dark;
+    margin: 0 auto; 
+  }
+
+  &.recipe{
+    background-color: $light_green;
+    margin: 0 auto; 
+  }
+  &.group{
+    background-color: $container_dark;
+    color: $textColor;
+    margin: 0 auto; 
+    width: 100%; 
+    margin: 15px; 
+  }
+}
+

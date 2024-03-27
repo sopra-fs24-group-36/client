@@ -5,6 +5,7 @@ import GameRouter from "./GameRouter";
 import {LoginGuard} from "../routeProtectors/LoginGuard";
 import Login from "../../views/Login";
 import Jasmine from "../../views/jasmine" /*TO BE REMOVED*/
+import Home from "../../views/Home"
 
 /**
  * Main router of your application.
@@ -22,6 +23,8 @@ const AppRouter = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/jasmine" element={<Jasmine/>} /> 
+
+        <Route path="/home" element={<Home/>}/>
         
         <Route path="/game/*" element={<GameGuard />}>
           <Route path="/game/*" element={<GameRouter base="/game"/>} />

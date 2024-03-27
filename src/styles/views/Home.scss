@@ -1,0 +1,75 @@
+@import "../theme";
+
+.Home {
+  &.containerLeft {
+    margin-top: 2em;
+    min-height: 300px;
+    flex-direction: column;
+    background-color: $true_green;
+    margin-left: calc(15% + 80px);
+    border-radius: $borderRadius; 
+    display: inline-block; 
+    vertical-align: top;
+    width: 50%;
+    margin-top: 30px; 
+    position: fixed; 
+    height: calc(100% - 210px);
+    padding-top: 15px;
+  }
+  &.containerRight {
+    margin-top: 2em;
+    min-height: 300px;
+    flex-direction: column;
+    background-color: $light_pink; /*colour needs to go*/ 
+    left: calc(65% + 100px);
+    margin-right: 10px; 
+    border-radius: $borderRadius; 
+    display: inline-block; 
+    vertical-align: top;
+    margin-top: 30px; 
+    position: fixed; 
+    height: calc(100% - 210px);
+    padding-top: 15px;
+    right: 0; 
+  }
+  &.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 60%;
+    max-width: 30em;
+    height: 20em;
+    font-size: 16px;
+    font-weight: 300;
+    padding-left: 37px;
+    padding-right: 37px;
+    border-radius: 0.75em;
+    background-color: $true_green;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    box-shadow: $dropShadow;
+  }
+  &.header{
+    text-align: center;
+    line-height: 0.5; /*to display personal and cookbook under each other */
+  }
+  &.personalTitle{
+    color: $textColor;
+    font-size: 40px;
+  }
+  &.recipeContainer{
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  &.groupTitle{
+    color: $container_dark;
+    font-size: 40px;
+  }
+  &.buttonContainer {
+    padding-left: 6px;
+    padding-right: 6px;
+    justify-content: center;
+    padding-top: 12px; 
+    padding-bottom: 12px;
+  }
+}

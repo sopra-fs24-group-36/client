@@ -61,6 +61,9 @@ const Login = () => {
   const jasmine = async() => {
     navigate("/jasmine")
   }
+  const home = async() =>{
+    navigate("/home")
+  }
 
   return (
     <BaseContainer>
@@ -88,6 +91,11 @@ const Login = () => {
           <div  className="login button-container">
             <Button onClick={() => jasmine()}>
               Jasmine UI
+            </Button>
+          </div>
+          <div  className="login button-container">
+            <Button onClick={() => home()}>
+              Home Page 
             </Button>
           </div>
         </div>

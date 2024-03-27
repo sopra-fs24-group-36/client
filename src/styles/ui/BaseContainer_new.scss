@@ -2,12 +2,12 @@
 
 /*UI for the new green base container*/
 .base-container-new {
-  margin-left: calc(15% + 20px);
+  margin-left: calc(15% + 80px);
   border-radius: $borderRadius; 
   background-color: $true_green;
   display: inline-block; 
   vertical-align: top;
-  width:calc(85% - 30px); /*subtracting all the margins off the dashboard and the base container from the remaining width*/ 
+  width:calc(85% - 90px); /*subtracting all the margins off the dashboard and the base container from the remaining width*/ 
   margin-top: 30px; 
   position: fixed; 
   height: calc(100% - 210px);

@@ -15,12 +15,12 @@
     position: fixed; 
     height: calc(100% - 210px);
     padding-top: 15px;
+    flex-direction: column;
   }
   &.containerRight {
     margin-top: 2em;
     min-height: 300px;
     flex-direction: column;
-    background-color: $light_pink; /*colour needs to go*/ 
     left: calc(65% + 100px);
     margin-right: 10px; 
     border-radius: $borderRadius; 
@@ -59,6 +59,8 @@
   &.recipeContainer{
     padding-left: 30px;
     padding-right: 30px;
+    margin-right:30px; 
+    margin-left:30px; 
   }
 
   &.groupTitle{
@@ -68,8 +70,37 @@
   &.buttonContainer {
     padding-left: 6px;
     padding-right: 6px;
-    justify-content: center;
     padding-top: 12px; 
     padding-bottom: 12px;
+    margin-left: 15px;
+    margin-right: 15px; 
+  }
+  &.recipeTitle{
+    color: $container_dark;
+    text-align: left;
+    font-size: 25px;
+    margin-top:0px;
+    margin-bottom:12px;
+    margin-left: 15px;
+  }
+  &.recipeDescription, 
+  &.recipeTags, 
+  &.recipeTime{
+    color: $container_dark; 
+    font-size: 12px;
+    text-align: left;
+    margin-left: 15px;
+    font-weight: 400px;
+  }
+  &.recipesButtonContainer{
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 12px; 
+    padding-bottom: 30px;
+    margin-left: 15px;
+    margin-right: 15px; 
+    bottom:0; 
+    position: absolute;
+    width: 100%
   }
 }

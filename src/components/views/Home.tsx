@@ -52,13 +52,19 @@ const Home = () => {
         </div>
         <div className ="Home recipeContainer">
           <Button className ="Home recipe">
-
+            <h3 className="Home recipeTitle">Wild garlic curry</h3>
+            <p className="Home recipeDescription">The perfect recipe for a nice summer evening to enjoy with your friends.</p>
+            <p className="Home recipeTime">Total Time: 45min</p>
+            <p className="Home recipeTags">Tags: lactose-free, gluten-free</p>
           </Button>
           <Button className ="Home recipe">
-
+            <h3 className="Home recipeTitle">Friend potatoes with kale</h3>
+            <p className="Home recipeDescription">Can’t do anything wrong with this recipe if you don’t have much time. </p>
+            <p className="Home recipeTime">Total Time: 30min</p>
+            <p className="Home recipeTags">Tags: vegetarian, gluten-free</p>
           </Button>
         </div>
-        <div className ="Home buttonContainer">
+        <div className ="Home recipesButtonContainer">
           <Button className="Home personalRecipes">
             View all Personal Recipes
           </Button>
@@ -69,22 +75,22 @@ const Home = () => {
           <h2 className = "Home groupTitle">Group Cookbooks</h2>
         </div>
         <div className ="Home groupContainer">
-          <div className ="Hoome buttonContainer">
+          <div className ="Home buttonContainer">
             <Button className ="Home group">
                 Carrot Crew
             </Button>
           </div>
-          <div className ="Hoome buttonContainer">
+          <div className ="Home buttonContainer">
             <Button className ="Home group">
                 Spice Girls
             </Button>
           </div>
-          <div className ="Hoome buttonContainer">
+          <div className ="Home buttonContainer">
             <Button className ="Home group">
                 Lords of Wings
             </Button>
           </div>
-          <div className ="Hoome buttonContainer">
+          <div className ="Home buttonContainer">
             <Button className ="Home group">
                 Pasta La Vista
             </Button>

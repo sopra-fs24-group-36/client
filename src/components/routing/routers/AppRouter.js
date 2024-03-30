@@ -4,8 +4,8 @@ import {GameGuard} from "../routeProtectors/GameGuard";
 import GameRouter from "./GameRouter";
 import {LoginGuard} from "../routeProtectors/LoginGuard";
 import Login from "../../views/Login";
-import Jasmine from "../../views/jasmine" /*TO BE REMOVED*/
-import Home from "../../views/Home"
+import Home from "../../views/Home";
+import AddRecipe from "../../views/AddRecipe";
 
 /**
  * Main router of your application.
@@ -22,9 +22,10 @@ const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/jasmine" element={<Jasmine/>} /> 
 
         <Route path="/home" element={<Home/>}/>
+
+        <Route path="/recipes" element={<AddRecipe/>}/>
         
         <Route path="/game/*" element={<GameGuard />}>
           <Route path="/game/*" element={<GameRouter base="/game"/>} />

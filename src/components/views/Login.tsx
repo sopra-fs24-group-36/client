@@ -58,11 +58,11 @@ const Login = () => {
     }
   };
 
-  const jasmine = async() => {
-    navigate("/jasmine")
-  }
   const home = async() =>{
     navigate("/home")
+  }
+  const addRecipe = async() =>{
+    navigate("/recipes")
   }
 
   return (
@@ -89,13 +89,13 @@ const Login = () => {
             </Button>
           </div>
           <div  className="login button-container">
-            <Button onClick={() => jasmine()}>
-              Jasmine UI
-            </Button>
-          </div>
-          <div  className="login button-container">
             <Button onClick={() => home()}>
               Home Page 
+            </Button>
+          </div>
+          <div className="login button-container">
+            <Button onClick={() => addRecipe()}>
+              Add Recipe
             </Button>
           </div>
         </div>

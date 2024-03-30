@@ -24,6 +24,27 @@
   background-color: $dark_pink;
   transition: all 0.3s ease;
 }
+.backButton{
+  background-color: $light_green;
+  color: $container_dark;
+  padding: 15px 60px;
+  height: 40px; 
+  align-items: center;
+  display: flex;
+}
+.help{
+  background-color: $light_green;
+  color: $container_dark;
+  padding: 15px 15px;
+  height: 40px; 
+  align-items: center;
+  display: flex;
+  border-radius: $borderRadius;
+  &.close{
+    color: $container_dark;
+    background-color: $dark_pink;
+  }
+}
 .db{ /*dashboard buttons*/ 
   width: 100%;
   height: 40px;
@@ -46,7 +67,7 @@
   background-color: $container_dark;
   display: flex; 
   align-items: center;
-  padding: 15px;
+  padding: 15px 30px;
 }
 .Home{
   &.personalRecipes{
@@ -80,5 +101,33 @@
     font-size: 25px;
     font-weight: 400;
   }
+  }
+  .recipes{
+    &.add{
+      height: 40px;
+      color: $container_dark;
+      padding: 15px 60px;
+      align-items: center;
+      display: flex;
+    }
+    &.plus{
+      padding: 15px 30px; 
+      background-color: $dark_green;
+      align-items: center;
+      display: flex;
+      height: 15px; 
+      font-size: 20px;
+    }
+    &.tag{
+      padding: 0px 16px; 
+      align-items: center;
+      margin: 8px 8px 0px 0px;
+      width: 150px; 
+      color: $container_dark; 
+      background-color: rgb(255, 255, 255, 0.6);
+      &.selected{
+        background-color: $true_green;
+      }
+    }
 }
 

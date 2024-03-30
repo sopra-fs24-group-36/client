@@ -28,6 +28,7 @@
     justify-content: center;
     display: flex; 
     align-items: center;
+    width: calc(100% - 430px); 
   }
   &.input {
     height: 35px;
@@ -39,7 +40,7 @@
     color: $textColor;
     background-color: $light_green;
     align-items: center;
-    width: 1000px; 
+    width: 100%; 
   }
   &.label {
     color: $textColor;
@@ -50,7 +51,7 @@
     display: flex;
     justify-content: center;
     margin-right: 30px; 
-    margin-left: 30px;  
     align-items: center;
+    margin-left: 30px; 
   }
 }

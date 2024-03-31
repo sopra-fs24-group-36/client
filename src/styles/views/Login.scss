@@ -1,20 +1,47 @@
 @import "../theme";
 
+body {
+  background-image: url("../../assets/Background-Brocc.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: Arial, sans-serif;
+}
+
 .login {
+  &.title{
+    color: $textColor;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1.5em;
+    margin-top: 1em;
+  }
+  .icon {
+    width: 40px;
+    height: 40px;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    position: relative;
+    top: 10px;
+  }
+  .flip-horizontal {
+    transform: scaleX(-1);
+  }
   &.container {
     margin-top: 2em;
     min-height: 300px;
-    /* we include the center mixin defined in _theme.scss and save three duplicate lines :) */
     @include center;
     flex-direction: column;
   }
   &.form {
+    margin-top: 5em;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 60%;
+    width: 50%;
     max-width: 30em;
-    height: 20em;
+    height: auto;
     font-size: 16px;
     font-weight: 300;
     padding-left: 37px;
@@ -23,6 +50,7 @@
     background-color: $true_green;
     transition: opacity 0.5s ease, transform 0.5s ease;
     box-shadow: $dropShadow;
+    border: 2px solid black;
   }
   &.field {
     display: flex;
@@ -37,18 +65,28 @@
     border-radius: 0.75em;
     margin-bottom: 20px;
     background: transparentize(white, 0.85);
-    color: $textColor;
+    color: $container_dark;
     background-color: $light_green;
   }
   &.label {
     color: $textColor;
-    margin-bottom: 10px;
-    text-transform: lowercase;
+    margin-bottom: 5px;
+    text-transform: capitalize;
     font-weight: 300;
   }
   &.button-container {
     display: flex;
     justify-content: center;
-    margin-top: 2em;
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1em;
+    width: 50%;
+  }
+  .register-link {
+    cursor: pointer;
+    color: $dark_pink;
+    text-decoration: underline;
+    margin-top: 1em;
   }
 }

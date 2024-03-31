@@ -20,25 +20,25 @@ const Home = () => {
   const [name, setName] = useState<string>(null);
   const [username, setUsername] = useState<string>(null);
 
-  const doLogin = async () => {
-    try {
-      const requestBody = JSON.stringify({ username, name });
-      const response = await api.post("/users", requestBody);
-
-      // Get the returned user and update a new object.
-      const user = new User(response.data);
-
-      // Store the token into the local storage.
-      localStorage.setItem("token", user.token);
-
-      // Login successfully worked --> navigate to the route /game in the GameRouter
-      navigate("/game");
-    } catch (error) {
-      alert(
-        `Something went wrong during the login: \n${handleError(error)}`
-      );
-    }
-  };
+  // const doLogin = async () => {
+  //   try {
+  //     const requestBody = JSON.stringify({ username, name });
+  //     const response = await api.post("/users", requestBody);
+  //
+  //     // Get the returned user and update a new object.
+  //     const user = new User(response.data);
+  //
+  //     // Store the token into the local storage.
+  //     localStorage.setItem("token", user.token);
+  //
+  //     // Login successfully worked --> navigate to the route /game in the GameRouter
+  //     navigate("/game");
+  //   } catch (error) {
+  //     alert(
+  //       `Something went wrong during the login: \n${handleError(error)}`
+  //     );
+  //   }
+  // };
 
 
   return (

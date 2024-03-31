@@ -23,7 +23,7 @@ const Dashboard = () => {
     navigate("/invitations");
   }
   const doLogout = async () => {
-    navigate("/login");
+    navigate("/users/login");
   }
 
   return (

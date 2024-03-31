@@ -12,8 +12,8 @@ import Header_new from "./components/views/Header_new"
 const App = () => {
   return (
     <div>
-      <Header height="100" />
-      <Header_new />
+      {/*<Header height="100" />*/}
+      {/*<Header_new />*/}
       <AppRouter />
     </div>
   );

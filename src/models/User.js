@@ -9,6 +9,8 @@ class User {
     this.token = null;
     this.status = null;
     this.Email = null;
+    this.creationdate = null;
+    user.profilePicture=null;
     Object.assign(this, data);
   }
 }

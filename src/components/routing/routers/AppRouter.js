@@ -5,7 +5,9 @@ import Login from "../../views/Login";
 import Home from "../../views/Home";
 import AddRecipe from "../../views/AddRecipe";
 import Register from "../../views/Register";
-
+import UserProfile from "../../views/UserProfile";
+import EditProfile from "../../views/EditProfile";
+import PersonalCookbook from "../../views/PersonalCookbook";
 /**
  * Main router of your application.
  * In the following class, different routes are rendered. In our case, there is a Login Route with matches the path "/login"
@@ -33,6 +35,9 @@ const AppRouter = () => {
         {/*  <Route path="/users/login" element={<Login/>} />*/}
         {/*</Route>*/}
 
+        <Route path="/users/profile" element={<UserProfile />} />
+        <Route path="/users/profile/edit" element={<EditProfile />} />
+        <Route path="users/cookbooks" element={<PersonalCookbook />} />
         <Route path="/" element={
           <Navigate to="/users/login" replace />
         } />

@@ -3,6 +3,8 @@ import "../../styles/ui/Dashboard.scss";
 import { Button } from "components/ui/Button";
 import {useNavigate} from "react-router-dom";
 import PropTypes from "prop-types";
+// @ts-ignore
+import login from "../../assets/login.png";
 
 /*creation of the dashboard with buttons*/
 const Dashboard = () => {
@@ -61,10 +63,11 @@ const Dashboard = () => {
             Invitations
         </Button>
       </div>
-      <div className ="dashboard logout-container">
-        <Button className = "db logout"
-          onClick={() => doLogout()}>
-            Log out 
+      <div className="dashboard logout-container">
+        <Button className="db logout"
+                onClick={() => doLogout()}>
+          <img className={"dashboard logout-img"} src={login} alt="Icon" />
+          Log out
         </Button>
       </div>
     </div>

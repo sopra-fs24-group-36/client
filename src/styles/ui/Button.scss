@@ -61,6 +61,9 @@
     color: $dark_pink;
     height: 60px; 
     font-size: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 .footer-button{

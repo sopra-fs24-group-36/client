@@ -14,10 +14,13 @@
     height: 90px;
     padding-left: 10px; 
   }
-
+  &.profileImage{
+    width: auto; 
+    border-radius: 50%;
+    padding-right: 15px; 
+  }
   &.title {
     font-weight: 600;
     color: $textColor;
   }
-
 }

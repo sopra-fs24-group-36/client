@@ -6,66 +6,89 @@ import { Button } from "components/ui/Button";
 import "styles/views/Home.scss";
 import Dashboard from "components/ui/Dashboard";
 import PropTypes from "prop-types";
-import Footer from "components/ui/footer"
-
-/*
-It is possible to add multiple components inside a single file,
-however be sure not to clutter your files with an endless amount!
-As a rule of thumb, use one file per component and only add small,
-specific components that belong to the main one in the same file.
- */
+import Footer from "components/ui/footer";
+import Header_new from "components/views/Header_new";
+// @ts-ignore
+import rightBrok from "../../assets/rightBrok.png";
+// @ts-ignore
+import leftBrok from "../../assets/leftBrok.png";
+// @ts-ignore
+import wildGarlic from "../../assets/defaultRecipe1.png"; 
+// @ts-ignore
+import potatoes from "../../assets/defaultRecipe3.png"; 
+// @ts-ignore
+import Group from "../../assets/defaultUser.png"; 
 
 const Home = () => {
   const navigate = useNavigate();
-  const [name, setName] = useState<string>(null);
-  const [username, setUsername] = useState<string>(null);
+  const userID = localStorage.getItem("userID"); /*getting the ID of the currently logged in user*/
 
-  // const doLogin = async () => {
-  //   try {
-  //     const requestBody = JSON.stringify({ username, name });
-  //     const response = await api.post("/users", requestBody);
-  //
-  //     // Get the returned user and update a new object.
-  //     const user = new User(response.data);
-  //
-  //     // Store the token into the local storage.
-  //     localStorage.setItem("token", user.token);
-  //
-  //     // Login successfully worked --> navigate to the route /game in the GameRouter
-  //     navigate("/game");
-  //   } catch (error) {
-  //     alert(
-  //       `Something went wrong during the login: \n${handleError(error)}`
-  //     );
-  //   }
-  // };
+  const doPersonalRecipes = async () => {
+    navigate("/users/cookbooks"); /*to navigate to personal cookbook*/
+  }
 
+  const doRecipe = async (recipeID) => { /*to navigate to a recipe*/
+    try{
+      navigate(`/users/${userID}/cookbooks/${recipeID}`) 
+    }
+    catch (error) {
+      alert(
+        `User could not be found: \n${handleError(error)}`
+      );
+    }
+  }
+
+  const doGroup = async(groupID) => {/*to navigate to a group*/
+    try{
+      navigate(`/logout/${groupID}`) 
+    }
+    catch (error) {
+      alert(
+        `User could not be found: \n${handleError(error)}`
+      );
+    }
+  }
 
   return (
     <div>
+      <Header_new>
+      </Header_new>
       <Dashboard>
       </Dashboard>
       <div className = "Home containerLeft">
         <div className ="Home header">
-          <h2 className = "Home personalTitle">Personal</h2>
-          <h2 className = "Home personalTitle">Cookbook</h2>
+          <img src={leftBrok} alt ="Icon" className = "Home icon"></img>
+          <div className = "Home headerTitle">
+            <h2 className = "Home personalTitle">Personal</h2>
+            <h2 className = "Home personalTitle">Cookbook</h2>
+          </div>
+          <img src={rightBrok} alt ="Broccoli" className = "Home icon"></img>
         </div>
         <div className ="Home recipeContainer">
-          <Button className ="Home recipe">
-            <h3 className="Home recipeTitle">Wild garlic curry</h3>
-            <p className="Home recipeDescription">The perfect recipe for a nice summer evening to enjoy with your friends.</p>
-            <p className="Home recipeTime">Total Time: 45min</p>
-            <p className="Home recipeTags">Tags: lactose-free, gluten-free</p>
+          <Button className ="Home recipe"
+            /*onClick={() => {doRecipe(recipeID)}}*/>
+            <img src={wildGarlic} alt="Recipe" className = "Home recipeImage"></img>
+            <div className = "Home recipeInfo">
+              <h3 className="Home recipeTitle">Wild garlic curry</h3>
+              <p className="Home recipeDescription">The perfect recipe for a nice summer evening to enjoy with your friends.</p>
+              <p className="Home recipeTime">Total Time: 45min</p>
+              <p className="Home recipeTags">Tags: lactose-free, gluten-free</p>
+            </div>
           </Button>
-          <Button className ="Home recipe">
-            <h3 className="Home recipeTitle">Friend potatoes with kale</h3>
-            <p className="Home recipeDescription">Can’t do anything wrong with this recipe if you don’t have much time. </p>
-            <p className="Home recipeTime">Total Time: 30min</p>
-            <p className="Home recipeTags">Tags: vegetarian, gluten-free</p>
+          <Button className ="Home recipe"
+          /*onClick={() => {doRecipe(recipeID)}}*/>
+            <img src={potatoes} alt="Recipe" className = "Home recipeImage"></img>
+            <div className = "Home recipeInfo">
+              <h3 className="Home recipeTitle">Friend potatoes with kale</h3>
+              <p className="Home recipeDescription">Can’t do anything wrong with this recipe if you don’t have much time. </p>
+              <p className="Home recipeTime">Total Time: 30min</p>
+              <p className="Home recipeTags">Tags: vegetarian, gluten-free</p>
+            </div>
           </Button>
         </div>
         <div className ="Home recipesButtonContainer">
-          <Button className="Home personalRecipes">
+          <Button className="Home personalRecipes"
+            onClick={() => {doPersonalRecipes()}}>
             View all Personal Recipes
           </Button>
         </div>
@@ -76,22 +99,30 @@ const Home = () => {
         </div>
         <div className ="Home groupContainer">
           <div className ="Home buttonContainer">
-            <Button className ="Home group">
+            <Button className ="Home group"
+            /*onClick={() => {doGroup(groupID)}}*/>
+                <img src={Group} alt="Group" className = "Home groupImage"></img>
                 Carrot Crew
             </Button>
           </div>
           <div className ="Home buttonContainer">
-            <Button className ="Home group">
+            <Button className ="Home group"
+            /*onClick={() => {doGroup(groupID)}}*/>
+                <img src={Group} alt="Group" className = "Home groupImage"></img>
                 Spice Girls
             </Button>
           </div>
           <div className ="Home buttonContainer">
-            <Button className ="Home group">
+            <Button className ="Home group"
+            /*onClick={() => {doGroup(groupID)}}*/>
+              <img src={Group} alt="Group" className = "Home groupImage"></img>
                 Lords of Wings
             </Button>
           </div>
           <div className ="Home buttonContainer">
-            <Button className ="Home group">
+            <Button className ="Home group"
+            /*onClick={() => {doGroup(groupID)}}*/>
+              <img src={Group} alt="Group" className = "Home groupImage"></img>
                 Pasta La Vista
             </Button>
           </div>

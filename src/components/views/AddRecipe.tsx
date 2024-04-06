@@ -8,14 +8,11 @@ import PropTypes from "prop-types";
 import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import BaseContainer from "components/ui/BaseContainer_new";
+import Header_new from "components/views/Header_new"
+// @ts-ignore
+import select_image from "../../assets/select_image.png";
 
-/*
-It is possible to add multiple components inside a single file,
-however be sure not to clutter your files with an endless amount!
-As a rule of thumb, use one file per component and only add small,
-specific components that belong to the main one in the same file.
- */
-const FormField = (props) => {
+const FormField = (props) => { /*general form fields for inputting information (e.g. title, description, etc.)*/
   return (
     <div className="recipes field">
       <label className="recipes label">{props.label}</label>
@@ -53,7 +50,8 @@ IngredientsField.propTypes = {
   onChange: PropTypes.func,
 };
 
-const StepsField = (props) => { /*separate for when adding new fields as we dont want each newly added field to have a label*/ 
+const StepsField = (props) => { /*separate for when adding new fields as we dont want each newly added field to have a label 
+-> sepearate from IngredientsField as we jave different formatting*/ 
   return (
     <div className="recipes stepsField"> 
       <input
@@ -84,25 +82,25 @@ const addRecipe = () => {
   const [group_tags, set_group_tags] = useState([""]); /*are arrays*/
   const [showHelp, setShowHelp] = useState(false); 
 
-  const addField = () =>{
+  const addField = () =>{ /*to add a field for adding ingredients and their amount*/
     set_recipe_ing([...recipe_ing, ""]);
     set_recipe_ing_amount([...recipe_ing_amount,""]);
   }
 
-  const addStep = () =>{
+  const addStep = () =>{/*to add a field for adding steps to complete recipe*/
     set_recipe_steps([...recipe_steps, ""]);
   }
 
-  const addRecipeTag = (tag) =>{
-    const isSelected = recipe_tags.includes(tag);
+  const addRecipeTag = (tag) =>{ /*to add a tag to a recipe*/
+    const isSelected = recipe_tags.includes(tag); /*to see if something has already been selected, we check if there is a tag in the recipe_tags list*/
     if (isSelected) {
-      set_recipe_tags(prevTags => prevTags.filter((selectedTag) => selectedTag !== tag));
+      set_recipe_tags(prevTags => prevTags.filter((selectedTag) => selectedTag !== tag)); /*if there is a tag, check the current one clicked is not the same */
     } else {
       set_recipe_tags([...recipe_tags, tag]);
     }
   }
 
-  const addGroupTag = (tag) =>{
+  const addGroupTag = (tag) =>{ /*to add a group tag to a recipe*/
     const isSelected = group_tags.includes(tag);
     if (isSelected) {
       set_group_tags(prevTags => prevTags.filter((selectedTag) => selectedTag !== tag));
@@ -111,7 +109,11 @@ const addRecipe = () => {
     }
   }
 
-  const HelpPopup = ({ onClose }) => {
+  const addImage = () =>{ /*to add an image to a recipe*/ 
+
+  }
+
+  const HelpPopup = ({ onClose }) => {/*when clicking on help, the following pop up is displayed explaining how to add a recipe*/ 
     return (
       <div className="recipes popupContainer">
         <div className="recipes popup">
@@ -132,12 +134,46 @@ const addRecipe = () => {
     onClose: PropTypes.func.isRequired,
   };
 
-  const doHelp = () =>{
+  const doHelp = () =>{ /*function to show the help section*/ 
     setShowHelp(!showHelp)
+  }
+  const saveChanges = async() => {
+    try{
+      const requestBody = null
+      if(recipe_link){ /*if we have a link, we save the following information*/
+        const requestBody=JSON.stringify({
+          "recipe_title":recipe_title, 
+          "recipe_description":recipe_description,
+          "recipe_prep":recipe_prep,
+          "recipe_link":recipe_link, 
+          "recipe_tags":recipe_tags,
+          "group_tags":group_tags
+        })
+      }
+      else{
+        const requestBody=JSON.stringify({/*if we have no link, we have steps and ingredients and save the following information*/
+          "recipe_title":recipe_title, 
+          "recipe_description":recipe_description,
+          "recipe_prep":recipe_prep,
+          "recipe_ing":recipe_ing,
+          "recipe_ing_amount":recipe_ing_amount,
+          "recipe_steps":recipe_steps,
+          "recipe_tags":recipe_tags,
+          "group_tags":group_tags
+        })
+      }
+      const response = await api.post("/recipes", requestBody)
+    }
+    catch(error){/*error messages*/
+      console.error("An error occurred while saving recipes:", error);
+      alert("An error occurred while saving. Please try again later.");
+    }
   }
 
   return (
     <div>
+      <Header_new>
+      </Header_new>
       <Dashboard>
       </Dashboard>
       <BaseContainer>
@@ -157,16 +193,21 @@ const addRecipe = () => {
             </Button>
           </div>
           <div className="recipes addButtonContainer">
-            <Button className="recipes add">
-              Add Recipe
+            <Button 
+              /*button is disabled unless we have a link or we have some steps*/
+              className="recipes add"
+              disabled={!recipe_link && !recipe_steps.some(step => step.trim() !== "")} /*checks if there are no recipe steps with content -> curtesy of chatGPT*/
+              onClick={()=>saveChanges()}>
+              Create Recipe
             </Button>
           </div>
         </div>
         <div className = "recipes container">
           {showHelp && <HelpPopup onClose={doHelp} />}
           <div className = "recipes formLeft">
-            <div className ="recipes imageContainer">
-
+            <div className ="recipes imageContainer"
+              onClick={addImage}>
+              <img src={select_image} alt="icon" className = "recipes image"></img>
             </div>
             <FormField
               label ="Add a title:"
@@ -200,11 +241,11 @@ const addRecipe = () => {
                 <div key={index} className="recipes ingredientFields">
                   <div className="recipes ingredientsAmount">
                     <IngredientsField
-                      value={recipe_ing_amount[index]}
+                      value={recipe_ing_amount[index]} 
                       onChange={(value) => {
-                        const newAmounts = [...recipe_ing_amount];
-                        newAmounts[index] = value;
-                        set_recipe_ing_amount(newAmounts);
+                        const newAmounts = [...recipe_ing_amount]; /*creating a copy of recipe_ing_amount*/
+                        newAmounts[index] = value; /*setting the index from the amount to the value*/
+                        set_recipe_ing_amount(newAmounts); /*overwriting previous aray with newAmounts array*/
                       }}
                     />
                   </div>
@@ -323,7 +364,4 @@ const addRecipe = () => {
   );
 };
 
-/**
- * You can get access to the history object's properties via the useLocation, useNavigate, useParams, ... hooks.
- */
 export default addRecipe;

@@ -7,6 +7,8 @@ import "styles/views/Home.scss";
 import Dashboard from "components/ui/Dashboard";
 import PropTypes from "prop-types";
 import Footer from "components/ui/footer"
+import Header from "./Header";
+import Header_new from "./Header_new";
 
 /*
 It is possible to add multiple components inside a single file,
@@ -43,6 +45,8 @@ const Home = () => {
 
   return (
     <div>
+      <Header height="100" />
+      <Header_new />
       <Dashboard>
       </Dashboard>
       <div className = "Home containerLeft">

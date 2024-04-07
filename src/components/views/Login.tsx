@@ -88,7 +88,7 @@ const Login = () => {
           <div className="login button-container">
             <Button
               disabled={!username || !password}
-              width="100%"
+              width="50%"
               onClick={() => doLogin()}
             >
               Login

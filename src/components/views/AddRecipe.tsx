@@ -8,6 +8,8 @@ import PropTypes from "prop-types";
 import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import BaseContainer from "components/ui/BaseContainer_new";
+import Header from "./Header";
+import Header_new from "./Header_new";
 
 /*
 It is possible to add multiple components inside a single file,
@@ -138,6 +140,8 @@ const addRecipe = () => {
 
   return (
     <div>
+      <Header height="100" />
+      <Header_new />
       <Dashboard>
       </Dashboard>
       <BaseContainer>

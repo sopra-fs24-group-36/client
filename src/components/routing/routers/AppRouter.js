@@ -30,14 +30,14 @@ const AppRouter = () => {
 
         <Route path="/users" element={<Register />} />
 
-        <Route path="users/login" element={<Login />} />
+        <Route path="/users/login" element={<Login />} />
         {/*<Route path="/users/login" element={<LoginGuard />}>*/}
         {/*  <Route path="/users/login" element={<Login/>} />*/}
         {/*</Route>*/}
 
         <Route path="/users/profile" element={<UserProfile />} />
         <Route path="/users/profile/edit" element={<EditProfile />} />
-        <Route path="users/cookbooks" element={<PersonalCookbook />} />
+        <Route path="/users/cookbooks" element={<PersonalCookbook />} />
         <Route path="/" element={
           <Navigate to="/users/login" replace />
         } />

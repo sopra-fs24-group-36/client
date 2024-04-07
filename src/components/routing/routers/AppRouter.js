@@ -8,6 +8,7 @@ import Register from "../../views/Register";
 import UserProfile from "../../views/UserProfile";
 import EditProfile from "../../views/EditProfile";
 import PersonalCookbook from "../../views/PersonalCookbook";
+import Recipe from "../../views/Recipe"; 
 /**
  * Main router of your application.
  * In the following class, different routes are rendered. In our case, there is a Login Route with matches the path "/login"
@@ -18,7 +19,7 @@ import PersonalCookbook from "../../views/PersonalCookbook";
  * Documentation about routing in React: https://reactrouter.com/en/main/start/tutorial
  */
 
-/*** JASMINE ROUTE TO BE REMOVED - JUST FOR UI COMPONENT TESTING ***/
+//RECIPE LINK NEEDS TO BE CHANGED /users/{userID}/cookbooks/{recipeID}*/ 
 const AppRouter = () => {
   return (
     <BrowserRouter>
@@ -27,6 +28,8 @@ const AppRouter = () => {
         <Route path="/home" element={<Home />} />
 
         <Route path="/recipes" element={<AddRecipe />} />
+
+        <Route path="/recipes/recipe" element={<Recipe/>}/> 
 
         <Route path="/users" element={<Register />} />
 

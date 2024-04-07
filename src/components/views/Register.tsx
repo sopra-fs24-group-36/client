@@ -53,6 +53,8 @@ const Register = () => {
         throw new Error();
       }
       const user = new User(response.data);
+      //store ID in the local storage
+      localStorage.setItem("userID", user.id);
       navigate("/users/login");
     } catch (error) {
       alert(

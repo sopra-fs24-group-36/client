@@ -2,7 +2,6 @@
 
 .Home {
   &.containerLeft {
-    margin-top: 2em;
     min-height: 300px;
     flex-direction: column;
     background-color: $true_green;
@@ -11,13 +10,12 @@
     display: inline-block; 
     vertical-align: top;
     width: 50%;
-    margin-top: 30px; 
+    margin-top: 115px; 
     position: fixed; 
     height: calc(100% - 210px);
     padding-top: 15px;
   }
   &.containerRight {
-    margin-top: 2em;
     min-height: 300px;
     flex-direction: column;
     left: calc(65% + 100px);
@@ -25,7 +23,7 @@
     border-radius: $borderRadius; 
     display: inline-block; 
     vertical-align: top;
-    margin-top: 30px; 
+    margin-top: 115px; 
     position: fixed; 
     height: calc(100% - 210px);
     padding-top: 15px;
@@ -50,6 +48,14 @@
   &.header{
     text-align: center;
     line-height: 0.5; /*to display personal and cookbook under each other */
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+  }
+  &.icon{
+    margin-left: 60px;
+    margin-right: 60px;
+    top: 10px;
   }
   &.personalTitle{
     color: $textColor;
@@ -62,9 +68,24 @@
     margin-left:30px; 
   }
 
+  &.recipeImage{
+    width: 40%;
+    padding-left: 15px; 
+    border-radius: $borderRadius;
+  }
+  &.recipeInfo{
+    padding: 0px 15px 0px 15px; 
+  }
+  &.groupImage{
+    width: 23%;
+    padding-left: 15px; 
+    border-radius: 50%;
+    margin-right: 15px; 
+  }
   &.groupTitle{
     color: $container_dark;
     font-size: 40px;
+    line-height: 60px;
   }
   &.buttonContainer {
     padding-left: 6px;
@@ -80,7 +101,6 @@
     font-size: 25px;
     margin-top:0px;
     margin-bottom:12px;
-    margin-left: 15px;
   }
   &.recipeDescription, 
   &.recipeTags, 
@@ -88,7 +108,6 @@
     color: $container_dark; 
     font-size: 12px;
     text-align: left;
-    margin-left: 15px;
     font-weight: 400px;
   }
   &.recipesButtonContainer{

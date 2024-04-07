@@ -16,7 +16,7 @@
     line-height: 0.5;
   }
   &.headerContainer{
-    justify-content: space-between;
+    justify-content: center;
     display: flex;
     align-items: center;
   }
@@ -26,12 +26,16 @@
   }
   &.titleContainer{
     text-align: center;
+    margin: 0 auto; 
   }
   &.addButtonContainer{
     margin-right: 15px; 
   }
   &.backButtonContainer{
-    margin-left: 60px; 
+    margin: 0px auto 0px 60px; 
+  }
+  &.helpContainer{
+    margin: 0px 30px 0px 30px; 
   }
   &.p{
     color: $container_dark;
@@ -49,9 +53,15 @@
     margin: 30px 0px 30px 30px;
     width: calc(40% - 45px);
   }
-  &.imageContainer{
-    width: 100%;
-    height: 200px;
+  &.image{
+    border-radius: $borderRadius;
+    border-style: solid;  
+    border-width: 2px;
+    border-color: $container_dark; 
+    margin-right: 30px; 
+    margin-bottom: 15px; 
+    cursor: pointer;
+    width: 100%
   }
   &.formRight {
     vertical-align: top;
@@ -128,9 +138,9 @@
     margin-left: -4px;
     border: none;
     border-radius: 0.75em;
-    color: $textColor;
     background-color: rgb(255, 255, 255, 0.6);
-    width: 100%
+    width: 100%;
+    color: $container_dark
   }
   &.label {
     color: $container_dark;

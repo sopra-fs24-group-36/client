@@ -58,7 +58,7 @@
   }
   &.logout{
     background-color: $container_dark;
-    color: $dark_pink;
+    color: $light_pink;
     height: 60px; 
     font-size: 26px;
     display: flex;
@@ -71,6 +71,12 @@
   display: flex; 
   align-items: center;
   padding: 15px 30px;
+}
+.header_new{
+  display: flex; 
+  height: 50px; 
+  align-items: center;
+  background-color: $container_dark;
 }
 .Home{
   &.personalRecipes{
@@ -92,6 +98,8 @@
     font-weight: 400;
     padding-top: 25px; 
     padding-bottom:25px;
+    display: flex; 
+
   }
   &.group{
     background-color: $container_dark;
@@ -103,8 +111,10 @@
     height: 90px;
     font-size: 25px;
     font-weight: 400;
+    display: flex;
+    align-items: center;
   }
-  }
+}
   .recipes{
     &.add{
       height: 40px;
@@ -133,4 +143,13 @@
       }
     }
 }
+  .recipe{
+    &.edit{
+      height: 40px;
+      color: $container_dark;
+      padding: 15px 60px;
+      align-items: center;
+      display: flex;
+    }
+  }
 

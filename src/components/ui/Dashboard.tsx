@@ -10,7 +10,7 @@ import login from "../../assets/login.png";
 const Dashboard = () => {
   const navigate = useNavigate();
   const doRecipe = async () => {
-    navigate("/game");
+    navigate("/recipes");
   }
   const doGroup = async () => {
     navigate("/groups");
@@ -65,7 +65,7 @@ const Dashboard = () => {
       </div>
       <div className="dashboard logout-container">
         <Button className="db logout"
-                onClick={() => doLogout()}>
+          onClick={() => doLogout()}>
           <img className={"dashboard logout-img"} src={login} alt="Icon" />
           Log out
         </Button>

@@ -1,0 +1,83 @@
+@import "../theme";
+
+.recipe {
+  &.container {
+    min-height: 300px;
+    margin-left: 30px; 
+    border-radius: $borderRadius;
+    margin-bottom: 15px; 
+  }
+  &.headerContainer{
+    justify-content: center;
+    display: flex;
+    align-items: center;
+  }
+  &.title{
+    color: $textColor;
+    font-size: 40px;
+    padding: 0px 60px 0px 30px; 
+  }
+  &.titleContainer{
+    text-align: center;
+    margin: 0 auto; 
+  }
+  &.editButtonContainer{
+    margin-right: 30px; 
+  }
+  &.backButtonContainer{
+    margin: 0px auto 0px 60px; 
+  }
+  &.p{
+    color: $container_dark;
+    font-weight: 600;
+    font-size: 1.5em;
+    margin: 16px 0px 16px 0px; 
+  }
+  &.left {
+    background-color: $light_green;
+    vertical-align: top;
+    display: inline-block;
+    flex-direction: column;
+    margin: 0px 0px 30px 30px;
+    width: calc(40% - 45px);
+    border-radius: $borderRadius;
+    padding: 30px;
+    height:auto;
+    min-height: 800px;
+  }
+  &.image{
+    border-radius: $borderRadius;
+    border-style: solid;  
+    border-width: 2px;
+    border-color: $container_dark; 
+    margin-right: 30px; 
+    margin-bottom: 15px; 
+    width: 100%;
+  }
+  &.right {
+    background-color: $light_green;
+    vertical-align: top;
+    display: inline-block;
+    flex-direction: column;
+    margin: 0px 0px 0px 30px;
+    width: calc(60% - 45px);
+    border-radius: $borderRadius;
+    padding: 10px 30px 30px 30px;
+    height:auto; /*height fits to size of information contained*/
+    min-height: 800px; /*minimum height is always length of page itself*/
+  }
+  
+  &.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 2em;
+  }
+  &.list,
+  &.description, 
+  &.time,
+  &.tags{
+    line-height: 1.4;
+    color: $container_dark;
+    font-weight: 300;
+  }
+}

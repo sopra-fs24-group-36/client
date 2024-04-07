@@ -1,7 +1,10 @@
 import React from "react";
-import {ReactLogo} from "../ui/ReactLogo";
 import PropTypes from "prop-types";
 import "../../styles/views/Header_new.scss";
+import { Button } from "components/ui/Button";
+// @ts-ignore
+import User from "../../assets/defaultUser.png"; 
+import {useNavigate} from "react-router-dom";
 
 /**
  * This is an example of a Functional and stateless component (View) in React. Functional components are not classes and thus don't handle internal state changes.
@@ -11,14 +14,22 @@ import "../../styles/views/Header_new.scss";
  * https://react.dev/learn/your-first-component and https://react.dev/learn/passing-props-to-a-component 
  * @FunctionalComponent
  */
-const Header_new = props => (
-  <div className="header_new container">
-    <ReactLogo classname="header_new logo" width="60px" height="60px"/>
-    <h2 className="header_new title">Username</h2>
-  </div>
-);
 
-/**
- * Don't forget to export your component!
- */
+const Header_new = () => {
+  const navigate = useNavigate();
+
+  const doProfile = () => {
+    navigate("/users/profile");
+  };
+
+  return (
+    <div className="header_new container">
+      <Button className="header_new userProfile" onClick={doProfile}>
+        <img src={User} alt="Profile Picture" className="header_new profileImage" />
+        <h2 className="header_new title">Username</h2>
+      </Button>
+    </div>
+  );
+};
+
 export default Header_new;

@@ -1,0 +1,135 @@
+@import "../theme";
+
+.cookbook{
+  &.headerContainer{
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+  }
+  &.titleContainer{
+     text-align: center;
+  }
+  &.backButtonContainer{
+    margin-left: 60px;
+    margin-right: 60px;
+  }
+  &.title{
+    color: $textColor;
+    font-size: 40px;
+  }
+  &.filterContainer{
+    margin-left:280px;
+    margin-right: 150px;
+    width:35%;
+    height:35px;
+    background-color: $light_green;
+    border-radius: 0.5em;
+    position: fixed;
+    display: flex;
+  }
+  &.filterButton{
+    width:90px;
+    height: 30px;
+    background-color:$dark_green;
+    color:$textColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &.filterButtonContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 10px;
+  }
+  &.field{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width:500px;
+    margin-left:calc(100% - 500px);
+  }
+  &.input{
+    height: 30px;
+    border: none;
+    border-radius: 0.5em;
+    background: transparentize(white, 0.01);
+    color: $container_dark;
+    background-color: $textColor;
+    text-align: left;
+    align-items: center;
+    justify-content: center;
+    width:100%;
+    display: flex;
+  }
+  &.recipeButton{
+    background-color: $light_green;
+    padding: 10px;
+    cursor: pointer;
+    width:400px;
+    height:200px;
+    display: flex;
+    align-items: center;
+    border: none;
+    border-radius: 0.75em;
+  }
+  &.recipeContainer{
+    display: flex;
+    //align-items: center;
+    width:40%;
+    margin:5px;
+    margin-left:100px;
+    padding:10px;
+    gap: 20px;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: relative;
+  }
+  &.recipeListContainer{
+    display: flex;
+    flex-wrap: wrap;//to wrap to the next line if there isn't enough space horizontally
+    overflow-y: scroll;
+    max-height: 400px;
+    margin-top:40px;
+  }
+  &.recipeContent {
+    flex-grow: 1;
+    text-align: left;
+    position: relative;
+  }
+  &.recipeTitle{
+    font-weight: bold;
+    color:$container_dark;
+    font-size: 20px;
+  }
+  &.recipeImgContainer {
+    flex-shrink: 0;
+    margin:15px;
+    align-items: center;
+  }
+  &.recipeImg{
+    width:150px;
+    height:150px;
+    margin-right:10px;
+  }
+  &.recipeUserImgContainer {
+    position: absolute;
+    bottom: 10px;
+    right: 65px;
+  }
+  &.recipeUserImg{
+    width:50px;
+    height:50px;
+    margin-right:10px;
+  }
+  &.recipeDescription{
+    color: $container-dark;
+  }
+  &.recipeTotalTime{
+    color: $container-dark;
+  }
+  &.recipeTags{
+    color: $container-dark;
+  }
+}

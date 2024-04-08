@@ -2,9 +2,9 @@ import React from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { LoginGuard } from "../routeProtectors/LoginGuard";
 import Login from "../../views/Login";
-import Home from "../../views/Home";
 import AddRecipe from "../../views/AddRecipe";
 import Register from "../../views/Register";
+import Home from "../../views/Home"
 import UserProfile from "../../views/UserProfile";
 import EditProfile from "../../views/EditProfile";
 import PersonalCookbook from "../../views/PersonalCookbook";

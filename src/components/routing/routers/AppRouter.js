@@ -4,12 +4,13 @@ import { LoginGuard } from "../routeProtectors/LoginGuard";
 import Login from "../../views/Login";
 import AddRecipe from "../../views/AddRecipe";
 import Register from "../../views/Register";
-import Home from "../../views/Home"
+import Home from "../../views/Home";
 import UserProfile from "../../views/UserProfile";
 import EditProfile from "../../views/EditProfile";
 import PersonalCookbook from "../../views/PersonalCookbook";
 import Recipe from "../../views/Recipe";
 import GroupCookbook from "../../views/GroupCookbook";
+import AddGroup from "../../views/AddGroup";
 
 /**
  * Main router of your application.
@@ -44,6 +45,7 @@ const AppRouter = () => {
         <Route path="/users/profile/edit" element={<EditProfile />} />
         <Route path="/users/cookbooks" element={<PersonalCookbook />} />
 
+        <Route path="/groups" element={<AddGroup />} />
         {/*<Route path="/groups/:groupID/cookbooks" element={<GroupCookbook />} />*/}
         <Route path="/groups/cookbooks" element={<GroupCookbook />} />
 

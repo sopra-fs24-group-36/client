@@ -179,9 +179,10 @@ const addRecipe = () => {
       <BaseContainer>
         <div className="recipes headerContainer">
           <div className="recipes backButtonContainer">
-            <Button className = "backButton">
-              Back
-            </Button>
+            <Button
+              className="backButton"
+              onClick={() => navigate("/home")}
+            >Back</Button>
           </div>
           <div className = "recipes titleContainer">
             <h2 className ="recipes title">Add a recipe</h2>

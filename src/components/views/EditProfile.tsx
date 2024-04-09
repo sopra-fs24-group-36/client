@@ -204,6 +204,6 @@ const EditProfile=()=>{
         </div>
       </div>
     </BaseContainer>
-  )
-}
+  );
+};
 export default EditProfile;

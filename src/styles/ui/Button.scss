@@ -4,110 +4,123 @@
   &:hover {
     transform: translateY(-2px);
   }
+
   &:disabled {
     cursor: default;
     opacity: 0.4;
+
     &:hover {
       transform: none;
     }
   }
+
   padding: 6px;
   font-weight: 600;
   font-size: 15px;
   text-align: center;
   height: 35px;
   cursor: pointer;
-  border: none; 
+  border: none;
   border-radius: $borderRadius;
   opacity: 1;
   color: $textColor;
   background-color: $dark_pink;
   transition: all 0.3s ease;
 }
-.backButton{
+
+.backButton {
   background-color: $light_green;
   color: $container_dark;
   padding: 15px 60px;
-  height: 40px; 
+  height: 40px;
   align-items: center;
   display: flex;
+  font-size: 20px;
 }
-.help{
+
+.help {
   background-color: $light_green;
   color: $container_dark;
   padding: 15px 15px;
-  height: 40px; 
+  height: 40px;
   align-items: center;
   display: flex;
   border-radius: $borderRadius;
-  &.close{
+
+  &.close {
     color: $container_dark;
     background-color: $dark_pink;
   }
 }
-.db{ /*dashboard buttons*/ 
+
+.db { /*dashboard buttons*/
   width: 100%;
   height: 40px;
   color: $textColor;
   background-color: $dark_green;
   display: block;
 
-  &.invitations{
+  &.invitations {
     background-color: $dark_pink;
     color: $container_dark;
   }
-  &.logout{
+
+  &.logout {
     background-color: $container_dark;
     color: $light_pink;
-    height: 60px; 
+    height: 60px;
     font-size: 26px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 }
-.footer-button{
+
+.footer-button {
   background-color: $container_dark;
-  display: flex; 
+  display: flex;
   align-items: center;
   padding: 15px 30px;
 }
-.header_new{
-  display: flex; 
-  height: 50px; 
+
+.header_new {
+  display: flex;
+  height: 50px;
   align-items: center;
   background-color: $container_dark;
 }
-.Home{
-  &.personalRecipes{
+
+.Home {
+  &.personalRecipes {
     display: block;
-    padding-left: 15px; 
+    padding-left: 15px;
     padding-right: 15px;
     background-color: $light_pink;
     color: $container_dark;
-    margin: 0 auto; 
+    margin: 0 auto;
     height: 40px;
   }
 
-  &.recipe{
+  &.recipe {
     background-color: $light_green;
     color: $textColor;
-    margin: 15px auto; 
+    margin: 15px auto;
     width: 100%;
     height: auto;
     font-weight: 400;
-    padding-top: 25px; 
-    padding-bottom:25px;
-    display: flex; 
+    padding-top: 25px;
+    padding-bottom: 25px;
+    display: flex;
 
   }
-  &.group{
+
+  &.group {
     background-color: $container_dark;
     color: $textColor;
     width: 100%;
-    border-style: solid;  
+    border-style: solid;
     border-width: 5px;
-    border-color: $light_pink; 
+    border-color: $light_pink;
     height: 90px;
     font-size: 25px;
     font-weight: 400;
@@ -115,41 +128,66 @@
     align-items: center;
   }
 }
-  .recipes{
-    &.add{
-      height: 40px;
-      color: $container_dark;
-      padding: 15px 60px;
-      align-items: center;
-      display: flex;
-    }
-    &.plus{
-      padding: 15px 30px; 
-      background-color: $dark_green;
-      align-items: center;
-      display: flex;
-      height: 15px; 
-      font-size: 20px;
-    }
-    &.tag{
-      padding: 0px 16px; 
-      align-items: center;
-      margin: 8px 8px 0px 0px;
-      width: 150px; 
-      color: $container_dark; 
-      background-color: rgb(255, 255, 255, 0.6);
-      &.selected{
-        background-color: $true_green;
-      }
-    }
-}
-  .recipe{
-    &.edit{
-      height: 40px;
-      color: $container_dark;
-      padding: 15px 60px;
-      align-items: center;
-      display: flex;
-    }
+
+.recipes {
+  &.add {
+    height: 40px;
+    color: $container_dark;
+    padding: 15px 60px;
+    align-items: center;
+    display: flex;
   }
 
+  &.plus {
+    padding: 15px 30px;
+    background-color: $dark_green;
+    align-items: center;
+    display: flex;
+    height: 15px;
+    font-size: 20px;
+  }
+
+  &.tag {
+    padding: 0px 16px;
+    align-items: center;
+    margin: 8px 8px 0px 0px;
+    width: 150px;
+    color: $container_dark;
+    background-color: rgb(255, 255, 255, 0.6);
+
+    &.selected {
+      background-color: $true_green;
+    }
+  }
+}
+
+.recipe {
+  &.edit {
+    height: 40px;
+    color: $container_dark;
+    padding: 15px 60px;
+    align-items: center;
+    display: flex;
+  }
+}
+
+.group {
+  &.add {
+    height: 40px;
+    color: $container_dark;
+    padding: 15px 60px;
+    align-items: center;
+    display: flex;
+    font-size: 20px;
+  }
+
+  &.plus {
+    padding: 15px 30px;
+    background-color: $dark_green;
+    align-items: center;
+    display: flex;
+    font-size: 15px;
+    justify-content: flex-end;
+    margin-left: auto;
+  }
+}

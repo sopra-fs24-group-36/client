@@ -8,7 +8,9 @@ import Home from "../../views/Home"
 import UserProfile from "../../views/UserProfile";
 import EditProfile from "../../views/EditProfile";
 import PersonalCookbook from "../../views/PersonalCookbook";
-import Recipe from "../../views/Recipe"; 
+import Recipe from "../../views/Recipe";
+import GroupCookbook from "../../views/GroupCookbook";
+
 /**
  * Main router of your application.
  * In the following class, different routes are rendered. In our case, there is a Login Route with matches the path "/login"
@@ -29,18 +31,22 @@ const AppRouter = () => {
 
         <Route path="/recipes" element={<AddRecipe />} />
 
-        <Route path="/recipes/recipe" element={<Recipe/>}/> 
+        <Route path="/recipes/recipe" element={<Recipe />} />
 
         <Route path="/users" element={<Register />} />
 
-        <Route path="users/login" element={<Login />} />
+        <Route path="/users/login" element={<Login />} />
         {/*<Route path="/users/login" element={<LoginGuard />}>*/}
         {/*  <Route path="/users/login" element={<Login/>} />*/}
         {/*</Route>*/}
 
         <Route path="/users/profile" element={<UserProfile />} />
         <Route path="/users/profile/edit" element={<EditProfile />} />
-        <Route path="users/cookbooks" element={<PersonalCookbook />} />
+        <Route path="/users/cookbooks" element={<PersonalCookbook />} />
+
+        {/*<Route path="/groups/:groupID/cookbooks" element={<GroupCookbook />} />*/}
+        <Route path="/groups/cookbooks" element={<GroupCookbook />} />
+
         <Route path="/" element={
           <Navigate to="/users/login" replace />
         } />

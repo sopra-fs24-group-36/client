@@ -3,7 +3,7 @@ import { Form, useNavigate, useParams } from "react-router-dom";
 import { api, handleError } from "helpers/api";
 import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
-import "styles/views/PersonalCookbook.scss";
+import "styles/views/GroupCookbooks.scss";
 import User from "models/User";
 import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
@@ -16,6 +16,14 @@ import defaultRecipe2 from "../../assets/defaultRecipe2.png";
 import defaultRecipe3 from "../../assets/defaultRecipe3.png";
 // @ts-ignore
 import defaultRecipe4 from "../../assets/defaultRecipe4.png";
+// @ts-ignore
+import defaultRecipe1UserImg from "../../assets/defaultRecipe1UserImg.png";
+// @ts-ignore
+import defaultRecipe2UserImg from "../../assets/defaultRecipe2UserImg.png";
+// @ts-ignore
+import defaultRecipe3UserImg from "../../assets/defaultRecipe3UserImg.png";
+// @ts-ignore
+import defaultRecipe4UserImg from "../../assets/defaultRecipe4UserImg.png";
 import Header from "./Header";
 import Header_new from "./Header_new";
 // @ts-ignore
@@ -41,7 +49,7 @@ FormField.propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 
-const Recipe = ({ title, description, time, tag, imageUrl, onClick }: any) => (
+const Recipe = ({ title, description, time, tag, imageUrl, userImgUrl, onClick }: any) => (
   <div className="cookbook recipeContainer">
     <button className="cookbook recipeButton" onClick={onClick}>
       <div className="cookbook recipeImgContainer">
@@ -52,6 +60,10 @@ const Recipe = ({ title, description, time, tag, imageUrl, onClick }: any) => (
         <p className="cookbook recipeDescription">Description:{description}</p>
         <p className="cookbook recipeTime">Total Time;{time}</p>
         <p className="cookbook recipeTags">Tags:{tag}</p>
+
+      </div>
+      <div className="cookbook recipeUserImgContainer">
+        <img className="cookbook recipeUserImg" src={userImgUrl} alt="User Image" />
       </div>
     </button>
   </div>
@@ -68,6 +80,7 @@ const RecipeList = ({ recipes, onClickRecipe }: any) => (
         time={recipe.cooking_time}
         tag={recipe.tags}
         imageUrl={recipe.image}
+        userImgUrl={recipe.userImg}
       />
     ))}
   </div>
@@ -80,6 +93,7 @@ const defaultRecipes = [
     cooking_time: "30min",
     tags: "vegetarian",
     image: defaultRecipe1,
+    userImg: defaultRecipe1UserImg,
   },
   {
     title: "Quick fried rice",
@@ -87,6 +101,7 @@ const defaultRecipes = [
     cooking_time: "25 min",
     tags: "vegetarian",
     image: defaultRecipe2,
+    userImg: defaultRecipe2UserImg,
   },
   {
     title: "Spring onion soup",
@@ -94,6 +109,7 @@ const defaultRecipes = [
     cooking_time: "30 min",
     tags: "vegetarian",
     image: defaultRecipe3,
+    userImg: defaultRecipe3UserImg,
   },
   {
     title: "Pork medallions",
@@ -101,6 +117,7 @@ const defaultRecipes = [
     cooking_time: "45min",
     tags: "dinner",
     image: defaultRecipe4,
+    userImg: defaultRecipe4UserImg,
   },
 ];
 
@@ -111,7 +128,7 @@ const PersonalCookbook = () => {
 
   const filterRecipe = () => {
   };
-  const deleteRecipe = () => {
+  const removeRecipe = () => {
   };
   const handleClickRecipe = (user: User, recipeId: string) => {
     navigate(`/users/${user.id}/cookbooks/${recipeId}`);
@@ -135,16 +152,16 @@ const PersonalCookbook = () => {
         {/*head field*/}
         <div className="cookbook headerContainer">
           <div className="cookbook backButtonContainer">
-            <Button className="cookbook backButton" onClick={() => navigate(`/home`)}>
+            <Button className="cookbook backButton" onClick={() => navigate("/home")}>
               Back
             </Button>
           </div>
           <div className="cookbook titleContainer">
-            <h2 className="cookbook title">Personal Cookbook</h2>
+            <h2 className="cookbook title">Carrot Crew - Cookbook</h2>
           </div>
           <div className="cookbook backButtonContainer">
-            <Button className="cookbook backButton" onClick={deleteRecipe()}>
-              Delete Recipes
+            <Button className="cookbook backButton" onClick={removeRecipe()}>
+              Remove Recipes
             </Button>
           </div>
         </div>

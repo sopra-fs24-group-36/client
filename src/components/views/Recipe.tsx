@@ -14,6 +14,7 @@ import select_image from "../../assets/select_image.png";
 
 
 const Recipe = () => {
+  const navigate = useNavigate()
   const editRecipe = () =>{
   }
 
@@ -26,7 +27,8 @@ const Recipe = () => {
       <BaseContainer>
         <div className="recipe headerContainer">
           <div className="recipe backButtonContainer">
-            <Button className = "backButton">
+            <Button className = "backButton"
+            onClick={() => navigate(-1)}>
               Back
             </Button>
           </div>

@@ -81,11 +81,11 @@ const Home = () => {
               <p className="Home recipeTags">Tags: vegetarian, gluten-free</p>
             </div>
           </Button>
-        </div>
-        <div className="Home recipesButtonContainer">
-          <Button className="Home personalRecipes" onClick={() => { /* doPersonalRecipes() */ }}>
-            View all Personal Recipes
-          </Button>
+          <div className="Home recipesButtonContainer">
+            <Button className="Home personalRecipes" onClick={() => {doPersonalRecipes() }}>
+                View all Personal Recipes
+            </Button>
+          </div>
         </div>
       </div>
       <div className ="Home containerRight">

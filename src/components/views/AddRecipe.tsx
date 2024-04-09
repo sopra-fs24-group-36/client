@@ -179,7 +179,8 @@ const addRecipe = () => {
       <BaseContainer>
         <div className="recipes headerContainer">
           <div className="recipes backButtonContainer">
-            <Button className = "backButton">
+            <Button className = "backButton"
+            onClick={() => navigate(-1)}>
               Back
             </Button>
           </div>

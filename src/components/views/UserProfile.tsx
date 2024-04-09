@@ -12,6 +12,7 @@ import rightBrok from "../../assets/rightBrok.png";
 import defaultUser from "../../assets/defaultUser.png"
 const Icon = ({ flip }) => {
   const iconClass = flip ? "icon flip-horizontal" : "icon";
+
   return <img src={rightBrok} alt="Icon" className={iconClass} />;
 };
 Icon.propTypes = {
@@ -61,7 +62,7 @@ const UserProfile=()=>{
             <Icon flip={false} />
           </div>
           <div>
-              {/*<div className="item-img">
+            {/*<div className="item-img">
               {user.profilePicture ? (
                 <img src={user.profilePicture} alt="Icon" />
               ) : (
@@ -73,7 +74,7 @@ const UserProfile=()=>{
                 <img src={defaultUser} alt="Icon" />
               </div>
             </div>
-            <div style={{ marginTop: '1em' }}></div>
+            <div style={{ marginTop: "1em" }}></div>
             <div className="userprofile user-data-item">
               <span className="userprofile item-label">ID:</span>
               <span className="userprofile ite m-value">{1}</span>

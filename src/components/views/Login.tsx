@@ -12,6 +12,7 @@ import rightBrok from "../../assets/rightBrok.png";
 
 const Icon = ({ flip }) => {
   const iconClass = flip ? "icon flip-horizontal" : "icon";
+  
   return <img src={rightBrok} alt="Icon" className={iconClass} />;
 };
 Icon.propTypes = {

@@ -87,7 +87,16 @@ const AddGroup = () => {
   return (
     <div>
       <Header_new></Header_new>
-      <Dashboard></Dashboard>
+      <Dashboard
+        showButtons={{
+          recipe: true,
+          group: true,
+          calendar: true,
+          shoppinglist: true,
+          invitations: true,
+        }}
+        activePage="group"
+      />
       <BaseContainer>
         <div className="groups headerContainer">
           <div className="groups backButtonContainer">

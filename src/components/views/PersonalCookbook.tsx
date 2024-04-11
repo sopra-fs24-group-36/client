@@ -31,10 +31,7 @@ const FormField = (props) => {
     </div>
   );
 };
-FormField.prototype = {
-  value: PropTypes.string,
-  onChange: PropTypes.func,
-};
+
 FormField.propTypes = {
   value: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
@@ -129,8 +126,16 @@ const PersonalCookbook = () => {
   return (
     <div>
       <Header_new />
-      <Dashboard>
-      </Dashboard>
+      <Dashboard
+        showButtons={{
+          recipe: true,
+          group: true,
+          calendar: true,
+          shoppinglist: true,
+          invitations: true,
+        }}
+        activePage=""
+      />
       <BaseContainer>
         {/*head field*/}
         <div className="cookbook headerContainer">

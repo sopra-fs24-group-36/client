@@ -51,8 +51,17 @@ const Home = () => {
 
   return (
     <div>
-      <Header_new />
-      <Dashboard />
+      <Header_new></Header_new>
+      <Dashboard
+        showButtons={{
+          recipe: true,
+          group: true,
+          calendar: true,
+          shoppinglist: true,
+          invitations: true,
+        }}
+        activePage=""
+      />
       <div className="Home containerLeft">
         <div className="Home header">
           <img src={leftBrok} alt="Icon" className="Home icon" />
@@ -63,7 +72,8 @@ const Home = () => {
           <img src={rightBrok} alt="Broccoli" className="Home icon" />
         </div>
         <div className="Home recipeContainer">
-          <Button className="Home recipe">
+          <Button className="Home recipe"
+                  onClick={() => navigate("/recipes/recipe")}>
             <img src={wildGarlic} alt="Recipe" className="Home recipeImage" />
             <div className="Home recipeInfo">
               <h3 className="Home recipeTitle">Wild garlic curry</h3>
@@ -83,7 +93,7 @@ const Home = () => {
           </Button>
         </div>
         <div className="Home recipesButtonContainer">
-          <Button className="Home personalRecipes" onClick={() => { /* doPersonalRecipes() */ }}>
+          <Button className="Home personalRecipes" onClick={() => navigate("/users/cookbooks")}>
             View all Personal Recipes
           </Button>
         </div>
@@ -94,7 +104,9 @@ const Home = () => {
         </div>
         <div className="Home groupContainer">
           <div className="Home buttonContainer">
-            <Button className="Home group" /*onClick={() => { doGroup(groupID) }}*/>
+            <Button className="Home group"
+              /*onClick={() => { doGroup(groupID) }}*/
+              onClick={() => navigate("/groups/cookbooks")}>
               <img src={Group} alt="Group" className="Home groupImage" />
               Carrot Crew
             </Button>

@@ -172,10 +172,17 @@ const addRecipe = () => {
 
   return (
     <div>
-      <Header_new>
-      </Header_new>
-      <Dashboard>
-      </Dashboard>
+      <Header_new></Header_new>
+      <Dashboard
+        showButtons={{
+          recipe: true,
+          group: true,
+          calendar: true,
+          shoppinglist: true,
+          invitations: true,
+        }}
+        activePage="recipe"
+      />
       <BaseContainer>
         <div className="recipes headerContainer">
           <div className="recipes backButtonContainer">

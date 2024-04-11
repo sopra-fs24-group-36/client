@@ -44,5 +44,25 @@
     height:50px;
     margin-right: 10px;
   }
+  &.popup{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: $container_dark;
+    color: $textColor;
+    border-radius: $borderRadius;
+    padding: 20px;
+    z-index: 1000;
+  }
+  &.popup-title{
+    font-weight: 600;
+    text-align: center;
+  }
+  &.popup-button-container{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
 }
 

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, useNavigate, useParams } from "react-router-dom";
-import { api, handleError } from "helpers/api";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
 import "styles/views/GroupCookbooks.scss";
@@ -39,13 +38,8 @@ const FormField = (props) => {
     </div>
   );
 };
-FormField.prototype = {
-  value: PropTypes.string,
-  onChange: PropTypes.func,
-};
 FormField.propTypes = {
   value: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 
@@ -121,11 +115,10 @@ const defaultRecipes = [
   },
 ];
 
-const PersonalCookbook = () => {
+const GroupCookbook = () => {
   const navigate = useNavigate();
   const [filterKeyword, setFilterKeyword] = useState<string>(null);
   const { id } = useParams();
-
   const filterRecipe = () => {
   };
   const removeRecipe = () => {
@@ -146,8 +139,17 @@ const PersonalCookbook = () => {
   return (
     <div>
       <Header_new />
-      <Dashboard>
-      </Dashboard>
+      <Dashboard
+        showButtons={{
+          recipe: true,
+          groupCalendar: true,
+          groupShoppinglist: true,
+          invitations: true,
+          inviteUser: true,
+          leaveGroup: true,
+        }}
+        activePage="leaveGroup"
+      />
       <BaseContainer>
         {/*head field*/}
         <div className="cookbook headerContainer">
@@ -165,7 +167,6 @@ const PersonalCookbook = () => {
             </Button>
           </div>
         </div>
-        {/*filter field*/}
         <div className="cookbook filterContainer">
           <div className="cookbook filterButtonContainer">
             <Button className="cookbook filterButton" onClick={filterRecipe()}>filter</Button>
@@ -173,10 +174,9 @@ const PersonalCookbook = () => {
           <FormField
             className="cookbook input"
             value={filterKeyword}
-            onClick={(fk: string) => setFilterKeyword()}>
+            onChange={(fk: string) => setFilterKeyword()}>
           </FormField>
         </div>
-        {/*recipe field*/}
         <RecipeList recipes={defaultRecipes} onClickRecipe={handleClickRecipe} />
       </BaseContainer>
       <Footer>
@@ -185,4 +185,4 @@ const PersonalCookbook = () => {
   );
 };
 
-export default PersonalCookbook;
+export default GroupCookbook;

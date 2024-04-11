@@ -1,7 +1,5 @@
 import React from "react";
-import Header from "./components/views/Header";
 import AppRouter from "./components/routing/routers/AppRouter";
-import Header_new from "./components/views/Header_new"  
 
 /**
  * Happy coding!
@@ -12,9 +10,8 @@ import Header_new from "./components/views/Header_new"
 const App = () => {
   return (
     <div>
-      {/*<Header height="100" />*/}
-      {/*<Header_new />*/}
       <AppRouter />
+      <div id="portal-invite-user"></div>
     </div>
   );
 };

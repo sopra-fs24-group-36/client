@@ -1,13 +1,5 @@
 @import "../theme";
 
-body {
-  background-image: url("../../assets/Background-Brocc.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  font-family: Arial, sans-serif;
-}
-
 .login {
   &.title{
     color: $textColor;

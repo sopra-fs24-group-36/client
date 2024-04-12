@@ -1,0 +1,173 @@
+@import "../theme";
+
+.shoppinglist {
+  &.base {
+    margin-left: calc(15% + 80px);
+    border-radius: $borderRadius;
+    background-color: $true_green;
+    display: inline-block;
+    vertical-align: top;
+    width: calc(85% - 90px);
+    margin-top: 30px;
+    position: fixed;
+    height: calc(100% - 210px);
+    margin-top: 115px;
+    overflow: auto;
+    background-image: url('../../assets/leftBrok.png');
+    background-size: 10%;
+  }
+
+  &.headerContainer {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  &.title {
+    color: $textColor;
+    font-size: 40px;
+    text-align: center;
+    flex: 1;
+    margin-right: 200px;
+  }
+
+  &.backButtonContainer {
+    margin-left: 60px;
+  }
+
+  &.container {
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    width: 60%;
+    margin: 0 auto;
+    background-color: $light_green;
+    border-radius: $borderRadius;
+    margin-bottom: 20px;
+  }
+
+  &.p {
+    height: 50px;
+    color: $container_dark;
+    font-weight: bold;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+
+  &.itemsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  &.itemsField {
+    position: relative;
+    height: 35px;
+    width: 60%;
+    border: none;
+    border-radius: $borderRadius;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $true_green;
+  }
+
+  &.itemsInput {
+    height: 35px;
+    border: none;
+    border-radius: $borderRadius;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: transparent;
+    color: $textColor;
+  }
+
+  &.check {
+    position: absolute;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: $borderRadius;
+    background-color: $light_green;
+    color: $dark_pink;
+    font-size: 30px;
+  }
+
+  &.addItemContainer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+    justify-content: space-between;
+    flex-direction: column;
+  }
+
+  &.label {
+    color: $container_dark;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 1.5em;
+    margin-right: 10px;
+  }
+
+  &.field {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    width: 60%;
+  }
+
+  &.input {
+    height: 35px;
+    width: calc(100% - 70px);
+    padding-left: 15px;
+    margin-left: -4px;
+    border: none;
+    border-radius: $borderRadius;
+    color: $container_dark;
+    background-color: rgb(255, 255, 255, 0.6);
+  }
+
+  &.add {
+    width: 60px;
+    height: 35px;
+    border: none;
+    border-radius: $borderRadius;
+    background-color: $dark_green;
+    color: $textColor;
+    font-weight: 600;
+    font-size: 1.5em;
+    cursor: pointer;
+  }
+
+  &.clearAll {
+    position: relative;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 35px;
+    border-radius: $borderRadius;
+    background-color: $light_pink;
+    color: $container_dark;
+    font-size: 17px;
+  }
+
+}

@@ -49,7 +49,7 @@ const Login = () => {
 
   const doLogin = async () => {
     try {
-      const requestBody = JSON.stringify({ username, name });
+      const requestBody = JSON.stringify({ username, password });
       const response = await api.post("/users/login", requestBody);
 
       // Get the returned user and update a new object.
@@ -60,7 +60,7 @@ const Login = () => {
       //store ID in the local storage 
       localStorage.setItem("userID", user.id);
 
-      // Login successfully worked --> navigate to the route /game in the GameRouter
+      // Login successfully worked --> navigate to the route /home
       navigate("/home");
     } catch (error) {
       alert(

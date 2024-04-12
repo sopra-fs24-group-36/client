@@ -47,7 +47,7 @@ const Register = () => {
 
   const doRegister = async () => {
     try {
-      const requestBody = JSON.stringify({ username, password, name });
+      const requestBody = JSON.stringify({ username, email, password, name });
       const response = await api.post("/users", requestBody);
 
       if (!response.data) {
@@ -56,7 +56,9 @@ const Register = () => {
       const user = new User(response.data);
       //store ID in the local storage
       localStorage.setItem("userID", user.id);
-      navigate("/users/login");
+      // Store the token into the local storage.
+      localStorage.setItem("token", user.token);
+      navigate("/home"); //navigating to home after successful login
     } catch (error) {
       alert(
         `Something went wrong during the register: \n${handleError(error)}`,

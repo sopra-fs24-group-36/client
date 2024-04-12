@@ -8,9 +8,9 @@ class User {
     this.username = null;
     this.token = null;
     this.status = null;
-    this.Email = null;
+    this.email = null;
     this.creationdate = null;
-    user.profilePicture=null;
+    this.profilePicture=null;
     Object.assign(this, data);
   }
 }

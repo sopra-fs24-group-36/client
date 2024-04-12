@@ -9,6 +9,7 @@ import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import BaseContainer from "components/ui/BaseContainer_new";
 import Header_new from "components/views/Header_new";
+import Group from "models/Group";
 // @ts-ignore
 import select_image from "../../assets/select_image.png";
 
@@ -78,6 +79,7 @@ const AddGroup = () => {
         group_members: group_members,
       });
       const response = await api.post("/groups", requestBody);
+      const group = new Group(response.data);
     } catch (error) {
       console.error("An error occurred while creating groups:", error);
       alert("Creating a group failed because the details were incomplete.");

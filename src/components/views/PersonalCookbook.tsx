@@ -7,6 +7,7 @@ import "styles/views/PersonalCookbook.scss"
 import User from "models/User";
 import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
+import Header_new from "components/views/Header_new";
 import BaseContainer from "components/ui/BaseContainer_new";
 // @ts-ignore
 import defaultRecipe1 from "../../assets/defaultRecipe1.png"
@@ -122,7 +123,7 @@ const PersonalCookbook=()=>{
 
   return(
     <div>
-      <Header_new />
+      <Header_new></Header_new>
       <Dashboard
         showButtons={{
           recipe: true,

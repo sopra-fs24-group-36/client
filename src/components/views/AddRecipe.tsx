@@ -75,16 +75,14 @@ const addRecipe = () => {
   const [recipe_link, set_recipe_link] = useState<string>(null);
   const [recipe_description, set_recipe_description] = useState<string>(null); 
   const [recipe_prep, set_recipe_prep] = useState<string>(null); 
-  const [recipe_ing, set_recipe_ing] = useState([""]); /*are arrays*/
-  const [recipe_ing_amount, set_recipe_ing_amount] = useState([""]); /*are arrays*/
+  const [recipe_ing, set_recipe_ing] = useState([[""],[""]]); /*are arrays*/
   const [recipe_steps, set_recipe_steps] = useState([""]); /*are arrays*/
   const [recipe_tags, set_recipe_tags] = useState([""]); /*are arrays*/
   const [group_tags, set_group_tags] = useState([""]); /*are arrays*/
   const [showHelp, setShowHelp] = useState(false); 
 
   const addField = () =>{ /*to add a field for adding ingredients and their amount*/
-    set_recipe_ing([...recipe_ing, ""]);
-    set_recipe_ing_amount([...recipe_ing_amount,""]);
+    set_recipe_ing([...recipe_ing, ["",""]]);
   }
 
   const addStep = () =>{/*to add a field for adding steps to complete recipe*/
@@ -93,12 +91,17 @@ const addRecipe = () => {
 
   const addRecipeTag = (tag) =>{ /*to add a tag to a recipe*/
     const isSelected = recipe_tags.includes(tag); /*to see if something has already been selected, we check if there is a tag in the recipe_tags list*/
-    if (isSelected) {
-      set_recipe_tags(prevTags => prevTags.filter((selectedTag) => selectedTag !== tag)); /*if there is a tag, check the current one clicked is not the same */
-    } else {
-      set_recipe_tags([...recipe_tags, tag]);
+      if (isSelected) {
+        set_recipe_tags(prevTags => prevTags.filter((selectedTag) => selectedTag !== tag)); /*if there is a tag, check the current one clicked is not the same */
+      } else {
+        if(recipe_tags.length <= 3){
+          set_recipe_tags([...recipe_tags, tag]);
+        }
+        else{
+          console.log("Maximum number of tags reached");
+        }
+      }
     }
-  }
 
   const addGroupTag = (tag) =>{ /*to add a group tag to a recipe*/
     const isSelected = group_tags.includes(tag);
@@ -156,7 +159,6 @@ const addRecipe = () => {
           "recipe_description":recipe_description,
           "recipe_prep":recipe_prep,
           "recipe_ing":recipe_ing,
-          "recipe_ing_amount":recipe_ing_amount,
           "recipe_steps":recipe_steps,
           "recipe_tags":recipe_tags,
           "group_tags":group_tags
@@ -249,20 +251,20 @@ const addRecipe = () => {
                 <div key={index} className="recipes ingredientFields">
                   <div className="recipes ingredientsAmount">
                     <IngredientsField
-                      value={recipe_ing_amount[index]} 
+                      value={recipe_ing[index][0]} 
                       onChange={(value) => {
-                        const newAmounts = [...recipe_ing_amount]; /*creating a copy of recipe_ing_amount*/
-                        newAmounts[index] = value; /*setting the index from the amount to the value*/
-                        set_recipe_ing_amount(newAmounts); /*overwriting previous aray with newAmounts array*/
+                        const newAmounts = [...recipe_ing]; /*creating a copy of recipe_ing_amount*/
+                        newAmounts[index][0] = value; /*setting the index from the amount to the value*/
+                        set_recipe_ing(newAmounts); /*overwriting previous aray with newAmounts array*/
                       }}
                     />
                   </div>
                   <div className="recipes ingredientsIng">
                     <IngredientsField
-                      value={recipe_ing[index]}
+                      value={recipe_ing[index][1]}
                       onChange={(value) => {
                         const newIngredients = [...recipe_ing];
-                        newIngredients[index] = value;
+                        newIngredients[index][1] = value;
                         set_recipe_ing(newIngredients);
                       }}
                     />
@@ -300,42 +302,50 @@ const addRecipe = () => {
               <p className ="recipes p tags">Select tags (max 3):</p>
               <Button 
                 className={`recipes tag ${recipe_tags.includes("Vegetarian") ? "selected" : ""}`}
-                onClick={() => addRecipeTag("Vegetarian")}>
+                onClick={() => addRecipeTag("Vegetarian")}
+                disabled={recipe_tags.length > 3 && !recipe_tags.includes("Vegetarian")}>
                 Vegetarian
               </Button>
               <Button 
                 className={`recipes tag ${recipe_tags.includes("Vegan") ? "selected" : ""}`}
-                onClick={() => addRecipeTag("Vegan")}>
+                onClick={() => addRecipeTag("Vegan")}
+                disabled={recipe_tags.length > 3 && !recipe_tags.includes("Vegan")}>
                 Vegan
               </Button>
               <Button 
                 className={`recipes tag ${recipe_tags.includes("Lactose-free") ? "selected" : ""}`}
-                onClick={() =>addRecipeTag("Lactose-free")}>
+                onClick={() =>addRecipeTag("Lactose-free")}
+                disabled={recipe_tags.length > 3 && !recipe_tags.includes("Lactose-free")} >
                 Lactose-free
               </Button>
               <Button 
                 className={`recipes tag ${recipe_tags.includes("Gluten-free") ? "selected" : ""}`}
-                onClick={() =>addRecipeTag("Gluten-free")}>
+                onClick={() =>addRecipeTag("Gluten-free")}
+                disabled={recipe_tags.length > 3 && !recipe_tags.includes("Gluten-free")}>
                 Gluten-free
               </Button>
               <Button 
                 className={`recipes tag ${recipe_tags.includes("Breakfast") ? "selected" : ""}`}
-                onClick={() =>addRecipeTag("Breakfast")}>
+                onClick={() =>addRecipeTag("Breakfast")}
+                disabled={recipe_tags.length > 3 && !recipe_tags.includes("Breakfast")}>
                 Breakfast
               </Button>
               <Button 
                 className={`recipes tag ${recipe_tags.includes("Lunch") ? "selected" : ""}`}
-                onClick={() =>addRecipeTag("Lunch")}>
+                onClick={() =>addRecipeTag("Lunch")}
+                disabled={recipe_tags.length > 3 && !recipe_tags.includes("Lunch")}>
                 Lunch
               </Button>
               <Button 
                 className={`recipes tag ${recipe_tags.includes("Apéro") ? "selected" : ""}`}
-                onClick={() =>addRecipeTag("Apéro")}>
+                onClick={() =>addRecipeTag("Apéro")}
+                disabled={recipe_tags.length > 3 && !recipe_tags.includes("Apéro")}>
                 Apéro
               </Button>
               <Button 
                 className={`recipes tag ${recipe_tags.includes("Desert") ? "selected" : ""}`}
-                onClick={() =>addRecipeTag("Desert")}>
+                onClick={() =>addRecipeTag("Desert")}
+                disabled={recipe_tags.length > 3 && !recipe_tags.includes("Desert")}>
                 Desert
               </Button>
             </div>

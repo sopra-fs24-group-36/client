@@ -5,7 +5,7 @@ import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
 import "styles/views/PersonalCookbook.scss"
 import User from "models/User";
-import Arecipe from "models/Recipe"
+import Arecipe from "models/Arecipe"
 import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import BaseContainer from "components/ui/BaseContainer_new";
@@ -125,7 +125,7 @@ const PersonalCookbook=()=>{
         setRecipes(response.data);
       }catch(error){
         console.error(
-          `Something went wrong while fetching the users: \n${handleError(
+          `Something went wrong while fetching the recipes: \n${handleError(
             error
           )}`
           );

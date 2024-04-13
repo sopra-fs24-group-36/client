@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { api, handleError } from "helpers/api";
 import User from "models/User";
 import { useNavigate, useParams } from "react-router-dom";
+import ReactDOM from "react-dom";
 import { Button } from "components/ui/Button";
 import "styles/views/UserProfile.scss";
+import "styles/views/EditPictureModal.scss"
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from 'prop-types';
 //import Modal from "react-boostrap/Modal";
@@ -13,7 +15,7 @@ import rightBrok from "../../assets/rightBrok.png";
 // @ts-ignore
 import defaultUser from "../../assets/defaultUser.png"
 // @ts-ignore
-import camera from "../../assets/camera.png"
+import select_image from "../../assets/select_image.png"
 import UserProfile from "./UserProfile";
 const Icon = ({ flip }) => {
   const iconClass = flip ? "icon flip-horizontal" : "icon";
@@ -37,12 +39,6 @@ const FormField=(props)=>{
   )
 }
 
-type FormFieldProps = {
-  label: PropTypes.string;
-  value: PropTypes.string;
-  placeholder: PropTypes.string;
-  onChange: PropTypes.func;
-};
 FormField.propTypes = {
   label: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
@@ -50,7 +46,56 @@ FormField.propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 
-const EditProfile=()=>{
+const ProfileFormField=(props)=>{
+  return(
+    <div className="editPicture field">
+      <div className="editPicture input-container">
+        <input
+          className="editPicture input"
+          placeholder="Enter the url for the new picture..."
+          value={props.value}
+        />
+      </div>
+    </div>
+  )
+}
+ProfileFormField.propTypes = {
+  value: PropTypes.string.isRequired,
+};
+const EditPictureModal = ({ open, onClose, profilepicture,setProfilepicture})=>{
+  if(!open) return null;
+  const handleSave=async()=>{
+    setProfilepicture(profilepicture)
+    onClose();
+  };
+
+  return (
+    <>
+      <div className="editPicture backdrop"></div>
+      <div className="editPicture container">
+        <div className="editPicture title">Change Profile Picture</div>
+        <ProfileFormField
+          value={profilepicture}
+        />
+        <div className="editPicture button-container">
+          <Button className="editPicture button" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button className="editPicture highlight" onClick={handleSave}>
+            Save
+          </Button>
+        </div>
+      </div>
+    </>
+  );
+}
+EditPictureModal.propTypes={
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  profilepicture: PropTypes.string.isRequired,
+  setProfilepicture: PropTypes.func.isRequired,
+}
+const EditProfile = () => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState(null);
@@ -58,17 +103,14 @@ const EditProfile=()=>{
   const [username, setUsername] = useState(null);
   const [name, setName]=useState(null);
   const [profilepicture, setProfilepicture]=useState(null);
-
-  //const [showModal, setShowModal] = useState(false);
+  const [isModalOpen,setIsModalOpen]=useState(false);
 
   const {id} = useParams();
 
-  //const handleCloseModal = () => setShowModal(false);
-  //const handleShowModal = () => setShowModal(true);
 
   const saveChanges=async ()=>{
     try{
-      //check if there are any changes
+      //TODO:check if there are any changes, send http request when changes occur
 
       const requestBody=JSON.stringify({
         "id":id,
@@ -119,6 +161,9 @@ const EditProfile=()=>{
             <Icon flip={false} />
           </div>
           <div>
+{/*
+TODO:add the following part and delete the default
+*/}
             {/*<div className="item-img">
               {user.profilePicture ? (
                 <img src={user.profilePicture} alt="Icon" />
@@ -126,38 +171,43 @@ const EditProfile=()=>{
                 <img src={defaultUser} alt="Icon" />
               )}
             </div>*/}
-            <div>
+            <div >
               <div className="userprofile imageContainer">
-                <div className="userprofile circle-img">
+                <div className="userprofile circle-img" style={{position:'relative'}}>{/*set the father component relative and then it can be regarded as reference point*/}
                   <img src={defaultUser} alt="Icon" />
+                  <Button
+                    className="userprofile button-with-picture"
+                    style={{
+                      position:'absolute',
+                      right:'120px',
+                      bottom:'0px',
+                      backgroundImage: `url(${select_image})` }}
+                    onClick={()=>setIsModalOpen(true)}>
+                  </Button>
                 </div>
               </div>
-{/*              <Button onClick={handleShowModal}>
-                <div className="userprofile circle-img">
-                  <img src={camera} alt={"Icon"} />
-                </div>
-              </Button>
-              {showModal&& (
-                <div className="userprofile modal">
-                  <input
-                    type="text"
-                    placeholder="Enter new profile picture URL"
-                    value={profilepicture}
-                    onChange={(e)=>setProfilepicture(e.target.value)}
-                  />
-                  <Button onClick={saveChanges}>Save</Button>
-                  <Button onClick={handleCloseModal}>Close</Button>
-                </div>
-              )}*/}
+
+              <EditPictureModal
+                  open={isModalOpen}
+                  onClose={()=>setIsModalOpen(false)}
+                  profilepicture={profilepicture}
+                  setProfilepicture={setProfilepicture}
+              />
             </div>
             <div className="userprofile user-data-item">
               <span className="userprofile item-label">ID:</span>
               <span className="userprofile ite m-value">{1}</span>
+{/*
+TODO:add the following line*
+*/}
               {/*<span className="userprofile item-value">{user.id}</span>*/}
             </div>
             <FormField
               label="E-Mail:"
               value={email}
+/*
+TODO:add the following line
+*/
               /*placeholder={user.email}*/
               placeholder={"brocc.oli@domain.com"}
               onChange={(un: string) => setEmail(un)}
@@ -165,6 +215,9 @@ const EditProfile=()=>{
             <FormField
               label="Username:"
               value={user}
+/*
+TODO:add the following line
+*/
               /*placeholder={user.username}*/
               placeholder={"broccHead1"}
               onChange={(un: string) => setUsername(un)}
@@ -178,11 +231,17 @@ const EditProfile=()=>{
             <div className="userprofile user-data-item">
               <span className="userprofile item-label">Creationdate:</span>
               <span className="userprofile item-value">{1}</span>
+{/*
+TODO:add the following line
+*/}
               {/*<span className="userprofile item-value">{user.creationdate}</span>*/}
             </div>
             <div className="userprofile user-data-item">
               <span className="userprofile item-label">Status:</span>
               <span className="item-value">{1}</span>
+{/*
+TODO:add the following line
+*/}
               {/*<span className="userprofile item-value">{user.status}</span>*/}
             </div>
           </div>
@@ -195,6 +254,9 @@ const EditProfile=()=>{
             </Button>
             <Button
               className="userprofile button-darkpink"
+/*
+TODO:add the following line
+*/
               /*disabled={!(user.token === localStorage.getItem("token"))}*/
               width="50%"
               onClick={()=>saveChanges()}>

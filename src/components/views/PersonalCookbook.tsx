@@ -5,6 +5,7 @@ import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
 import "styles/views/PersonalCookbook.scss"
 import User from "models/User";
+import Arecipe from "models/Recipe"
 import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import BaseContainer from "components/ui/BaseContainer_new";
@@ -16,6 +17,8 @@ import defaultRecipe2 from "../../assets/defaultRecipe2.png";
 import defaultRecipe3 from "../../assets/defaultRecipe3.png";
 // @ts-ignore
 import defaultRecipe4 from "../../assets/defaultRecipe4.png";
+import Header from "./Header";
+import Header_new from "./Header_new";
 // @ts-ignore
 const FormField=(props)=>{
   return (
@@ -29,8 +32,6 @@ const FormField=(props)=>{
     </div>
   );
 };
-
-
 FormField.propTypes = {
   value: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
@@ -104,20 +105,39 @@ const PersonalCookbook=()=>{
   const navigate = useNavigate();
   const [filterKeyword, setFilterKeyword]=useState<string>(null)
   const {id} = useParams();
+  const [recipes,setRecipes]=useState<Arecipe[]>(null);
 
-  const filterRecipe=()=>{}
-  const deleteRecipe=()=>{}
+  const filterRecipe=()=>{
+    //TODO:add the filter func by tags or names
+  }
+  const deleteRecipe=()=>{
+    //TODO:add the deleteRecipe when connecting with backend
+
+  }
   const handleClickRecipe=(user:User,recipeId:string)=>{
     navigate(`/users/${user.id}/cookbooks/${recipeId}`)
   }
-
+//TODO: add the fetchData func when connecting with backend
 /*  useEffect(() => {
     async function fetchData(){
       try{
         const response = await api.get(`/users/${user.id}/cookbooks`)
+        setRecipes(response.data);
+      }catch(error){
+        console.error(
+          `Something went wrong while fetching the users: \n${handleError(
+            error
+          )}`
+          );
+          console.error("Details:", error);
+          alert(
+          "Something went wrong while fetching the users! See the console for details."
+        );
       }
     }
-  }, []);*/
+    fetchData();
+  }, []);
+*/
 
 
   return(
@@ -163,6 +183,10 @@ const PersonalCookbook=()=>{
         </div>
 {/*recipe field*/}
         <RecipeList recipes={defaultRecipes} onClickRecipe={handleClickRecipe} />
+{/*
+TODO：add the following line and delete the line above
+        <RecipeList recipes={recipes} onClickRecipe={handleClickRecipe} />
+*/}
       </BaseContainer>
       <Footer>
       </Footer>

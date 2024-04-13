@@ -1,0 +1,104 @@
+@import "../theme";
+
+.editPicture {
+  &.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+  }
+  &.container {
+    position: fixed;
+    z-index: 100;
+    left: 50%;
+    top: 50%;
+    width: 400px;
+    height: 200px;
+    margin-left: -200px;
+    margin-top: -100px;
+    border-radius: 0.25em;
+    background-color: $container_dark;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  &.title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $textColor;
+    width: 403px;
+    height: 40px;
+    border: 3px solid $container_dark;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 0.25em;
+    background-color: $dark_pink;
+  }
+
+  &.field {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+  }
+
+  &.input-container {
+    width: 300px;
+    height: 40px;
+    border-radius: 0.25em;
+    background-color: $light_green;
+    text-align: left;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+  }
+
+  &.input {
+    width: 290px;
+    height: 30px;
+    border-radius: 0.25em;
+    border: none;
+    color: $container_dark;
+    background-color: $textColor;
+    text-align: left;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    text-indent: 5px;
+  }
+
+  &.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    width: 300px;
+  }
+
+  &.button {
+    width: 45%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25em;
+    background-color: $light_green;
+    color: $container_dark;
+  }
+
+  &.highlight {
+    width: 45%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25em;
+    background-color: $light_pink;
+    color: $container_dark;
+  }
+}

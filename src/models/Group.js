@@ -3,6 +3,7 @@
  */
 class Group {
     constructor(data = {}) {
+      this.id = null; 
       this.group_name = null;
       this.group_members = null;
       this.group_recipes = null;

@@ -76,14 +76,15 @@ const addRecipe = () => {
   const [title, set_recipe_title] = useState<string>(null);
   const [link, set_recipe_link] = useState<string>(null);
   const [shortDescription, set_recipe_description] = useState<string>(null); 
-  const [image, set_recipe_image] = useState([""]); /*are arrays*/
+  const [image, set_recipe_image] = useState<string>(null); 
   const [cookingTime, set_recipe_prep] = useState<string>(null); 
-  const [ingredients, set_recipe_ing] = useState([""]); /*are arrays*/
-  const [amount, set_recipe_amount] = useState([""]); /*are arrays*/
-  const [instructions, set_recipe_steps] = useState([""]); /*are arrays*/
-  const [tags, set_recipe_tags] = useState([""]); /*are arrays*/
-  const [cookbooks, set_cookbbooks] = useState([""]); /*are arrays*/
+  const [ingredients, set_recipe_ing] = useState<string[]>([]);
+  const [amount, set_recipe_amount] = useState<string[]>([]);
+  const [instructions, set_recipe_steps] = useState<string[]>([]);
+  const [tags, set_recipe_tags] = useState<string[]>([]);
+  const [cookbooks, set_cookbooks] = useState<string[]>([]);
   const [showHelp, setShowHelp] = useState(false); 
+  
 
   const addField = () =>{ /*to add a field for adding ingredients and their amount*/
     set_recipe_ing([...ingredients, ""]);
@@ -111,9 +112,9 @@ const addRecipe = () => {
   const addGroupTag = (tag) =>{ /*to add a group tag to a recipe*/
     const isSelected = cookbooks.includes(tag);
     if (isSelected) {
-      set_cookbbooks(prevTags => prevTags.filter((selectedTag) => selectedTag !== tag));
+      set_cookbooks(prevTags => prevTags.filter((selectedTag) => selectedTag !== tag));
     } else {
-      set_cookbbooks([...tags, tag]);
+      set_cookbooks([...tags, tag]);
     }
   }
 
@@ -144,23 +145,38 @@ const addRecipe = () => {
   
   const saveChanges = async() => {
     try{
-      let requestBody = null;
       if(link){ /*if we have a link, we save the following information*/
-        requestBody=JSON.stringify({title, shortDescription, cookingTime, image, link, tags, cookbooks})
+        const requestBody1=JSON.stringify({title, shortDescription, cookingTime, image, link, tags, cookbooks});
+        const response1 = await api.post(`/users/${currentUserID}/cookbooks`, requestBody1);
+        const recipe = new Recipe(response1.data); 
+        localStorage.setItem("recipeID", recipe.id); //not 100% sure if we need this, need to check with getting a recipe
+        navigate(-1);
       }
       else{
-        requestBody=JSON.stringify({/*if we have no link, we have steps and ingredients and save the following information*/
-        title, shortDescription, cookingTime, image, amount, ingredients, instructions, tags, cookbooks})
+        const requestBody2=JSON.stringify({/*if we have no link, we have steps and ingredients and save the following information*/
+        title, shortDescription, cookingTime, image, amount, ingredients, instructions, tags, cookbooks});
+        const response2 = await api.post(`/users/${currentUserID}/cookbooks`, requestBody2);
+        const recipe = new Recipe(response2.data); 
+        localStorage.setItem("recipeID", recipe.id); //not 100% sure if we need this, need to check with getting a recipe
+        navigate(-1);
       }
-      const response = await api.post(`/users/${currentUserID}/cookbooks`, requestBody)
-      const recipe = new Recipe(response.data); 
     }
     catch(error){
       alert(
       `Something went wrong when saving the recipe: \n${handleError(error)}`,
-    );}
+    );
+    set_recipe_title("");
+    set_recipe_link("");
+    set_recipe_description("");
+    set_recipe_image("");
+    set_recipe_prep("");
+    set_recipe_ing();
+    set_recipe_amount([]);
+    set_recipe_steps([]);
+    set_recipe_tags([]);
+    set_cookbooks([]);    
+    }
   }
-
   return (
     <div>
       <Header_new></Header_new>
@@ -290,51 +306,51 @@ const addRecipe = () => {
             <div className = "recipes tags">
               <p className ="recipes p tags">Select tags (max 3):</p>
               <Button 
-                className={`recipes tag ${tags.includes("Vegetarian") ? "selected" : ""}`}
-                onClick={() => addRecipeTag("Vegetarian")}
-                disabled={tags.length > 3 && !tags.includes("Vegetarian")}>
+                className={`recipes tag ${tags.includes("VEGETARIAN") ? "selected" : ""}`}
+                onClick={() => addRecipeTag("VEGETARIAN")}
+                disabled={tags.length >= 3 && !tags.includes("VEGETARIAN")}>
                 Vegetarian
               </Button>
               <Button 
-                className={`recipes tag ${tags.includes("Vegan") ? "selected" : ""}`}
-                onClick={() => addRecipeTag("Vegan")}
-                disabled={tags.length > 3 && !tags.includes("Vegan")}>
+                className={`recipes tag ${tags.includes("VEGAN") ? "selected" : ""}`}
+                onClick={() => addRecipeTag("VEGAN")}
+                disabled={tags.length >= 3 && !tags.includes("VEGAN")}>
                 Vegan
               </Button>
               <Button 
-                className={`recipes tag ${tags.includes("Lactose-free") ? "selected" : ""}`}
-                onClick={() =>addRecipeTag("Lactose-free")}
-                disabled={tags.length > 3 && !tags.includes("Lactose-free")} >
+                className={`recipes tag ${tags.includes("LACTOSEFREE") ? "selected" : ""}`}
+                onClick={() =>addRecipeTag("LACTOSEFREE")}
+                disabled={tags.length >= 3 && !tags.includes("LACTOSEFREE")} >
                 Lactose-free
               </Button>
               <Button 
-                className={`recipes tag ${tags.includes("Gluten-free") ? "selected" : ""}`}
-                onClick={() =>addRecipeTag("Gluten-free")}
-                disabled={tags.length > 3 && !tags.includes("Gluten-free")}>
+                className={`recipes tag ${tags.includes("GLUTENFREE") ? "selected" : ""}`}
+                onClick={() =>addRecipeTag("GLUTENFREE")}
+                disabled={tags.length >= 3 && !tags.includes("GLUTENFREE")}>
                 Gluten-free
               </Button>
               <Button 
-                className={`recipes tag ${tags.includes("Breakfast") ? "selected" : ""}`}
-                onClick={() =>addRecipeTag("Breakfast")}
-                disabled={tags.length > 3 && !tags.includes("Breakfast")}>
+                className={`recipes tag ${tags.includes("BREAKFAST") ? "selected" : ""}`}
+                onClick={() =>addRecipeTag("BREAKFAST")}
+                disabled={tags.length >= 3 && !tags.includes("BREAKFAST")}>
                 Breakfast
               </Button>
               <Button 
-                className={`recipes tag ${tags.includes("Lunch") ? "selected" : ""}`}
-                onClick={() =>addRecipeTag("Lunch")}
-                disabled={tags.length > 3 && !tags.includes("Lunch")}>
+                className={`recipes tag ${tags.includes("LUNCH") ? "selected" : ""}`}
+                onClick={() =>addRecipeTag("LUNCH")}
+                disabled={tags.length >= 3 && !tags.includes("LUNCH")}>
                 Lunch
               </Button>
               <Button 
-                className={`recipes tag ${tags.includes("Apéro") ? "selected" : ""}`}
-                onClick={() =>addRecipeTag("Apéro")}
-                disabled={tags.length > 3 && !tags.includes("Apéro")}>
+                className={`recipes tag ${tags.includes("APÉRO") ? "selected" : ""}`}
+                onClick={() =>addRecipeTag("APÉRO")}
+                disabled={tags.length >= 3 && !tags.includes("APÉRO")}>
                 Apéro
               </Button>
               <Button 
-                className={`recipes tag ${tags.includes("Desert") ? "selected" : ""}`}
-                onClick={() =>addRecipeTag("Desert")}
-                disabled={tags.length > 3 && !tags.includes("Desert")}>
+                className={`recipes tag ${tags.includes("DESSERT") ? "selected" : ""}`}
+                onClick={() =>addRecipeTag("DESSERT")}
+                disabled={tags.length >= 3 && !tags.includes("DESSERT")}>
                 Desert
               </Button>
             </div>

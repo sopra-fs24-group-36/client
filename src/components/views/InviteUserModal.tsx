@@ -10,7 +10,6 @@ const FormField = (props) => {
       <div className="invite input-container">
         <input
           className="invite input"
-          placeholder="Enter the User's Email..."
           value={props.value}
           onChange={(e) => props.onChange(e.target.value)}
         />

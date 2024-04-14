@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { api, handleError } from "helpers/api";
 import User from "models/User";
@@ -27,13 +28,14 @@ const UserProfile=()=>{
   useEffect(() => {
     const fetchData=async()=>{
       try{
+//TODO: add the following codes to ensure only logged-in user can fetch data
         /*const token=localStorage.getItem("token");
         if(!token){
-          // if a user has not logged yet, then navigate to the userprofile page
+          // if a user has not logged yet, then navigate to the login page
           navigate("/users/login");
           return;
         }*/
-
+//---------------------end of modifications
         const response=await api.get(`/users/${id}`);
         setUser(response.data);
       }catch(error){
@@ -62,6 +64,7 @@ const UserProfile=()=>{
             <Icon flip={false} />
           </div>
           <div>
+{/* TODO:add functional codes and delete the default             */}
             {/*<div className="item-img">
               {user.profilePicture ? (
                 <img src={user.profilePicture} alt="Icon" />
@@ -105,6 +108,7 @@ const UserProfile=()=>{
               <span className="item-value">{1}</span>
               {/*<span className="userprofile item-value">{user.status}</span>*/}
             </div>
+{/*---------------------end of modifications*/}
           </div>
           <div className="userprofile button-container">
             <Button
@@ -115,6 +119,7 @@ const UserProfile=()=>{
             </Button>
             <Button
               className="userprofile button-darkpink"
+/* TODO:add the following line            */
               /*disabled={!(user.token === localStorage.getItem("token"))}*/
               width="50%"
               onClick={() => navigate(`/users/profile/edit`)}>

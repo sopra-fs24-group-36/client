@@ -1,0 +1,101 @@
+@import "../theme";
+.invitations {
+  &.headerContainer {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  &.backButtonContainer {
+    margin-left: 60px;
+  }
+  &.title {
+    color: $textColor;
+    font-size: 40px;
+    text-align: center;
+    flex: 1;
+    margin-right: 200px;
+  }
+
+  &.container {
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    width: 60%;
+    margin: 0 auto;
+    background-color: $light_green;
+    border-radius: $borderRadius;
+    margin-bottom: 20px;
+  }
+  &.invitationContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  &.noInvitation{
+    padding-top:30px;
+  }
+  &.invitationField {
+    display: flex;
+    justify-content: left;
+    position: relative;
+    height: 35px;
+    width: 90%;
+    border: none;
+    border-radius: $borderRadius;
+    margin-bottom: 10px;
+    margin-top:10px;
+    align-items: center;
+    background-color: $true_green;
+    color:$textColor;
+  }
+  &.invitationHead{
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+    font-weight: bold;
+    padding-top: 20px;
+    margin-left:-40px;
+    padding-left:40px;
+    padding-right: 20px;
+    padding-bottom: 5px;
+  }
+  &.column1{
+    width:30%;
+    text-align: left;
+  }
+  &.column2{
+    width:35%;
+    text-align: left;
+  }
+  &.column3{
+    width:17.5%;
+    display: flex;
+    text-align: left;
+  }
+  &.acceptButton,&.denyButton{
+    background-color: $light_green;
+    height:30px;
+    width:30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left:50px;
+    color:$dark_pink;
+    font-size: 30px;
+  }
+  &.acceptButton:hover::after{
+    content: '✔';
+    position: absolute;
+  }
+  &.denyButton:hover::after {
+    content: '×';
+    position: absolute;
+  }
+
+}

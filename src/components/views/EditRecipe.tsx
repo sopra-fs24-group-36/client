@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { api, handleError } from "helpers/api";
-import {Form, useNavigate} from "react-router-dom";
+import {Form, useNavigate, useParams} from "react-router-dom";
 import { Button } from "components/ui/Button";
-import "styles/views/AddRecipe.scss";
+import "styles/views/EditRecipe.scss";
 import PropTypes from "prop-types";
 import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import BaseContainer from "components/ui/BaseContainer_new";
 import Header_new from "components/views/Header_new";
 import Recipe from "models/Recipe";
+import {Spinner} from "components/ui/Spinner";
 // @ts-ignore
 import select_image from "../../assets/select_image.png";
 
@@ -69,8 +70,11 @@ StepsField.propTypes = {
   onChange: PropTypes.func,
 };
 
-const addRecipe = () => {
+const editRecipe = () => {
   const navigate = useNavigate();
+  const {authorID, recipeID} = useParams(); //User ID of recipe's author and recipeID 
+  const [recipe, setRecipe] = useState(null); //getting the recipe we are currently viewing 
+
   const currentUserID = localStorage.getItem("userID"); 
   const [title, set_recipe_title] = useState<string>(null);
   const [link, set_recipe_link] = useState<string>(null);
@@ -82,7 +86,6 @@ const addRecipe = () => {
   const [instructions, set_recipe_steps] = useState<string[]>([]);
   const [tags, set_recipe_tags] = useState<string[]>([]);
   const [cookbooks, set_cookbooks] = useState<string[]>([]);
-  const [showHelp, setShowHelp] = useState(false); 
   
 
   const addField = () =>{ /*to add a field for adding ingredients and their amount*/
@@ -116,37 +119,32 @@ const addRecipe = () => {
       set_cookbooks([...tags, tag]);
     }
   }
-
-  const HelpPopup = ({ onClose }) => {/*when clicking on help, the following pop up is displayed explaining how to add a recipe*/ 
-    return (
-      <div className="recipes popupContainer">
-        <div className="recipes popup">
-          <p>Recipes must have a title, description and preparation time.</p>
-          <p>Recipes can either be added with a URL link or by manually typing in ingredients and steps.</p>
-          <p>Recipe tags can be added.</p>
-          <p>Recipes will automatically be added to your personal cookbook and can also be added to group cookbooks.</p>
-          <Button 
-            className = "help close"
-            onClick={onClose}>
-            Close
-          </Button>
-        </div>
-      </div>
-    );
-  };
-  HelpPopup.propTypes = {
-    onClose: PropTypes.func.isRequired,
-  };
-
-  const doHelp = () =>{ /*function to show the help section*/ 
-    setShowHelp(!showHelp)
-  }
   
+  useEffect(() => { //retrieve the recipe based on the ID from the URL 
+    async function fetchData(){
+      try{
+        const response = await api.get(`/users/${authorID}/cookbooks/${recipeID}`);
+        console.log(response);
+        // delays continuous execution of an async operation for 1 second -> can be removed 
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        //returned recipe based on the id from the URL 
+        setRecipe(response.data);
+      }catch(error){
+        console.error(
+          `Something went wrong while fetching the users: \n${handleError(error)}`
+        );
+        console.error("Details:", error);
+        alert("Something went wrong while fetching the users! See the console for details.");
+      };
+    };
+    fetchData(); 
+  }, []);
+
   const saveChanges = async() => {
     try{
       if(link){ /*if we have a link, we save the following information*/
         const requestBody1=JSON.stringify({title, shortDescription, cookingTime, image, link, tags, cookbooks});
-        const response1 = await api.post(`/users/${currentUserID}/cookbooks`, requestBody1);
+        const response1 = await api.put(`/users/${currentUserID}/cookbooks/${recipeID}`, requestBody1);
         const recipe = new Recipe(response1.data); 
         localStorage.setItem("recipeID", recipe.id); //not 100% sure if we need this, need to check with getting a recipe
         navigate(-1);
@@ -154,7 +152,7 @@ const addRecipe = () => {
       else{
         const requestBody2=JSON.stringify({/*if we have no link, we have steps and ingredients and save the following information*/
         title, shortDescription, cookingTime, image, amount, ingredients, instructions, tags, cookbooks});
-        const response2 = await api.post(`/users/${currentUserID}/cookbooks`, requestBody2);
+        const response2 = await api.put(`/users/${currentUserID}/cookbooks/${recipeID}`, requestBody2);
         const recipe = new Recipe(response2.data); 
         localStorage.setItem("recipeID", recipe.id); //not 100% sure if we need this, need to check with getting a recipe
         navigate(-1);
@@ -176,7 +174,10 @@ const addRecipe = () => {
     set_cookbooks([]);    
     }
   }
-  return (
+  let content; 
+  if(!recipe){
+    content = <Spinner/>; //had to use the spinner because it takes a while to render the content 
+  }else content =  (
     <div>
       <Header_new></Header_new>
       <Dashboard
@@ -187,7 +188,7 @@ const addRecipe = () => {
           shoppinglist: true,
           invitations: true,
         }}
-        activePage="recipe"
+        activePage=""
       />
       <BaseContainer>
         <div className="recipes headerContainer">
@@ -198,13 +199,7 @@ const addRecipe = () => {
             >Back</Button>
           </div>
           <div className = "recipes titleContainer">
-            <h2 className ="recipes title">Add a recipe</h2>
-          </div>
-          <div className ="recipes helpContainer">
-            <Button className ="help"
-              onClick={doHelp}>
-              help
-            </Button>
+            <h2 className ="recipes title">Edit recipe</h2>
           </div>
           <div className="recipes addButtonContainer">
             <Button 
@@ -212,12 +207,11 @@ const addRecipe = () => {
               className="recipes add"
               disabled={!link && !instructions.some(step => step.trim() !== "")} /*checks if there are no recipe steps with content -> curtesy of chatGPT*/
               onClick={()=>saveChanges()}>
-              Create Recipe
+              Update Recipe
             </Button>
           </div>
         </div>
         <div className = "recipes container">
-          {showHelp && <HelpPopup onClose={doHelp} />}
           <div className = "recipes formLeft">
             <div className ="recipes imageContainer"
               onChange={(img: string) => set_recipe_image(img)}>
@@ -226,6 +220,7 @@ const addRecipe = () => {
             <FormField
               label ="Add a title:"
               value = {title}
+              placeholder = {recipe.title}
               onChange={(rt: string) => set_recipe_title(rt)}>
             </FormField>
             <FormField
@@ -379,11 +374,15 @@ const addRecipe = () => {
           </div>
         </div>
       </BaseContainer>
-      <Footer>
-
-      </Footer>
+      <Footer></Footer>
     </div>
   );
+
+  return(
+    <div>
+      {content}
+    </div>
+  )
 };
 
-export default addRecipe;
+export default editRecipe;

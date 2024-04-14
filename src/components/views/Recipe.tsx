@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { api, handleError } from "helpers/api";
-import User from "models/User";
-import { Form, useNavigate } from "react-router-dom";
+import { Form, useNavigate, useParams } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import "styles/views/Recipe.scss";
 import PropTypes from "prop-types";
@@ -9,16 +8,94 @@ import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import BaseContainer from "components/ui/BaseContainer_new";
 import Header_new from "components/views/Header_new";
+import {Spinner} from "components/ui/Spinner";
 // @ts-ignore
 import select_image from "../../assets/select_image.png";
 
 
 const Recipe = () => {
+  const navigate = useNavigate();
+  const {authorID, recipeID} = useParams(); //User ID of recipe's author and recipeID 
+  const [recipe, setRecipe] = useState(null); //getting the recipe we are currently viewing 
+  const userID = localStorage.getItem("userID");
+
   const editRecipe = () => {
+    navigate(`/users/${authorID}/cookbooks/${recipeID}/edit`)
   };
 
-  return (
-    <div>
+
+  const doTags = () => {
+    const recipeTags = recipe.tags;
+    let webpageTags = "";
+    if(recipeTags.length === 0){
+      webpageTags += "no tags set"
+    }
+    recipeTags.forEach(tag => {
+      webpageTags += tag.toLowerCase() + ", "; // Add each tag to the webpageTags string
+    });
+    // Remove the trailing comma and space
+    if (webpageTags !== "no tags set"){
+      webpageTags = webpageTags.slice(0, -2);
+    }
+    return webpageTags;
+  };
+
+  const doIngredients = () => {
+    const recipeIngredients = recipe.ingredients;
+  if (recipeIngredients.length === 0) {
+    return <p>This recipe has no ingredients</p>
+  }
+  // Map each ingredient to a JSX <li> element
+  const ingredientList = recipeIngredients.map((ingredient, index) => (
+    <li key={index}>{ingredient}</li>
+  ));
+
+  return ingredientList;
+};
+
+const doInstructions = () =>{
+  const recipeInstructions = recipe.instructions;
+  if (recipeInstructions.length === 0){
+    return <p>This recipe has no instructions</p>
+  }
+  const instructionsList = recipeInstructions.map((instruction, index) => (
+    <li key={index}>{instruction}</li>
+  ));
+
+  return instructionsList; 
+}
+
+  useEffect(() => { //retrieve the recipe based on the ID from the URL 
+    async function fetchData(){
+      try{
+        const response = await api.get(`/users/${authorID}/cookbooks/${recipeID}`);
+        console.log(response);
+        // delays continuous execution of an async operation for 0.5 second -> can be removed 
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        //returned recipe based on the id from the URL 
+        setRecipe(response.data)
+      }catch(error){
+        console.error(
+          `Something went wrong while fetching the users: \n${handleError(error)}`
+        );
+        console.error("Details:", error);
+        alert("Something went wrong while fetching the users! See the console for details.");
+      };
+    };
+    fetchData(); 
+  }, []);
+
+  let content;
+  if(!recipe){
+    content = <Spinner/>; //had to use the spinner because it takes a while to render the content 
+  }
+  else if (recipe.link){
+    window.open(recipe.link);
+    navigate("/home"); //potentially needs taking out when we connect to cookbooks 
+  }else{
+    const canEdit = userID === authorID; 
+      content = (
+      <div>
       <Header_new></Header_new>
       <Dashboard
         showButtons={{
@@ -30,74 +107,69 @@ const Recipe = () => {
         }}
         activePage=""
       />
-      <BaseContainer>
-        <div className="recipe headerContainer">
-          <div className="recipe backButtonContainer">
-            <Button className="backButton">
-              Back
-            </Button>
+        <BaseContainer>
+          <div className="recipe headerContainer">
+            <div className="recipe backButtonContainer">
+              <Button className="backButton">
+                Back
+              </Button>
+            </div>
+            <div className="recipe titleContainer">
+              <h2 className="recipe title">{recipe.title}</h2>
+            </div>
+            {canEdit &&(<div className="recipe editButtonContainer">
+              <Button
+                className="recipe edit"
+                onClick={() => editRecipe()}>
+                Edit Recipe
+              </Button>
+            </div>)}
           </div>
-          <div className="recipe titleContainer">
-            <h2 className="recipe title">Quick fried rice</h2>
-          </div>
-          <div className="recipe editButtonContainer">
-            <Button
-              className="recipe edit"
-              onClick={() => editRecipe()}>
-              Edit Recipe
-            </Button>
-          </div>
-        </div>
-        <div className="recipe container">
-          <div className="recipe left">
-            <div className="recipe imageContainer">
-              <img src={select_image} alt="icon" className="recipes image"></img>
-            </div>
-            <div className="recipe rating">
-            </div>
-            <div className="recipe description">
-              <p>Not enough time? No problem, because this recipe is fast and delicious.</p>
-            </div>
-            <div className="recipe time">
-              <p>Total Time: 25min</p>
-            </div>
-            <div className="recipe tags">
-              <p>Tags: vegetarian</p>
-            </div>
-          </div>
-          <div className="recipe right">
-            <div className="recipe ingredients">
-              <div className="recipe ingredientsTitle">
-                <h2>Ingredients</h2>
+          <div className="recipe container">
+            <div className="recipe left">
+              <div className="recipe imageContainer">
+                <img src={select_image} alt="icon" className="recipes image"></img>
               </div>
-              <ul className="recipe list">
-                <li>rice</li>
-                <li>1 tbsp oil</li>
-                <li>2 onions, cut into thin wedges</li>
-                <li>2 garlic cloves, pressed</li>
-                <li>250g basmati rice (2 minutes cooking time)</li>
-                <li>300g wok vegetables</li>
-                <li>½ dl soy sauce</li>
-                <li>3 eggs, beaten</li>
-              </ul>
-            </div>
-            <div className="recipe steps">
-              <div className="recipe stepsTitle">
-                <h2>Step by Step</h2>
+              <div className="recipe rating">
               </div>
-              <ol className="recipe list">
-                <li>Heat oil in a pan. Sauté onion and garlic. Add the rice and stir-fry for approx. 10 minutes. Add
-                  vegetables and stir-fry for approx. 5 minutes. Pour in soy sauce, mix.
-                </li>
-                <li>Before serving, mix the eggs into the rice and fry for about 1 minute.</li>
-              </ol>
+              <div className="recipe description">
+                <p>{recipe.shortDescription}</p>
+              </div>
+              <div className="recipe time">
+                <p><strong>Total Time:</strong> {recipe.cookingTime}</p>
+              </div>
+              <div className="recipe tags">
+                <p><strong>Tags:</strong> {doTags()}</p>
+              </div>
+            </div>
+            <div className="recipe right">
+              <div className="recipe ingredients">
+                <div className="recipe ingredientsTitle">
+                  <h2>Ingredients</h2>
+                </div>
+                <ul className="recipe list">
+                  {doIngredients()}
+                </ul>
+              </div>
+              <div className="recipe steps">
+                <div className="recipe stepsTitle">
+                  <h2>Step by Step</h2>
+                </div>
+                <ol className="recipe list">
+                  {doInstructions()}
+                </ol>
+              </div>
             </div>
           </div>
-        </div>
-      </BaseContainer>
-      <Footer>
+        </BaseContainer>
+        <Footer></Footer>
+      </div>
+    );
+  }
 
-      </Footer>
+  return(
+    <div>
+      {content}
     </div>
   )
 };

@@ -19,7 +19,6 @@ import defaultRecipe3 from "../../assets/defaultRecipe3.png";
 // @ts-ignore
 import defaultRecipe4 from "../../assets/defaultRecipe4.png";
 import Header from "./Header";
-import Header_new from "./Header_new";
 // @ts-ignore
 const FormField=(props)=>{
   return (

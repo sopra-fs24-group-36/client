@@ -7,7 +7,7 @@ import { Button } from "components/ui/Button";
 import "styles/views/UserProfile.scss";
 import "styles/views/EditPictureModal.scss"
 import BaseContainer from "components/ui/BaseContainer";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 //import Modal from "react-boostrap/Modal";
 
 // @ts-ignore
@@ -19,6 +19,7 @@ import select_image from "../../assets/select_image.png"
 import UserProfile from "./UserProfile";
 const Icon = ({ flip }) => {
   const iconClass = flip ? "icon flip-horizontal" : "icon";
+
   return <img src={rightBrok} alt="Icon" className={iconClass} />;
 };
 Icon.propTypes = {
@@ -26,6 +27,7 @@ Icon.propTypes = {
 };
 
 const FormField=(props)=>{
+
   return(
     <div className="userprofile user-data-item">
       <label className="userprofile item-label">{props.label}</label>
@@ -47,6 +49,7 @@ FormField.propTypes = {
 };
 
 const ProfileFormField=(props)=>{
+
   return(
     <div className="editPicture field">
       <div className="editPicture input-container">
@@ -63,6 +66,7 @@ ProfileFormField.propTypes = {
   value: PropTypes.string.isRequired,
 };
 const EditPictureModal = ({ open, onClose, profilepicture,setProfilepicture})=>{
+
   if(!open) return null;
   const handleSave=async()=>{
     setProfilepicture(profilepicture)
@@ -121,8 +125,8 @@ const EditProfile = () => {
       })
       const response=await api.put("/users/"+id,requestBody);
     }catch(error){
-      console.error('An error occurred while saving changes:', error);
-      alert('An error occurred while saving changes. Please try again later.');
+      console.error("An error occurred while saving changes:", error);
+      alert("An error occurred while saving changes. Please try again later.");
     }
   }
   useEffect(() => {
@@ -134,6 +138,7 @@ const EditProfile = () => {
         if(!token){
           // if a user has not logged yet, then navigate to the userprofile page
           navigate("/users/login");
+
           return;
         }
         if (localStorage.getItem("token") !== response.data.token) {
@@ -161,7 +166,7 @@ const EditProfile = () => {
             <Icon flip={false} />
           </div>
           <div>
-{/*
+            {/*
 TODO:add the following part and delete the default
 */}
             {/*<div className="item-img">
@@ -173,14 +178,14 @@ TODO:add the following part and delete the default
             </div>*/}
             <div >
               <div className="userprofile imageContainer">
-                <div className="userprofile circle-img" style={{position:'relative'}}>{/*set the father component relative and then it can be regarded as reference point*/}
+                <div className="userprofile circle-img" style={{position:"relative"}}>{/*set the father component relative and then it can be regarded as reference point*/}
                   <img src={defaultUser} alt="Icon" />
                   <Button
                     className="userprofile button-with-picture"
                     style={{
-                      position:'absolute',
-                      right:'120px',
-                      bottom:'0px',
+                      position:"absolute",
+                      right:"120px",
+                      bottom:"0px",
                       backgroundImage: `url(${select_image})` }}
                     onClick={()=>setIsModalOpen(true)}>
                   </Button>
@@ -188,16 +193,16 @@ TODO:add the following part and delete the default
               </div>
 
               <EditPictureModal
-                  open={isModalOpen}
-                  onClose={()=>setIsModalOpen(false)}
-                  profilepicture={profilepicture}
-                  setProfilepicture={setProfilepicture}
+                open={isModalOpen}
+                onClose={()=>setIsModalOpen(false)}
+                profilepicture={profilepicture}
+                setProfilepicture={setProfilepicture}
               />
             </div>
             <div className="userprofile user-data-item">
               <span className="userprofile item-label">ID:</span>
               <span className="userprofile ite m-value">{1}</span>
-{/*
+              {/*
 TODO:add the following line*
 */}
               {/*<span className="userprofile item-value">{user.id}</span>*/}
@@ -205,7 +210,7 @@ TODO:add the following line*
             <FormField
               label="E-Mail:"
               value={email}
-/*
+              /*
 TODO:add the following line
 */
               /*placeholder={user.email}*/
@@ -215,7 +220,7 @@ TODO:add the following line
             <FormField
               label="Username:"
               value={user}
-/*
+              /*
 TODO:add the following line
 */
               /*placeholder={user.username}*/
@@ -231,7 +236,7 @@ TODO:add the following line
             <div className="userprofile user-data-item">
               <span className="userprofile item-label">Creationdate:</span>
               <span className="userprofile item-value">{1}</span>
-{/*
+              {/*
 TODO:add the following line
 */}
               {/*<span className="userprofile item-value">{user.creationdate}</span>*/}
@@ -239,7 +244,7 @@ TODO:add the following line
             <div className="userprofile user-data-item">
               <span className="userprofile item-label">Status:</span>
               <span className="item-value">{1}</span>
-{/*
+              {/*
 TODO:add the following line
 */}
               {/*<span className="userprofile item-value">{user.status}</span>*/}
@@ -249,12 +254,12 @@ TODO:add the following line
             <Button
               className="userprofile button-lightgreen"
               width="50%"
-              onClick={() => navigate(`/users/profile`)}>
+              onClick={() => navigate("/users/profile")}>
               Back
             </Button>
             <Button
               className="userprofile button-darkpink"
-/*
+              /*
 TODO:add the following line
 */
               /*disabled={!(user.token === localStorage.getItem("token"))}*/
@@ -268,4 +273,5 @@ TODO:add the following line
     </BaseContainer>
   );
 };
+
 export default EditProfile;

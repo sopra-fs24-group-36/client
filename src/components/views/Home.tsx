@@ -73,7 +73,7 @@ const Home = () => {
         </div>
         <div className="Home recipeContainer">
           <Button className="Home recipe"
-                  onClick={() => navigate("/recipes/recipe")}>
+            onClick={() => navigate("/recipes/recipe")}>
             <img src={wildGarlic} alt="Recipe" className="Home recipeImage" />
             <div className="Home recipeInfo">
               <h3 className="Home recipeTitle">Wild garlic curry</h3>

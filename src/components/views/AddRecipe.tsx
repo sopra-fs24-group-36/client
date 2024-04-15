@@ -78,7 +78,7 @@ const addRecipe = () => {
   const [image, set_recipe_image] = useState<string>(null); 
   const [cookingTime, set_recipe_prep] = useState<string>(null); 
   const [ingredients, set_recipe_ing] = useState<string[]>([]);
-  const [amount, set_recipe_amount] = useState<string[]>([]);
+  const [amounts, set_recipe_amount] = useState<string[]>([]);
   const [instructions, set_recipe_steps] = useState<string[]>([]);
   const [tags, set_recipe_tags] = useState<string[]>([]);
   const [cookbooks, set_cookbooks] = useState<string[]>([]);
@@ -87,7 +87,7 @@ const addRecipe = () => {
 
   const addField = () =>{ /*to add a field for adding ingredients and their amount*/
     set_recipe_ing([...ingredients, ""]);
-    set_recipe_amount([...amount, ""]);
+    set_recipe_amount([...amounts, ""]);
   }
 
   const addStep = () =>{/*to add a field for adding steps to complete recipe*/
@@ -153,7 +153,7 @@ const addRecipe = () => {
       }
       else{
         const requestBody2=JSON.stringify({/*if we have no link, we have steps and ingredients and save the following information*/
-        title, shortDescription, cookingTime, image, amount, ingredients, instructions, tags, cookbooks});
+        title, shortDescription, cookingTime, image, amounts, ingredients, instructions, tags, cookbooks});
         const response2 = await api.post(`/users/${currentUserID}/cookbooks`, requestBody2);
         const recipe = new Recipe(response2.data); 
         localStorage.setItem("recipeID", recipe.id); //not 100% sure if we need this, need to check with getting a recipe
@@ -255,9 +255,9 @@ const addRecipe = () => {
                 <div key={index} className="recipes ingredientFields">
                   <div className="recipes ingredientsAmount">
                     <IngredientsField
-                      value={amount[index]} 
+                      value={amounts[index]} 
                       onChange={(value) => {
-                        const newAmounts = [...amount]; /*creating a copy of recipe_ing_amount*/
+                        const newAmounts = [...amounts]; /*creating a copy of recipe_ing_amount*/
                         newAmounts[index] = value; /*setting the index from the amount to the value*/
                         set_recipe_amount(newAmounts); /*overwriting previous aray with newAmounts array*/
                       }}

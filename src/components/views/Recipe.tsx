@@ -42,12 +42,14 @@ const Recipe = () => {
 
   const doIngredients = () => {
     const recipeIngredients = recipe.ingredients;
+    const recipeAmounts = recipe.amounts;
+    console.log(recipeAmounts);
   if (recipeIngredients.length === 0) {
     return <p>This recipe has no ingredients</p>
   }
   // Map each ingredient to a JSX <li> element
   const ingredientList = recipeIngredients.map((ingredient, index) => (
-    <li key={index}>{ingredient}</li>
+    <li key={index}>{recipeAmounts[index]} {ingredient}</li>
   ));
 
   return ingredientList;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef} from "react";
 import { api, handleError } from "helpers/api";
 import {Form, useNavigate, useParams} from "react-router-dom";
 import { Button } from "components/ui/Button";
@@ -19,9 +19,8 @@ const FormField = (props) => { /*general form fields for inputting information (
       <label className="recipes label">{props.label}</label>
       <input
         className="recipes input"
-        placeholder="enter here..."
-        value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
+        value = {props.value || ""}
       />
     </div>
   );
@@ -73,28 +72,78 @@ StepsField.propTypes = {
 const editRecipe = () => {
   const navigate = useNavigate();
   const {authorID, recipeID} = useParams(); //User ID of recipe's author and recipeID 
-  const [recipe, setRecipe] = useState(null); //getting the recipe we are currently viewing 
+  const [currentRecipe, setCurrentRecipe] = useState(null); //getting the recipe we are currently viewing 
+  const [updatedRecipe, setUpdatedRecipe] = useState(null);
 
   const currentUserID = localStorage.getItem("userID"); 
-  const [title, set_recipe_title] = useState<string>(null);
-  const [link, set_recipe_link] = useState<string>(null);
-  const [shortDescription, set_recipe_description] = useState<string>(null); 
-  const [image, set_recipe_image] = useState<string>(null); 
-  const [cookingTime, set_recipe_prep] = useState<string>(null); 
-  const [ingredients, set_recipe_ing] = useState<string[]>([]);
-  const [amount, set_recipe_amount] = useState<string[]>([]);
-  const [instructions, set_recipe_steps] = useState<string[]>([]);
-  const [tags, set_recipe_tags] = useState<string[]>([]);
-  const [cookbooks, set_cookbooks] = useState<string[]>([]);
-  
+  let [title, set_recipe_title] = useState<string>("");
+  let [link, set_recipe_link] = useState<string>("");
+  let [shortDescription, set_recipe_description] = useState<string>(""); 
+  let [image, set_recipe_image] = useState<string>(""); 
+  let [cookingTime, set_recipe_prep] = useState<string>(""); 
+  let [ingredients, set_recipe_ing] = useState<string[]>([]);
+  let [amounts, set_recipe_amount] = useState<string[]>([]);
+  let [instructions, set_recipe_steps] = useState<string[]>([]);
+  let [tags, set_recipe_tags] = useState<string[]>([]);
+  let [cookbooks, set_cookbooks] = useState<string[]>([]);
+
+  const doLink = () =>{
+    if(currentRecipe.link=== null){
+      return "No link set";
+    }
+    else{
+      return currentRecipe.link; 
+    }
+  }
+
+  const handleTitleChange = (value) =>{
+    setCurrentRecipe({...currentRecipe, title:value});
+  }
+
+  const handleDescriptionChange = (value) => {
+    setCurrentRecipe({...currentRecipe, shortDescription:value});
+  }
+
+  const handleTimeChange = (value) => {
+    setCurrentRecipe({...currentRecipe, cookingTime:value});
+  }
+
+  const handleLinkChange = (value) => {
+    setCurrentRecipe({...currentRecipe, link:value});
+  }
+
+  const handleImageChange = (value) => {
+    setCurrentRecipe({...currentRecipe, image:value});
+  }
+
+  const handleAmountChange = (value) => {
+    setCurrentRecipe(prevRecipe => ({
+      ...prevRecipe, 
+      amounts: value
+    }));
+  }
+
+  const handleIngredientChange = (value) => {
+    setCurrentRecipe(prevRecipe => ({
+      ...prevRecipe, 
+      ingredients:value
+    }));
+  }
+
+  const handleStepsChange = (value) => {
+    setCurrentRecipe(prevRecipe => ({
+      ...prevRecipe, 
+      instructions:value
+    }));
+  }
 
   const addField = () =>{ /*to add a field for adding ingredients and their amount*/
-    set_recipe_ing([...ingredients, ""]);
-    set_recipe_amount([...amount, ""]);
+    handleIngredientChange([...currentRecipe.ingredients, ""]);
+    handleAmountChange([...currentRecipe.amounts, ""]);
   }
 
   const addStep = () =>{/*to add a field for adding steps to complete recipe*/
-    set_recipe_steps([...instructions, ""]);
+    handleStepsChange([...currentRecipe.instructions, ""]);
   }
 
   const addRecipeTag = (tag) =>{ /*to add a tag to a recipe*/
@@ -120,27 +169,36 @@ const editRecipe = () => {
     }
   }
   
+  //retrieving the current recipe information 
   useEffect(() => { //retrieve the recipe based on the ID from the URL 
     async function fetchData(){
       try{
         const response = await api.get(`/users/${authorID}/cookbooks/${recipeID}`);
-        console.log(response);
         // delays continuous execution of an async operation for 1 second -> can be removed 
         await new Promise((resolve) => setTimeout(resolve, 500));
         //returned recipe based on the id from the URL 
-        setRecipe(response.data);
+        setCurrentRecipe(response.data);
       }catch(error){
         console.error(
-          `Something went wrong while fetching the users: \n${handleError(error)}`
+          `Something went wrong while fetching the recipe: \n${handleError(error)}`
         );
         console.error("Details:", error);
-        alert("Something went wrong while fetching the users! See the console for details.");
+        alert("Something went wrong while fetching the recipe! See the console for details.");
       };
     };
     fetchData(); 
   }, []);
 
-  const saveChanges = async() => {
+  //submitting the information 
+  const handleSubmit = async() => {
+    title = currentRecipe.title; 
+    shortDescription = currentRecipe.shortDescription; 
+    cookingTime = currentRecipe.cookingTime;
+    link = currentRecipe.link; 
+    amounts = currentRecipe.amounts; 
+    ingredients = currentRecipe.ingredients; 
+    instructions = currentRecipe.instructions; 
+
     try{
       if(link){ /*if we have a link, we save the following information*/
         const requestBody1=JSON.stringify({title, shortDescription, cookingTime, image, link, tags, cookbooks});
@@ -151,7 +209,7 @@ const editRecipe = () => {
       }
       else{
         const requestBody2=JSON.stringify({/*if we have no link, we have steps and ingredients and save the following information*/
-        title, shortDescription, cookingTime, image, amount, ingredients, instructions, tags, cookbooks});
+        title, shortDescription, cookingTime, image, amounts, ingredients, instructions, tags, cookbooks});
         const response2 = await api.put(`/users/${currentUserID}/cookbooks/${recipeID}`, requestBody2);
         const recipe = new Recipe(response2.data); 
         localStorage.setItem("recipeID", recipe.id); //not 100% sure if we need this, need to check with getting a recipe
@@ -175,7 +233,7 @@ const editRecipe = () => {
     }
   }
   let content; 
-  if(!recipe){
+  if(!currentRecipe){
     content = <Spinner/>; //had to use the spinner because it takes a while to render the content 
   }else content =  (
     <div>
@@ -205,8 +263,8 @@ const editRecipe = () => {
             <Button 
               /*button is disabled unless we have a link or we have some steps*/
               className="recipes add"
-              disabled={!link && !instructions.some(step => step.trim() !== "")} /*checks if there are no recipe steps with content -> curtesy of chatGPT*/
-              onClick={()=>saveChanges()}>
+               /*checks if there are no recipe steps with content -> curtesy of chatGPT*/
+              onClick={()=>handleSubmit()}>
               Update Recipe
             </Button>
           </div>
@@ -214,71 +272,70 @@ const editRecipe = () => {
         <div className = "recipes container">
           <div className = "recipes formLeft">
             <div className ="recipes imageContainer"
-              onChange={(img: string) => set_recipe_image(img)}>
+              value = {currentRecipe.image}
+              onChange={(value) => handleImageChange(value)}>
               <img src={select_image} alt="icon" className = "recipes image"></img>
             </div>
             <FormField
-              label ="Add a title:"
-              value = {title}
-              placeholder = {recipe.title}
-              onChange={(rt: string) => set_recipe_title(rt)}>
+              label ="Edit title:"
+              value = {currentRecipe.title}
+              onChange={(value) => handleTitleChange(value)}>
             </FormField>
             <FormField
-              label ="Description:"
-              value = {shortDescription}
-              onChange={(rd: string) => set_recipe_description(rd)}>
+              label ="Edit description:"
+              value = {currentRecipe.shortDescription}
+              onChange={(value) => handleDescriptionChange(value)}>
             </FormField>
             <FormField
-              label ="Preparation time:"
-              value = {cookingTime}
-              onChange={(rp: string) => set_recipe_prep(rp)}>
+              label ="Edit preparation time:"
+              value = {currentRecipe.cookingTime}
+              onChange={(value) => handleTimeChange(value)}>
             </FormField>
           </div>
           <div className = "recipes formRight">
             <FormField
               label="Add a recipe by URL link:"
-              value = {link}
-              onChange = {(rl:string) => set_recipe_link(rl)}>
+              value = {doLink()}
+              onChange = {(value) => handleLinkChange(value)}>
             </FormField>
             <div className="recipes ingredients">
-              <p className ="recipes p">Add all ingredients:</p>
+              <p className ="recipes p">Edit ingredients:</p>
               <div className="recipes ingredientsHeader">
                 <p className ="recipes ingredientsHeaderAmount">Amount:</p>
                 <p className ="recipes ingredientsHeaderIng">Ingredient:</p>
               </div>
-              {ingredients.map((_, index) => (
+              {currentRecipe.amounts.map((amount, index) => (
                 <div key={index} className="recipes ingredientFields">
                   <div className="recipes ingredientsAmount">
                     <IngredientsField
-                      value={amount[index]} 
+                      value={amount} 
                       onChange={(value) => {
-                        const newAmounts = [...amount]; /*creating a copy of recipe_ing_amount*/
-                        newAmounts[index] = value; /*setting the index from the amount to the value*/
-                        set_recipe_amount(newAmounts); /*overwriting previous aray with newAmounts array*/
+                        const newAmounts = [...currentRecipe.amounts]; /* Copying current amounts array */
+                        newAmounts[index] = value; /* Setting the index from the amount to the value */
+                        handleAmountChange(newAmounts); /* Overwriting previous array with newAmounts array */
                       }}
                     />
                   </div>
                   <div className="recipes ingredientsIng">
                     <IngredientsField
-                      value={ingredients[index]}
+                      value={currentRecipe.ingredients[index]} /* Using currentRecipe.ingredients array */
                       onChange={(value) => {
-                        const newIngredients = [...ingredients];
-                        newIngredients[index] = value;
-                        set_recipe_ing(newIngredients);
+                        const newIngredients = [...currentRecipe.ingredients]; /* Copying current ingredients array */
+                        newIngredients[index] = value; /* Setting the index from the ingredient to the value */
+                        handleIngredientChange(newIngredients); /* Overwriting previous array with newIngredients array */
                       }}
                     />
                   </div>
                 </div>
               ))}
-            </div>
             <div className="recipes plusButton">
               <Button className="recipes plus" onClick={addField}>
                 +
               </Button>
             </div>
             <div className = "recipes steps">
-              <p className ="recipes p">Add all steps:</p>
-              {instructions.map((step, index) => (
+              <p className ="recipes p">Edit steps:</p>
+              {currentRecipe.instructions.map((step, index) => (
                 <div key = {index} className = "recipes stepField">
                   <div className="recipes stepNumber">{index+1}.</div>
                   <StepsField
@@ -286,7 +343,7 @@ const editRecipe = () => {
                     onChange={(value)=>{
                       const newSteps = [...instructions];
                       newSteps[index] = value; 
-                      set_recipe_steps(newSteps);
+                      handleStepsChange(newSteps);
                     }}
                   />
                 </div>
@@ -298,7 +355,7 @@ const editRecipe = () => {
               </Button>
             </div>
             <div className = "recipes tags">
-              <p className ="recipes p tags">Select tags (max 3):</p>
+              <p className ="recipes p tags">Edit tags (max 3):</p>
               <Button 
                 className={`recipes tag ${tags.includes("VEGETARIAN") ? "selected" : ""}`}
                 onClick={() => addRecipeTag("VEGETARIAN")}
@@ -349,7 +406,7 @@ const editRecipe = () => {
               </Button>
             </div>
             <div className = "recipes tags groups">
-              <p className ="recipes p tags">Select Groups:</p>
+              <p className ="recipes p tags">Edit Groups:</p>
               <Button 
                 className={`recipes tag ${cookbooks.includes("Carrot Crew") ? "selected" : ""}`}
                 onClick={() =>addGroupTag("Carrot Crew")}>
@@ -372,6 +429,7 @@ const editRecipe = () => {
               </Button>
             </div>
           </div>
+        </div>
         </div>
       </BaseContainer>
       <Footer></Footer>

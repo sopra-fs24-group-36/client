@@ -96,17 +96,17 @@ const addRecipe = () => {
 
   const addRecipeTag = (tag) =>{ /*to add a tag to a recipe*/
     const isSelected = tags.includes(tag); /*to see if something has already been selected, we check if there is a tag in the recipe_tags list*/
-      if (isSelected) {
-        set_recipe_tags(prevTags => prevTags.filter((selectedTag) => selectedTag !== tag)); /*if there is a tag, check the current one clicked is not the same */
-      } else {
-        if(tags.length <= 3){
-          set_recipe_tags([...tags, tag]);
-        }
-        else{
-          console.log("Maximum number of tags reached");
-        }
+    if (isSelected) {
+      set_recipe_tags(prevTags => prevTags.filter((selectedTag) => selectedTag !== tag)); /*if there is a tag, check the current one clicked is not the same */
+    } else {
+      if(tags.length <= 3){
+        set_recipe_tags([...tags, tag]);
+      }
+      else{
+        console.log("Maximum number of tags reached");
       }
     }
+  }
 
   const addGroupTag = (tag) =>{ /*to add a group tag to a recipe*/
     const isSelected = cookbooks.includes(tag);
@@ -149,33 +149,36 @@ const addRecipe = () => {
         const response1 = await api.post(`/users/${currentUserID}/cookbooks`, requestBody1);
         const recipe = new Recipe(response1.data); 
         localStorage.setItem("recipeID", recipe.id); //not 100% sure if we need this, need to check with getting a recipe
-        navigate(-1);
+        const recipeID = localStorage.getItem("recipeID");
+        navigate(`/users/${currentUserID}/cookbooks/${recipeID}`);
       }
       else{
         const requestBody2=JSON.stringify({/*if we have no link, we have steps and ingredients and save the following information*/
-        title, shortDescription, cookingTime, image, amounts, ingredients, instructions, tags, cookbooks});
+          title, shortDescription, cookingTime, image, amounts, ingredients, instructions, tags, cookbooks});
         const response2 = await api.post(`/users/${currentUserID}/cookbooks`, requestBody2);
         const recipe = new Recipe(response2.data); 
         localStorage.setItem("recipeID", recipe.id); //not 100% sure if we need this, need to check with getting a recipe
-        navigate(-1);
+        const recipeID = localStorage.getItem("recipeID");
+        navigate(`/users/${currentUserID}/cookbooks/${recipeID}`);
       }
     }
     catch(error){
       alert(
-      `Something went wrong when saving the recipe: \n${handleError(error)}`,
-    );
-    set_recipe_title("");
-    set_recipe_link("");
-    set_recipe_description("");
-    set_recipe_image("");
-    set_recipe_prep("");
-    set_recipe_ing();
-    set_recipe_amount([]);
-    set_recipe_steps([]);
-    set_recipe_tags([]);
-    set_cookbooks([]);    
+        `Something went wrong when saving the recipe: \n${handleError(error)}`,
+      );
+      set_recipe_title("");
+      set_recipe_link("");
+      set_recipe_description("");
+      set_recipe_image("");
+      set_recipe_prep("");
+      set_recipe_ing();
+      set_recipe_amount([]);
+      set_recipe_steps([]);
+      set_recipe_tags([]);
+      set_cookbooks([]);    
     }
   }
+
   return (
     <div>
       <Header_new></Header_new>

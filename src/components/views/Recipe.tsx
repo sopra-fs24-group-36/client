@@ -37,6 +37,7 @@ const Recipe = () => {
     if (webpageTags !== "no tags set"){
       webpageTags = webpageTags.slice(0, -2);
     }
+
     return webpageTags;
   };
 
@@ -44,28 +45,28 @@ const Recipe = () => {
     const recipeIngredients = recipe.ingredients;
     const recipeAmounts = recipe.amounts;
     console.log(recipeAmounts);
-  if (recipeIngredients.length === 0) {
-    return <p>This recipe has no ingredients</p>
+    if (recipeIngredients.length === 0) {
+      return <p>This recipe has no ingredients</p>
+    }
+    // Map each ingredient to a JSX <li> element
+    const ingredientList = recipeIngredients.map((ingredient, index) => (
+      <li key={index}>{recipeAmounts[index]} {ingredient}</li>
+    ));
+
+    return ingredientList;
+  };
+
+  const doInstructions = () =>{
+    const recipeInstructions = recipe.instructions;
+    if (recipeInstructions.length === 0){
+      return <p>This recipe has no instructions</p>
+    }
+    const instructionsList = recipeInstructions.map((instruction, index) => (
+      <li key={index}>{instruction}</li>
+    ));
+
+    return instructionsList; 
   }
-  // Map each ingredient to a JSX <li> element
-  const ingredientList = recipeIngredients.map((ingredient, index) => (
-    <li key={index}>{recipeAmounts[index]} {ingredient}</li>
-  ));
-
-  return ingredientList;
-};
-
-const doInstructions = () =>{
-  const recipeInstructions = recipe.instructions;
-  if (recipeInstructions.length === 0){
-    return <p>This recipe has no instructions</p>
-  }
-  const instructionsList = recipeInstructions.map((instruction, index) => (
-    <li key={index}>{instruction}</li>
-  ));
-
-  return instructionsList; 
-}
 
   useEffect(() => { //retrieve the recipe based on the ID from the URL 
     async function fetchData(){
@@ -96,19 +97,19 @@ const doInstructions = () =>{
     navigate("/home"); //potentially needs taking out when we connect to cookbooks 
   }else{
     const canEdit = userID === authorID; 
-      content = (
+    content = (
       <div>
-      <Header_new></Header_new>
-      <Dashboard
-        showButtons={{
-          recipe: true,
-          group: true,
-          calendar: true,
-          shoppinglist: true,
-          invitations: true,
-        }}
-        activePage=""
-      />
+        <Header_new></Header_new>
+        <Dashboard
+          showButtons={{
+            recipe: true,
+            group: true,
+            calendar: true,
+            shoppinglist: true,
+            invitations: true,
+          }}
+          activePage=""
+        />
         <BaseContainer>
           <div className="recipe headerContainer">
             <div className="recipe backButtonContainer">

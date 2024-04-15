@@ -28,7 +28,7 @@ const FormField=(props)=>{
         placeholder="Search for your recipes..."
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
-        />
+      />
     </div>
   );
 };
@@ -74,29 +74,29 @@ const defaultRecipes = [
   {
     title: "Breakfast burritos",
     shortDescription: "Fat and easy recipe for a good start of your day.",
-    cooking_time:'30min',
-    tags:'vegetarian',
+    cooking_time:"30min",
+    tags:"vegetarian",
     image:defaultRecipe1,
   },
   {
-    title:'Quick fried rice',
-    shortDescription:'Not enough time? No problem, because this recipe is fast and delicious',
-    cooking_time:'25 min',
-    tags:'vegetarian',
+    title:"Quick fried rice",
+    shortDescription:"Not enough time? No problem, because this recipe is fast and delicious",
+    cooking_time:"25 min",
+    tags:"vegetarian",
     image:defaultRecipe2,
   },
   {
-    title:'Spring onion soup',
-    shortDescription:'Enjoy our spring onion soup, bursting with fresh, vibrant flavour',
-    cooking_time:'30 min',
-    tags:'vegetarian',
+    title:"Spring onion soup",
+    shortDescription:"Enjoy our spring onion soup, bursting with fresh, vibrant flavour",
+    cooking_time:"30 min",
+    tags:"vegetarian",
     image:defaultRecipe3,
   },
   {
-    title:'Pork medallions',
-    shortDescription:'Juicy pork medallions, perfectly seared for exquisite flavour.',
-    cooking_time:'45min',
-    tags:'dinner',
+    title:"Pork medallions",
+    shortDescription:"Juicy pork medallions, perfectly seared for exquisite flavour.",
+    cooking_time:"45min",
+    tags:"dinner",
     image:defaultRecipe4,
   },
 ]
@@ -117,27 +117,27 @@ const PersonalCookbook=()=>{
   const handleClickRecipe=(user:User,recipeId:string)=>{
     navigate(`/users/${user.id}/cookbooks/${recipeId}`)
   }
-//TODO: add the fetchData func when connecting with backend
-/*  useEffect(() => {
-    async function fetchData(){
-      try{
-        const response = await api.get(`/users/${user.id}/cookbooks`)
-        setRecipes(response.data);
-      }catch(error){
-        console.error(
-          `Something went wrong while fetching the recipes: \n${handleError(
-            error
-          )}`
+  //TODO: add the fetchData func when connecting with backend
+  /*  useEffect(() => {
+      async function fetchData(){
+        try{
+          const response = await api.get(`/users/${user.id}/cookbooks`)
+          setRecipes(response.data);
+        }catch(error){
+          console.error(
+            `Something went wrong while fetching the recipes: \n${handleError(
+              error
+            )}`
+            );
+            console.error("Details:", error);
+            alert(
+            "Something went wrong while fetching the users! See the console for details."
           );
-          console.error("Details:", error);
-          alert(
-          "Something went wrong while fetching the users! See the console for details."
-        );
+        }
       }
-    }
-    fetchData();
-  }, []);
-*/
+      fetchData();
+    }, []);
+  */
 
 
   return(
@@ -154,11 +154,11 @@ const PersonalCookbook=()=>{
         activePage=""
       />
       <BaseContainer>
-{/*head field*/}
+        {/*head field*/}
         <div className="cookbook headerContainer">
           <div className="cookbook backButtonContainer">
-            <Button className="cookbook backButton" onClick={() => navigate(`/home`)}>
-              Back
+            <Button className="cookbook backButton" onClick={() => navigate("/home")}>
+              Back  
             </Button>
           </div>
           <div className="cookbook titleContainer">
@@ -170,7 +170,7 @@ const PersonalCookbook=()=>{
             </Button>
           </div>
         </div>
-{/*filter field*/}
+        {/*filter field*/}
         <div className="cookbook filterContainer">
           <div className="cookbook filterButtonContainer">
             <Button className="cookbook filterButton" onClick={filterRecipe()}>filter</Button>
@@ -181,9 +181,9 @@ const PersonalCookbook=()=>{
             onClick={(fk:string)=>setFilterKeyword()}>
           </FormField>
         </div>
-{/*recipe field*/}
+        {/*recipe field*/}
         <RecipeList recipes={defaultRecipes} onClickRecipe={handleClickRecipe} />
-{/*
+        {/*
 TODO：add the following line and delete the line above
         <RecipeList recipes={recipes} onClickRecipe={handleClickRecipe} />
 */}

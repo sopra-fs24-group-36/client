@@ -15,35 +15,35 @@ import { Button } from "components/ui/Button";
  */
 
 const FormField = (props) => {
-    return (
-      <div className="footer field">
-        <label className="footer label">{props.label}</label>
-        <input
-          className="footer input"
-          placeholder="search here..."
-          value={props.value}
-          onChange={(e) => props.onChange(e.target.value)}
-        />
-      </div>
-    );
-  };
-  
-  FormField.propTypes = {
-    label: PropTypes.string,
-    value: PropTypes.string,
-    onChange: PropTypes.func,
-  };
-
-  const Footer = () => (
-    <div className="footer container">
-      <h2 className="footer title">Search for recipe</h2>
-      <FormField>
-      </FormField>
-      <div  className="footer button-container">
-        <Button className="footer-button">Search</Button>
-    </div>    
+  return (
+    <div className="footer field">
+      <label className="footer label">{props.label}</label>
+      <input
+        className="footer input"
+        placeholder="search here..."
+        value={props.value}
+        onChange={(e) => props.onChange(e.target.value)}
+      />
     </div>
   );
+};
+
+FormField.propTypes = {
+  label: PropTypes.string,
+  value: PropTypes.string,
+  onChange: PropTypes.func,
+};
+
+const Footer = () => (
+  <div className="footer container">
+    <h2 className="footer title">Search for recipe</h2>
+    <FormField>
+    </FormField>
+    <div  className="footer button-container">
+      <Button className="footer-button">Search</Button>
+    </div>    
+  </div>
+);
 
 /**
  * Don't forget to export your component!

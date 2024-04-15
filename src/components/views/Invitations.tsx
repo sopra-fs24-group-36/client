@@ -40,13 +40,13 @@ const Invitations = (invitation) => {
         );
       }
     }
-  fetchInvitations();
-}, [refreshinvitation]);
+    fetchInvitations();
+  }, [refreshinvitation]);
   const handleAccept= async (invitation)=>{
     try{
       const response=await  api.put(`users/${userid}/${invitation.id}/accept`);
       //TODO:navigate means refresh data and allow us to see the joined group right now??
-      navigate('/home')
+      navigate("/home")
     }catch (error){
       alert("Accepting failed.");
     }
@@ -73,7 +73,7 @@ const Invitations = (invitation) => {
           invitations: true,
         }}
         activePage="invitations"
-        />
+      />
       <BaseContainer>
         <div className="invitations headerContainer">
           <div className="invitations backButtonContainer">

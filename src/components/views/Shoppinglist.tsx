@@ -38,6 +38,7 @@ const ItemField = (props) => {
   const handleCheck = () => {
     set_isChecked(!isChecked);
   };
+  
   return (
     <div className="shoppinglist itemsField">
       <input className="shoppinglist itemsInput" value={props.value} readOnly />

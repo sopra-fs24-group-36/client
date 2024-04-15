@@ -1,0 +1,135 @@
+@import "../theme";
+
+body {
+  background-image: url("../../assets/Background-Brocc.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: Arial, sans-serif;
+}
+
+.userprofile{
+  &.title{
+    color: $textColor;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1.5em;
+    margin-top: 1em;
+  }
+  &.field {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .icon {
+    width: 40px;
+    height: 40px;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    position: relative;
+    top: 10px;
+  }
+  .flip-horizontal {
+    transform: scaleX(-1);
+  }
+  &.container {
+    margin-top: 2em;
+    min-height: 300px;
+    @include center;
+    flex-direction: column;
+  }
+  &.form {
+    margin-top: 5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 38%;
+    max-width: 30em;
+    height: auto;
+    font-size: 17px;
+    font-weight: 300;
+    padding-left: 37px;
+    padding-right: 37px;
+    border-radius: 0.75em;
+    background-color: $true_green;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    box-shadow: $dropShadow;
+    border: 2px solid black;
+  }
+  &.button-container{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2em;
+  }
+  &.button-lightgreen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2em;
+    background-color: $light_green;
+    color:$container_dark;
+    margin-right: 10px;
+  }
+  &.button-darkpink {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2em;
+    background-color: $dark_pink;
+    color:$textColor;
+  }
+  &.button-with-picture{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    background-size: cover;
+    border: 1.5px solid black;
+  }
+  &.user-data-item {
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    color: $textColor;
+    margin-bottom: 5px;
+  }
+  &.item-label{
+    font-weight: bold;
+    text-align: left;
+  }
+  &.item-value{
+    font-weight: 300;
+    text-align: right;
+  }
+  &.imgcontainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &.circle-img {
+    width: auto;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &.circle-img img {
+    width: 30%;
+    height: 30%;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  &.input{
+    height: 30px;
+    border: none;
+    border-radius: 0.75em;
+    background: transparentize(white, 0.85);
+    color: $container_dark;
+    background-color: $light_green;
+    text-align: right;
+    width:60%
+  }
+}

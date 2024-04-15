@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { api, handleError } from "helpers/api";
 import User from "models/User";
-import { useNavigate } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
+
 import { Button } from "components/ui/Button";
 import "styles/views/Login.scss";
-import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
 // @ts-ignore
 import rightBrok from "../../assets/rightBrok.png";
-
 
 const Icon = ({ flip }) => {
   const iconClass = flip ? "icon flip-horizontal" : "icon";
@@ -39,49 +38,61 @@ FormField.propTypes = {
   onChange: PropTypes.func,
 };
 
-const Login = () => {
+const Register = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState<string>(null);
+  const [email, setEmail] = useState<string>(null);
   const [password, setPassword] = useState<string>(null);
-  const handleRegisterClick = () => {
-    navigate("/users");
-  };
+  const [name, setName] = useState<string>(null);
 
-  const doLogin = async () => {
+  const doRegister = async () => {
     try {
-      const requestBody = JSON.stringify({ username, password });
-      const response = await api.post("/users/login", requestBody);
+      const requestBody = JSON.stringify({ username, email, password, name });
+      const response = await api.post("/users", requestBody);
 
-      // Get the returned user and update a new object.
+      if (!response.data) {
+        throw new Error();
+      }
       const user = new User(response.data);
-
+      //store ID in the local storage
+      localStorage.setItem("userID", user.id);
       // Store the token into the local storage.
       localStorage.setItem("token", user.token);
-      //store ID in the local storage 
-      localStorage.setItem("userID", user.id);
-
-      // Login successfully worked --> navigate to the route /home
-      navigate("/home");
+      navigate("/home"); //navigating to home after successful login
     } catch (error) {
       alert(
-        `Something went wrong during the login: \n${handleError(error)}`,
+        `Something went wrong during the register: \n${handleError(error)}`,
       );
+      setName("");
+      setEmail("");
+      setUsername("");
+      setPassword("");
     }
   };
 
   return (
-    <BaseContainer>
+    <div>
       <div className="login container">
         <div className="login form">
           <div className="login title">
             <Icon flip />
-            Login
-            <Icon flip={false} />
+            Register
+            <Icon flip={false}/>
           </div>
           <FormField
-            label="Please enter your username:"
+            label="Username:"
             value={username}
             onChange={(un: string) => setUsername(un)}
+          />
+          <FormField
+            label="Name(optional):"
+            value={name}
+            onChange={(un: string) => setName(un)}
+          />
+          <FormField
+            label="Email:"
+            value={email}
+            onChange={(e) => setEmail(e)}
           />
           <FormField
             label="Password:"
@@ -90,30 +101,24 @@ const Login = () => {
           />
           <div className="login button-container">
             <Button
-              disabled={!username || !password}
               width="50%"
-              onClick={() => doLogin()}
+              onClick={() => navigate("/users/login")}
             >
-              Login
+              Return
             </Button>
-          </div>
-          <div style={{ textAlign: "center" }}>
-            <p>
-              Don`t have an account?<br />
-              You can register{" "}
-              <span className="register-link" onClick={handleRegisterClick}>
-              here
-              </span>
-              .
-            </p>
+            <Button
+              disabled={!username || !password || !email}
+              width="50%"
+              onClick={() => doRegister()}
+            >
+              Register
+            </Button>
           </div>
         </div>
       </div>
-    </BaseContainer>
+    </div>
   );
+
 };
 
-/**
- * You can get access to the history object's properties via the useLocation, useNavigate, useParams, ... hooks.
- */
-export default Login;
+export default Register;

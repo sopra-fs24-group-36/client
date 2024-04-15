@@ -1,0 +1,26 @@
+@import "../theme";
+
+.header_new {
+  &.container {
+    background-color: $container_dark;
+    margin: 10px; 
+    border-radius: $borderRadius;
+    position: fixed; 
+    top: 0; 
+    width: calc(100% - 20px); 
+    text-align: left;
+    display: flex;
+    align-items: center;
+    height: 90px;
+    padding-left: 10px; 
+  }
+  &.profileImage{
+    width: auto; 
+    border-radius: 50%;
+    padding-right: 15px; 
+  }
+  &.title {
+    font-weight: 600;
+    color: $textColor;
+  }
+}

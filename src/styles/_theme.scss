@@ -8,10 +8,16 @@
    feel free to play around with these and see what other look you can come up with! :D
 */
 
-$accent: #97ABFF;
-$accentDark: #123597;
+$background: #D8E2DC;
+$container_dark: #0B202C;
 $textColor: white;
-$background: #262632;
+$true_green: #2F8059;
+$light_green: #C6DABF; 
+$dark_pink: #E27396;  
+$light_pink: #F9B7C0; 
+$dark_green: #147067;
+
+
 
 /* some constants */
 
@@ -22,13 +28,13 @@ $SMALL_WIDTH: 768px;
 
 /* some standard elements */
 /* fonts */
-$fontDefault: "M PLUS Rounded 1c", sans-serif;
+$fontDefault:"Inter", sans-serif; /*updated the font family*/
 $fontMono: "Roboto Mono", monospace;
 
 /* a standard drop shadow */
 $dropShadow: 0 0.25em 0.25em rgba(0, 0, 0, 0.25);
 
-$borderRadius: 0.75em;
+$borderRadius: 0.25em;
 
 /* mixins
 

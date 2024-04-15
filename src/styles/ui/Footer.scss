@@ -1,0 +1,57 @@
+@import "../theme";
+
+.footer {
+  &.container {
+    background-color: $dark_pink;
+    margin: 10px; 
+    border-radius: $borderRadius;
+    position: fixed; 
+    bottom: 0; 
+    width: calc(100% - 20px); 
+    display: flex; 
+    height: 70px;
+  }
+
+  &.title {
+    font-weight: 600;
+    color: $textColor;
+    text-align: center;
+    padding-left: 30px; 
+    display: flex; 
+    padding-right: 30px; 
+    overflow: hidden;
+    
+  }
+  &.field {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    display: flex; 
+    align-items: center;
+    width: calc(100% - 430px); 
+  }
+  &.input {
+    height: 35px;
+    padding-left: 15px;
+    margin-left: -4px;
+    border: none;
+    border-radius: 0.75em;
+    background: transparentize(white, 0.85);
+    color: $textColor;
+    background-color: $light_green;
+    align-items: center;
+    width: 100%; 
+  }
+  &.label {
+    color: $textColor;
+    text-transform: lowercase;
+    font-weight: 300;
+  }
+  &.button-container {
+    display: flex;
+    justify-content: center;
+    margin-right: 30px; 
+    align-items: center;
+    margin-left: 30px; 
+  }
+}

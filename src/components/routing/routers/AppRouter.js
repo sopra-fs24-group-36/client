@@ -1,9 +1,19 @@
 import React from "react";
-import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
-import {GameGuard} from "../routeProtectors/GameGuard";
-import GameRouter from "./GameRouter";
-import {LoginGuard} from "../routeProtectors/LoginGuard";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { LoginGuard } from "../routeProtectors/LoginGuard";
 import Login from "../../views/Login";
+import AddRecipe from "../../views/AddRecipe";
+import Register from "../../views/Register";
+import Home from "../../views/Home";
+import UserProfile from "../../views/UserProfile";
+import EditProfile from "../../views/EditProfile";
+import PersonalCookbook from "../../views/PersonalCookbook";
+import Recipe from "../../views/Recipe";
+import GroupCookbook from "../../views/GroupCookbook";
+import AddGroup from "../../views/AddGroup";
+import Shoppinglist from "../../views/Shoppinglist";
+import Invitations from "../../views/Invitations";
+import RecipeEdit from "../../views/EditRecipe";
 
 /**
  * Main router of your application.
@@ -12,24 +22,43 @@ import Login from "../../views/Login";
  * The main difference between these two routes is the following:
  * /login renders another component without any sub-route
  * /game renders a Router that contains other sub-routes that render in turn other react components
- * Documentation about routing in React: https://reactrouter.com/en/main/start/tutorial 
+ * Documentation about routing in React: https://reactrouter.com/en/main/start/tutorial
  */
+
+//RECIPE LINK NEEDS TO BE CHANGED /users/{userID}/cookbooks/{recipeID}*/ 
 const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
 
-        <Route path="/game/*" element={<GameGuard />}>
-          <Route path="/game/*" element={<GameRouter base="/game"/>} />
-        </Route>
+        <Route path="/home" element={<Home />} />
 
-        <Route path="/login" element={<LoginGuard />}>
-          <Route path="/login" element={<Login/>} />
-        </Route>
+        <Route path="/recipes" element={<AddRecipe />} />
+
+        <Route path="/users/:authorID/cookbooks/:recipeID" element={<Recipe />} />
+
+        <Route path="/users/:authorID/cookbooks/:recipeID/edit" element={<RecipeEdit />} />
+
+        <Route path="/users" element={<Register />} />
+
+        <Route path="/users/login" element={<Login />} />
+        {/*<Route path="/users/login" element={<LoginGuard />}>*/}
+        {/*  <Route path="/users/login" element={<Login/>} />*/}
+        {/*</Route>*/}
+
+        <Route path="/users/profile" element={<UserProfile />} />
+        <Route path="/users/profile/edit" element={<EditProfile />} />
+        <Route path="/users/cookbooks" element={<PersonalCookbook />} />
+        <Route path="/shoppinglists" element={<Shoppinglist />} />
+        <Route path="/invitations" element={<Invitations/>} />
+
+        <Route path="/groups" element={<AddGroup />} />
+        {/*<Route path="/groups/:groupID/cookbooks" element={<GroupCookbook />} />*/}
+        <Route path="/groups/cookbooks" element={<GroupCookbook />} />
 
         <Route path="/" element={
-          <Navigate to="/game" replace />
-        }/>
+          <Navigate to="/users/login" replace />
+        } />
 
       </Routes>
     </BrowserRouter>

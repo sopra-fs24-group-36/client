@@ -90,7 +90,7 @@
     display: flex;
     flex-wrap: wrap;//to wrap to the next line if there isn't enough space horizontally
     overflow-y: scroll;
-    max-height: 400px;
+    height: 320px;
     margin-top:40px;
   }
   &.recipeContent {

@@ -14,6 +14,7 @@ import AddGroup from "../../views/AddGroup";
 import Shoppinglist from "../../views/Shoppinglist";
 import Invitations from "../../views/Invitations";
 import RecipeEdit from "../../views/EditRecipe";
+import Calendar from "../../views/Calendar";
 
 /**
  * Main router of your application.
@@ -49,6 +50,7 @@ const AppRouter = () => {
         <Route path="/users/profile" element={<UserProfile />} />
         <Route path="/users/profile/edit" element={<EditProfile />} />
         <Route path="/users/cookbooks" element={<PersonalCookbook />} />
+        <Route path="/calendars" element={<Calendar />} />
         <Route path="/shoppinglists" element={<Shoppinglist />} />
         <Route path="/invitations" element={<Invitations/>} />
 

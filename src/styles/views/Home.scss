@@ -68,6 +68,15 @@
     margin-right:30px; 
     margin-left:30px; 
   }
+  &.noRecipeText{
+    font-weight: bold;
+    color: $light_pink; 
+    font-size: 30px; 
+    font-style: italic;
+    text-align: center;
+    padding-top: 100px;
+    padding-bottom: 60px;
+  }
   &.recipeImage{
     width: 40%;
     padding-left: 15px; 
@@ -109,11 +118,12 @@
   &.recipeTags, 
   &.recipeTime{
     color: $container_dark; 
-    font-size: 12px;
+    font-size: 16px;
     text-align: left;
     font-weight: 400px;
   }
   &.recipesButtonContainer{
     padding: 60px 0px 60px 0px; 
   }
+
 }

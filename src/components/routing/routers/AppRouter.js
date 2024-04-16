@@ -25,7 +25,6 @@ import RecipeEdit from "../../views/EditRecipe";
  * Documentation about routing in React: https://reactrouter.com/en/main/start/tutorial
  */
 
-//RECIPE LINK NEEDS TO BE CHANGED /users/{userID}/cookbooks/{recipeID}*/ 
 const AppRouter = () => {
   return (
     <BrowserRouter>

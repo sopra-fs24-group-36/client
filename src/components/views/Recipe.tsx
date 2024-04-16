@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { api, handleError } from "helpers/api";
-import { Form, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import "styles/views/Recipe.scss";
-import PropTypes from "prop-types";
 import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import BaseContainer from "components/ui/BaseContainer_new";
@@ -44,7 +43,6 @@ const Recipe = () => {
   const doIngredients = () => {
     const recipeIngredients = recipe.ingredients;
     const recipeAmounts = recipe.amounts;
-    console.log(recipeAmounts);
     if (recipeIngredients.length === 0) {
       return <p>This recipe has no ingredients</p>
     }
@@ -72,7 +70,6 @@ const Recipe = () => {
     async function fetchData(){
       try{
         const response = await api.get(`/users/${authorID}/cookbooks/${recipeID}`);
-        console.log(response);
         // delays continuous execution of an async operation for 0.5 second -> can be removed 
         await new Promise((resolve) => setTimeout(resolve, 500));
         //returned recipe based on the id from the URL 
@@ -113,7 +110,8 @@ const Recipe = () => {
         <BaseContainer>
           <div className="recipe headerContainer">
             <div className="recipe backButtonContainer">
-              <Button className="backButton">
+              <Button className="backButton"
+                onClick={()=>navigate(-1)}>
                 Back
               </Button>
             </div>

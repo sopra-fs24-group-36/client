@@ -73,7 +73,6 @@ const editRecipe = () => {
   const navigate = useNavigate();
   const {authorID, recipeID} = useParams(); //User ID of recipe's author and recipeID 
   const [currentRecipe, setCurrentRecipe] = useState(null); //getting the recipe we are currently viewing 
-  const [updatedRecipe, setUpdatedRecipe] = useState(null);
 
   const currentUserID = localStorage.getItem("userID"); 
   let [title, set_recipe_title] = useState<string>("");

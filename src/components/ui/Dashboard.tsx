@@ -31,7 +31,7 @@ const Dashboard = ({ showButtons, activePage }) => {
   };
   const doGroupShopping = async () => {
     /*TODO: to navigate to a group's shopping list
-     navigate("/groups/:id/shoppinglists")*/
+     navigate("/groups/:groupID/shoppinglists")*/
     navigate("/groups/shoppinglists");
   };
   const doInvitations = async () => {

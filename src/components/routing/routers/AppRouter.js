@@ -15,6 +15,7 @@ import Shoppinglist from "../../views/Shoppinglist";
 import Invitations from "../../views/Invitations";
 import RecipeEdit from "../../views/EditRecipe";
 import GroupShoppinglist from "../../views/GroupShoppinglist";
+import { EditRecipeGuard } from "../routeProtectors/EditRecipeGuard";
 
 /**
  * Main router of your application.
@@ -37,7 +38,9 @@ const AppRouter = () => {
 
         <Route path="/users/:authorID/cookbooks/:recipeID" element={<Recipe />} />
 
-        <Route path="/users/:authorID/cookbooks/:recipeID/edit" element={<RecipeEdit />} />
+        <Route path="/users/:authorID/cookbooks/:recipeID/edit" element={<EditRecipeGuard/>}>
+          <Route path="/users/:authorID/cookbooks/:recipeID/edit" element={<RecipeEdit />} />
+        </Route>
 
         <Route path="/users" element={<Register />} />
 

@@ -35,13 +35,18 @@ FormField.propTypes = {
 };
 
 const Footer = () => (
-  <div className="footer container">
-    <h2 className="footer title">Search for recipe</h2>
-    <FormField>
-    </FormField>
-    <div  className="footer button-container">
-      <Button className="footer-button">Search</Button>
-    </div>    
+  <div className = "footer">
+    <div className="footer searchBar">
+      <h2 className="footer title">Search for recipe</h2>
+      <FormField>
+      </FormField>
+      <div  className="footer button-container">
+        <Button className="footer-button">Search</Button>
+      </div>    
+    </div>
+    <div className = "footer recipesContainer">
+
+    </div>
   </div>
 );
 

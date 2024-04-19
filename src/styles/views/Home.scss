@@ -77,6 +77,15 @@
     padding-top: 100px;
     padding-bottom: 60px;
   }
+  &.noGroupText{
+    font-weight: bold;
+    color: $true_green; 
+    font-size: 30px; 
+    font-style: italic;
+    text-align: center;
+    padding-top: 115px;
+    padding-bottom: 60px;
+  }
   &.recipeImage{
     width: 40%;
     padding-left: 15px; 

@@ -23,6 +23,7 @@ const Home = () => {
   const navigate = useNavigate();
   const userID = localStorage.getItem("userID"); /*getting the ID of the currently logged in user*/
   const [recipeList, setRecipeList] = useState<object[]>([]);
+  const [groupList, setGroupList] = useState<object[]>([]);
   const [firstRecipe, setFirstRecipe] = useState(null);
   const [secondRecipe, setSecondRecipe] = useState(null);
   const [thirdRecipe, setThirdRecipe] = useState(null);
@@ -30,17 +31,6 @@ const Home = () => {
 
   const doPersonalRecipes = async () => {
     navigate("/users/cookbooks"); /*to navigate to personal cookbook*/
-  }
-
-  const doGroup = async(groupID) => {/*to navigate to a group*/
-    try{
-      navigate(`/logout/${groupID}`) 
-    }
-    catch (error) {
-      alert(
-        `User could not be found: \n${handleError(error)}`
-      );
-    }
   }
 
   const doTags = (recipeTags) => {
@@ -62,6 +52,10 @@ const Home = () => {
   const doNoRecipe = () =>{
 
     return <p className = "Home noRecipeText">no recipes saved yet</p>;
+  }
+  const doNoGroup = () =>{
+
+    return <p className = "Home noGroupText">not part of any groups yet</p>;
   }
 
   useEffect(() => { //retrieve the recipe based on the ID from the URL 
@@ -101,6 +95,21 @@ const Home = () => {
     fetchData(); 
   }, []);
 
+  useEffect(()=>{
+    async function fetchData(){
+      try{
+        const response = await api.get(`/users/${userID}/groups`);
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        setGroupList(response.data);
+      }catch(error){
+        console.error(`Something went wrong while fetching the groups: \n${handleError(error)}`);
+        console.error("Details:", error);
+        alert("Something went wrong while fetching the groups! See the console for details.");
+      };
+    };
+    fetchData();
+  }, []);
+
   const doRecipes = () => {
     const recipes = [firstRecipe, secondRecipe, thirdRecipe]; // Collect recipes in an array
   
@@ -123,6 +132,25 @@ const Home = () => {
     } else {
 
       return doNoRecipe(); // Return JSX element indicating no recipes
+    }
+  }
+
+  const doGroup = () =>{
+    const groups = groupList;
+    const validGroups = groups.filter(group => group);
+    if(groupList.length>0){
+      return validGroups.map((group, index) => (
+        <div key = {index} className="Home buttonContainer">
+          <Button className="Home group"
+            onClick={() => navigate(`/users/${group.groupID}/cookbooks/`)}>
+            <img src={group.groupImage} alt="Group" className="Home groupImage" />
+            {group.groupName}
+          </Button>
+        </div>
+      ));
+    }
+    else{
+      return doNoGroup(); 
     }
   }
 
@@ -166,32 +194,7 @@ const Home = () => {
             <h2 className = "Home groupTitle">Group Cookbooks</h2>
           </div>
           <div className="Home groupContainer">
-            <div className="Home buttonContainer">
-              <Button className="Home group"
-                /*onClick={() => { doGroup(groupID) }}*/
-                onClick={() => navigate("/groups/cookbooks")}>
-                <img src={Group} alt="Group" className="Home groupImage" />
-                Carrot Crew
-              </Button>
-            </div>
-            <div className="Home buttonContainer">
-              <Button className="Home group" /*onClick={() => { doGroup(groupID) }}*/>
-                <img src={Group} alt="Group" className="Home groupImage" />
-                Spice Girls
-              </Button>
-            </div>
-            <div className="Home buttonContainer">
-              <Button className="Home group" /*onClick={() => { doGroup(groupID) }}*/>
-                <img src={Group} alt="Group" className="Home groupImage" />
-                Lords of Wings
-              </Button>
-            </div>
-            <div className="Home buttonContainer">
-              <Button className="Home group" /*onClick={() => { doGroup(groupID) }}*/>
-                <img src={Group} alt="Group" className="Home groupImage" />
-                Pasta La Vista
-              </Button>
-            </div>
+            {doGroup()}
           </div>
         </div>
         <Footer />

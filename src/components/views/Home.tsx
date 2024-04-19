@@ -29,10 +29,6 @@ const Home = () => {
   const [thirdRecipe, setThirdRecipe] = useState(null);
   const [recipeState, setRecipeState] = useState(false); 
 
-  const doPersonalRecipes = async () => {
-    navigate("/users/cookbooks"); /*to navigate to personal cookbook*/
-  }
-
   const doTags = (recipeTags) => {
     let webpageTags = "";
     if(recipeTags.length === 0){
@@ -138,7 +134,7 @@ const Home = () => {
   const doGroup = () =>{
     const groups = groupList;
     const validGroups = groups.filter(group => group);
-    if(groupList.length>0){
+    if(validGroups.length>0){
       return validGroups.map((group, index) => (
         <div key = {index} className="Home buttonContainer">
           <Button className="Home group"

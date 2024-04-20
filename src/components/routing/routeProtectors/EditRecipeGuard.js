@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 export const EditRecipeGuard = () => {
   const {authorID, recipeID} = useParams();
   const userID = localStorage.getItem("userID")
-  if (userID ===authorID) {
+  if (userID === authorID) {
     
     return <Outlet />;
   }

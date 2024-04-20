@@ -8,7 +8,8 @@ import Home from "../../views/Home";
 import UserProfile from "../../views/UserProfile";
 import EditProfile from "../../views/EditProfile";
 import PersonalCookbook from "../../views/PersonalCookbook";
-import Recipe from "../../views/Recipe";
+import UserRecipe from "../../views/UserRecipe";
+import GroupRecipe from "../../views/GroupRecipe";
 import GroupCookbook from "../../views/GroupCookbook";
 import AddGroup from "../../views/AddGroup";
 import Shoppinglist from "../../views/Shoppinglist";
@@ -36,7 +37,8 @@ const AppRouter = () => {
 
         <Route path="/recipes" element={<AddRecipe />} />
 
-        <Route path="/users/:authorID/cookbooks/:recipeID" element={<Recipe />} />
+        <Route path="/users/:authorID/cookbooks/:recipeID" element={<UserRecipe />} />
+        <Route path="/groups/:groupID/cookbooks/:recipeID" element={<GroupRecipe />} />
 
         <Route path="/users/:authorID/cookbooks/:recipeID/edit" element={<EditRecipeGuard/>}>
           <Route path="/users/:authorID/cookbooks/:recipeID/edit" element={<RecipeEdit />} />

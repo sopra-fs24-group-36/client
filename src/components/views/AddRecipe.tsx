@@ -412,7 +412,6 @@ const addRecipe = () => {
           </div>
         </BaseContainer>
         <Footer>
-
         </Footer>
       </div>
     );

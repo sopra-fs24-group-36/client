@@ -155,7 +155,7 @@ const Home = () => {
     content = <Spinner/>; //had to use the spinner because it takes a while to render the content 
   }else{
     content = (
-      <div>
+      <div className = "allcontent">
         <Header_new></Header_new>
         <Dashboard
           showButtons={{

@@ -1,16 +1,14 @@
-import React from "react";
-import {ReactLogo} from "../ui/ReactLogo";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "../../styles/ui/Footer.scss";
-import { Form } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { api, handleError } from "helpers/api";
 import { Button } from "components/ui/Button";
+import Recipe from "models/Recipe";
+// @ts-ignore
+import rightBrok from "../../assets/rightBrok.png"
 
 /**
- * This is an example of a Functional and stateless component (View) in React. Functional components are not classes and thus don't handle internal state changes.
- * Conceptually, components are like JavaScript functions. They accept arbitrary inputs (called “props”) and return React elements describing what should appear on the screen.
- * They are reusable pieces, and think about each piece in isolation.
- * Functional components have to return always something. However, they don't need a "render()" method.
- * https://react.dev/learn/your-first-component and https://react.dev/learn/passing-props-to-a-component 
  * @FunctionalComponent
  */
 
@@ -34,21 +32,152 @@ FormField.propTypes = {
   onChange: PropTypes.func,
 };
 
-const Footer = () => (
-  <div className = "footer">
-    <div className="footer searchBar">
-      <h2 className="footer title">Search for recipe</h2>
-      <FormField>
-      </FormField>
-      <div  className="footer button-container">
-        <Button className="footer-button">Search</Button>
-      </div>    
-    </div>
-    <div className = "footer recipesContainer">
+const Footer = () => {
+  const currentUserID = localStorage.getItem("userID");
+  const navigate = useNavigate(); 
+  const [title, set_recipe_title] = useState<string>(null);
+  const [link, set_recipe_link] = useState<string>(null);
+  const [shortDescription, set_recipe_description] = useState<string>(null); 
+  const [image, set_recipe_image] = useState<string>(null); 
+  const [cookingTime, set_recipe_prep] = useState<string>(null); 
 
+  const AddRecipe = async() =>{
+    try{
+      const requestBody = JSON.stringify({title, shortDescription, cookingTime, image, link})
+      const response = await api.post(`/users/${currentUserID}/cookbooks`, requestBody);
+      const recipe = new Recipe(response.data);
+      localStorage.setItem("recipeID", recipe.id); //not 100% sure if we need this, need to check with getting a recipe
+      const recipeID = localStorage.getItem("recipeID");
+      navigate(`/users/${currentUserID}/cookbooks/${recipeID}`);
+    }
+    catch(error){
+      alert(
+        `Something went wrong when saving the recipe: \n${handleError(error)}`,
+      );
+    }
+  }
+
+  return (
+    <div className = "footer content">
+      <div className="footer searchBar">
+        <h2 className="footer title">Search for recipe</h2>
+        <FormField>
+        </FormField>
+        <div  className="footer button-container">
+          <Button className="footer-button">Search</Button>
+        </div>    
+      </div>
+      <div className = "footer recipesContainer">
+        <div className = "footer recipe">
+          <div className = "footer recipeContent">
+            <div className ="footer recipeTitleContainer">
+              <p className = "footer recipeTitle">
+                The first Recipe
+              </p>
+            </div>
+            <div className = "footer recipeImageContainer">
+              <img src={rightBrok} alt="Broccoli" className="Home icon" />
+            </div>
+            <div className = "footer recipeDescriptionContainer">
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+            <div className = "footer recipeButton">
+              <Button className = "footer-footerButton">View recipe</Button>
+            </div>
+            <div className = "footer recipeButton">
+              <Button className = "footer-footerButton">Add recipe</Button>
+            </div>
+          </div>
+        </div>
+        <div className = "footer recipe">
+          <div className = "footer recipeContent">
+            <div className ="footer recipeTitleContainer">
+              <p className = "footer recipeTitle">
+                The second Recipe
+              </p>
+            </div>
+            <div className = "footer recipeImageContainer">
+              <img src={rightBrok} alt="Broccoli" className="Home icon" />
+            </div>
+            <div className = "footer recipeDescriptionContainer">
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+            <div className = "footer recipeButton">
+              <Button className = "footer-footerButton">View recipe</Button>
+            </div>
+            <div className = "footer recipeButton">
+              <Button className = "footer-footerButton">Add recipe</Button>
+            </div>
+          </div>
+        </div>
+        <div className = "footer recipe">
+          <div className = "footer recipeContent">
+            <div className ="footer recipeTitleContainer">
+              <p className = "footer recipeTitle">
+                The second Recipe
+              </p>
+            </div>
+            <div className = "footer recipeImageContainer">
+              <img src={rightBrok} alt="Broccoli" className="Home icon" />
+            </div>
+            <div className = "footer recipeDescriptionContainer">
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+            <div className = "footer recipeButton">
+              <Button className = "footer-footerButton">View recipe</Button>
+            </div>
+            <div className = "footer recipeButton">
+              <Button className = "footer-footerButton">Add recipe</Button>
+            </div>
+          </div>
+        </div>
+        <div className = "footer recipe">
+          <div className = "footer recipeContent">
+            <div className ="footer recipeTitleContainer">
+              <p className = "footer recipeTitle">
+                The second Recipe
+              </p>
+            </div>
+            <div className = "footer recipeImageContainer">
+              <img src={rightBrok} alt="Broccoli" className="Home icon" />
+            </div>
+            <div className = "footer recipeDescriptionContainer">
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+            <div className = "footer recipeButton">
+              <Button className = "footer-footerButton">View recipe</Button>
+            </div>
+            <div className = "footer recipeButton">
+              <Button className = "footer-footerButton">Add recipe</Button>
+            </div>
+          </div>
+        </div>
+        <div className = "footer recipe">
+          <div className = "footer recipeContent">
+            <div className ="footer recipeTitleContainer">
+              <p className = "footer recipeTitle">
+                The second Recipe
+              </p>
+            </div>
+            <div className = "footer recipeImageContainer">
+              <img src={rightBrok} alt="Broccoli" className="Home icon" />
+            </div>
+            <div className = "footer recipeDescriptionContainer">
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+            <div className = "footer recipeButton">
+              <Button className = "footer-footerButton">View recipe</Button>
+            </div>
+            <div className = "footer recipeButton">
+              <Button className = "footer-footerButton">Add recipe</Button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+}
+  
 
 /**
  * Don't forget to export your component!

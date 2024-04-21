@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../../styles/ui/Dashboard.scss";
 import { Button } from "components/ui/Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 // @ts-ignore
 import login from "../../assets/login.png";
@@ -10,6 +10,9 @@ import InviteUserModal from "components/views/InviteUserModal";
 
 const Dashboard = ({ showButtons, activePage }) => {
   const navigate = useNavigate();
+  const { groupID } = useParams();
+
+  const userID = parseInt(localStorage.getItem("userID"));
   const [isInviteUserModalOpen, setIsInviteUserModalOpen] = useState(false);
 
   const doRecipe = async () => {
@@ -22,17 +25,13 @@ const Dashboard = ({ showButtons, activePage }) => {
     navigate("/calendars");
   };
   const doGroupCalendar = async () => {
-    /*TODO: to navigate to a group's calendar
-     navigate("/groups/:id/calendars");*/
-    navigate("/groups/calendars");
+    navigate(`/groups/${userID}/calendars`);
   };
   const doShopping = async () => {
-    navigate("/shoppinglists");
+    navigate(`/users/${userID}/shoppinglists`);
   };
   const doGroupShopping = async () => {
-    /*TODO: to navigate to a group's shopping list
-     navigate("/groups/:groupID/shoppinglists")*/
-    navigate("/groups/shoppinglists");
+    navigate(`/groups/${groupID}/shoppinglists`);
   };
   const doInvitations = async () => {
     navigate("/invitations");
@@ -115,12 +114,12 @@ const Dashboard = ({ showButtons, activePage }) => {
         <div className="dashboard button-container">
           <Button
             className={`db${activePage === "inviteUser" ? " highlight" : ""}`}
-            onClick={()=>setIsInviteUserModalOpen(true)}>
+            onClick={() => setIsInviteUserModalOpen(true)}>
             Invite a user
           </Button>
           <InviteUserModal
             open={isInviteUserModalOpen}
-            onClose={()=>setIsInviteUserModalOpen(false)}>
+            onClose={() => setIsInviteUserModalOpen(false)}>
           </InviteUserModal>
         </div>
       )}

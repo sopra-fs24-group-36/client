@@ -60,7 +60,7 @@ const GroupCookbook = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [groupID]);
 
 
   useEffect(() => {

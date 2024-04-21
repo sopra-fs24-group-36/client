@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { api, handleError } from "helpers/api";
 import User from "models/User";
-import { Form, useNavigate } from "react-router-dom";
+import { Form, useNavigate, useParams } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import "styles/views/Shoppinglist.scss";
 import PropTypes from "prop-types";
@@ -34,17 +34,27 @@ FormField.propTypes = {
 };
 
 const ItemField = (props) => {
+  const { groupID } = useParams();
   const [isChecked, set_isChecked] = useState(false);
-  const handleCheck = () => {
+
+  const removeItem = async (index) => {
     set_isChecked(!isChecked);
+    try {
+      const requestBody = JSON.stringify({
+        "item": props.value,
+      });
+      const response = await api.put(`/groups/${groupID}/shoppinglists`, requestBody);
+    } catch (error) {
+      alert("An error occurred while remove items");
+    }
   };
-  
+
   return (
     <div className="shoppinglist itemsField">
       <input className="shoppinglist itemsInput" value={props.value} readOnly />
       <Button
         className={`shoppinglist check ${isChecked ? "checked" : ""}`}
-        onClick={handleCheck}
+        onClick={removeItem}
       >
         {isChecked ? "×" : ""}
       </Button>
@@ -54,45 +64,56 @@ const ItemField = (props) => {
 
 ItemField.propTypes = {
   value: PropTypes.string,
-  onRemove: PropTypes.func,
 };
 
 const GroupShoppinglist = () => {
   const navigate = useNavigate();
+  const { groupID } = useParams();
+  const [groupInfo, setGroupInfo] = useState<any[]>([]);
   const [items, set_items] = useState([]);
   const [new_item, set_new_item] = useState("");
 
-  const addItem = () => {
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await api.get(`/groups/${groupID}/shoppinglists`);
+        set_items(response.data.items);
+      } catch (error) {
+        alert("Something went wrong while fetching the items!");
+      }
+      try {
+        const response = await api.get(`/groups/${groupID}`);
+        setGroupInfo(response.data);
+      } catch (error) {
+        alert("Something went wrong while fetching the group");
+      }
+    }
+    fetchData();
+  }, [groupID]);
+
+  const addItem = async () => {
     if (new_item.trim() !== "") { // Make sure the input is not empty
       set_items([...items, new_item]);
       set_new_item("");
+      try {
+        const requestBody = JSON.stringify({
+          "item": new_item,
+        });
+        const response = await api.post(`/groups/${groupID}/shoppinglists`, requestBody);
+      } catch (error) {
+        alert("An error occurred while adding items");
+      }
     }
   };
 
-  const removeItem = (index) => {
-    const new_item = [...items];
-    new_item.splice(index, 1);
-    set_items(new_item);
-  };
-
-  const clearAll = () => {
+  const clearAll = async () => {
     set_items([]);
-  };
-
-  /*TODO：Add item to the database, Fetch group name
-  const saveChanges = async () => {
     try {
-      const requestBody = JSON.stringify({
-        group_name: group_name,
-        group_members: items,
-      });
-      const response = await api.post("/groups", requestBody);
+      const response = await api.delete(`/groups/${groupID}/shoppinglists`);
     } catch (error) {
-      console.error("An error occurred while creating groups:", error);
-      alert("Creating a group failed because the details were incomplete.");
+      alert("An error occurred while clear all items");
     }
   };
-  */
 
 
   return (
@@ -117,7 +138,7 @@ const GroupShoppinglist = () => {
               onClick={() => navigate("/home")}
             >Back</Button>
           </div>
-          <h2 className="shoppinglist title">Carrot Crew - Shopping List</h2>
+          <h2 className="shoppinglist title">{groupInfo.name} - Shopping List</h2>
         </div>
 
         <div className="shoppinglist container">
@@ -127,7 +148,6 @@ const GroupShoppinglist = () => {
               <ItemField
                 key={index}
                 value={new_item}
-                onRemove={() => removeItem(index)}
               />
             ))}
           </div>

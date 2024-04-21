@@ -54,7 +54,7 @@ const AppRouter = () => {
         <Route path="/users/:userID" element={<UserProfile />} />
         <Route path="/users/:userID/edit" element={<EditProfile />} />
         <Route path="/users/cookbooks" element={<PersonalCookbook />} />
-        <Route path="/shoppinglists" element={<Shoppinglist />} />
+        <Route path="/users/:userID/shoppinglists" element={<Shoppinglist />} />
         <Route path="/invitations" element={<Invitations />} />
 
         <Route path="/groups" element={<AddGroup />} />

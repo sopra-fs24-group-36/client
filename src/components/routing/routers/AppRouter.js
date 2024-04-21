@@ -53,19 +53,17 @@ const AppRouter = () => {
         {/*  <Route path="/users/login" element={<Login/>} />*/}
         {/*</Route>*/}
 
-        <Route path="/users/profile" element={<UserProfile />} />
-        <Route path="/users/profile/edit" element={<EditProfile />} />
+        <Route path="/users/:userID" element={<UserProfile />} />
+        <Route path="/users/:userID/edit" element={<EditProfile />} />
         <Route path="/users/cookbooks" element={<PersonalCookbook />} />
         <Route path="/calendars" element={<Calendar />} />
-        <Route path="/shoppinglists" element={<Shoppinglist />} />
+        <Route path={"/groups/calendars"} element={<GroupCalendar/>} />
+        <Route path="/users/:userID/shoppinglists" element={<Shoppinglist />} />
         <Route path="/invitations" element={<Invitations />} />
 
         <Route path="/groups" element={<AddGroup />} />
-        {/*<Route path="/groups/:groupID/cookbooks" element={<GroupCookbook />} />*/}
-        <Route path="/groups/cookbooks" element={<GroupCookbook />} />
-        <Route path={"/groups/calendars"} element={<GroupCalendar/>} />
-        {/*<Route path="/groups/:groupID/shoppinglists" element={<GroupShoppinglist />} />*/}
-        <Route path="/groups/shoppinglists" element={<GroupShoppinglist />} />
+        <Route path="/groups/:groupID/cookbooks" element={<GroupCookbook />} />
+        <Route path="/groups/:groupID/shoppinglists" element={<GroupShoppinglist />} />
 
         <Route path="/" element={
           <Navigate to="/users/login" replace />

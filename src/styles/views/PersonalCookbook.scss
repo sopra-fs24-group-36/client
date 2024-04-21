@@ -5,7 +5,6 @@
     justify-content: space-between;
     display: flex;
     align-items: center;
-
   }
   &.titleContainer{
      text-align: center;
@@ -25,7 +24,6 @@
     height:35px;
     background-color: $light_green;
     border-radius: 0.5em;
-    position: fixed;
     display: flex;
   }
   &.filterButton{

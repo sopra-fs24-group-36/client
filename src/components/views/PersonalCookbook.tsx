@@ -16,7 +16,7 @@ const FormField = (props) => {
     <div className="cookbook field">
       <input
         className="cookbook input"
-        placeholder="Search for your recipes..."
+        placeholder="Search for your recipes by name or tag"
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
       />
@@ -36,10 +36,20 @@ const PersonalCookbook = () => {
   const userID = localStorage.getItem("userID"); /*getting the ID of the currently logged in user*/
   const [recipeState, setRecipeState] = useState(false);
   const [recipeList, setRecipeList] = useState<object[]>([]);
+  const [originalRecipeList, setOriginalRecipeList] = useState<object[]>([]); // 新增原始食谱列表状态
+
 
   const filterRecipe = () => {
-    //TODO:add the filter func by tags or names
+    const lowerCaseFilterKeyword = filterKeyword.toLowerCase();
+    const filteredRecipes = originalRecipeList.filter(recipe => {
+      const lowerCaseTitle = recipe.title.toLowerCase();
+      const lowerCaseTags = recipe.tags.map(tag => tag.toLowerCase());
+      return lowerCaseTitle.includes(lowerCaseFilterKeyword) || lowerCaseTags.includes(lowerCaseFilterKeyword);
+    });
+    setRecipeList(filteredRecipes);
   };
+
+
   const deleteRecipe = () => {
     //TODO:add the deleteRecipe when connecting with backend
 
@@ -49,6 +59,10 @@ const PersonalCookbook = () => {
   };
   const handleClickRecipe = (user: User, recipeId: string) => {
     navigate(`/users/${userID}/cookbooks/${recipeId}`);
+  };
+
+  const handleFilterChange = (newValue) => {
+    setFilterKeyword(newValue);
   };
 
   useEffect(() => {
@@ -69,6 +83,7 @@ const PersonalCookbook = () => {
             image: recipe.image,
           }));
           setRecipeList(formattedRecipes);
+          setOriginalRecipeList(formattedRecipes);
         }
       } catch (error) {
         console.error(
@@ -97,7 +112,7 @@ const PersonalCookbook = () => {
           <h2 className="cookbook recipeTitle">{title}</h2>
           <p className="cookbook recipeDescription">Description:{description}</p>
           <p className="cookbook recipeTime">Total Time:{time}</p>
-          <p className="cookbook recipeTags">Tags:{tag}</p>
+          <p className="cookbook recipeTags">Tags:{tag.join(",")}</p>
         </div>
       </button>
     </div>
@@ -145,7 +160,7 @@ const PersonalCookbook = () => {
             <h2 className="cookbook title">Personal Cookbook</h2>
           </div>
           <div className="cookbook backButtonContainer">
-            <Button className="cookbook backButton" onClick={deleteRecipe()}>
+            <Button className="cookbook backButton" onClick={deleteRecipe}>
               Delete Recipes
             </Button>
           </div>
@@ -153,12 +168,12 @@ const PersonalCookbook = () => {
         {/*filter field*/}
         <div className="cookbook filterContainer">
           <div className="cookbook filterButtonContainer">
-            <Button className="cookbook filterButton" onClick={filterRecipe()}>filter</Button>
+            <Button className="cookbook filterButton" onClick={filterRecipe}>filter</Button>
           </div>
           <FormField
             className="cookbook input"
             value={filterKeyword}
-            onClick={(fk: string) => setFilterKeyword()}>
+            onChange={handleFilterChange}>
           </FormField>
         </div>
         {/*recipe field*/}

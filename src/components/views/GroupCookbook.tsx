@@ -16,7 +16,7 @@ const FormField = (props) => {
     <div className="cookbook field">
       <input
         className="cookbook input"
-        placeholder="Search for your recipes..."
+        placeholder="Search for your recipes by name or tag"
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
       />
@@ -25,6 +25,7 @@ const FormField = (props) => {
 };
 FormField.propTypes = {
   value: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 
@@ -36,9 +37,19 @@ const GroupCookbook = () => {
   const [groupInfo, setGroupInfo] = useState<any[]>([]);
   const [recipeState, setRecipeState] = useState(false);
   const [recipeList, setRecipeList] = useState<any[]>([]);
+  const [originalRecipeList, setOriginalRecipeList] = useState<object[]>([]); // 新增原始食谱列表状态
+
 
   const filterRecipe = () => {
+    const lowerCaseFilterKeyword = filterKeyword.toLowerCase();
+    const filteredRecipes = originalRecipeList.filter(recipe => {
+      const lowerCaseTitle = recipe.title.toLowerCase();
+      const lowerCaseTags = recipe.tags.map(tag => tag.toLowerCase());
+      return lowerCaseTitle.includes(lowerCaseFilterKeyword) || lowerCaseTags.includes(lowerCaseFilterKeyword);
+    });
+    setRecipeList(filteredRecipes);
   };
+
   const removeRecipe = () => {
   };
 
@@ -48,6 +59,10 @@ const GroupCookbook = () => {
 
   const handleClickRecipe = (user: User, recipeId: string) => {
     navigate(`/users/${userID}/cookbooks/${recipeId}`);
+  };
+
+  const handleFilterChange = (newValue) => {
+    setFilterKeyword(newValue);
   };
 
   useEffect(() => {
@@ -81,6 +96,7 @@ const GroupCookbook = () => {
             image: recipe.image,
           }));
           setRecipeList(formattedRecipes);
+          setOriginalRecipeList(formattedRecipes);
         }
       } catch (error) {
         console.error(
@@ -108,7 +124,7 @@ const GroupCookbook = () => {
           <h2 className="cookbook recipeTitle">{title}</h2>
           <p className="cookbook recipeDescription">Description:{description}</p>
           <p className="cookbook recipeTime">Total Time:{time}</p>
-          <p className="cookbook recipeTags">Tags:{tag}</p>
+          <p className="cookbook recipeTags">Tags:{tag.join(",")}</p>
         </div>
         <div className="cookbook recipeUserImgContainer">
           <img className="cookbook recipeUserImg" src={userImgUrl} alt="User Image" />
@@ -162,19 +178,19 @@ const GroupCookbook = () => {
             <h2 className="cookbook title">{groupInfo.name} - Cookbook</h2>
           </div>
           <div className="cookbook backButtonContainer">
-            <Button className="cookbook backButton" onClick={removeRecipe()}>
+            <Button className="cookbook backButton" onClick={removeRecipe}>
               Remove Recipes
             </Button>
           </div>
         </div>
         <div className="cookbook filterContainer">
           <div className="cookbook filterButtonContainer">
-            <Button className="cookbook filterButton" onClick={filterRecipe()}>filter</Button>
+            <Button className="cookbook filterButton" onClick={filterRecipe}>filter</Button>
           </div>
           <FormField
             className="cookbook input"
             value={filterKeyword}
-            onChange={(fk: string) => setFilterKeyword()}>
+            onChange={handleFilterChange}>
           </FormField>
         </div>
         <RecipeList recipes={recipeList} onClickRecipe={handleClickRecipe} />

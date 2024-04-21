@@ -22,9 +22,9 @@ import Header from "./Header";
 // @ts-ignore
 const FormField=(props)=>{
   return (
-    <div className="cookbook field">
+    <div className="personalCookbook field">
       <input
-        className="cookbook input"
+        className="personalCookbook input"
         placeholder="Search for your recipes..."
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
@@ -55,7 +55,7 @@ const RecipeItem=({title,description,time,tag,imageUrl,onClick}:any)=>(
 
 );
 const RecipeList = ({ recipes, onClickRecipe }: any) => (
-  <div className="cookbook recipeListContainer">
+  <div className="personalCookbook recipeListContainer">
     {recipes.map((recipe: any, index: number) => (
       <RecipeItem
         key={index}
@@ -167,28 +167,28 @@ const PersonalCookbook=()=>{
       />
       <BaseContainer>
 {/*head field*/}
-        <div className="cookbook headerContainer">
-          <div className="cookbook backButtonContainer">
+        <div className="personalCookbook headerContainer">
+          <div className="personalCookbook backButtonContainer">
             <Button className="backButton" onClick={() => navigate(`/home`)}>
               Back
             </Button>
           </div>
-          <div className="cookbook titleContainer">
-            <h2 className="cookbook title">Personal Cookbook</h2>
+          <div className="personalCookbook titleContainer">
+            <h2 className="personalCookbook title">Personal Cookbook</h2>
           </div>
-          <div className="cookbook backButtonContainer">
+          <div className="personalCookbook backButtonContainer">
             <Button className=" backButton" onClick={deleteRecipe()}>
               Delete Recipes
             </Button>
           </div>
         </div>
 {/*filter field*/}
-        <div className="cookbook filterContainer">
-          <div className="cookbook filterButtonContainer">
-            <Button className="cookbook filterButton" onClick={filterRecipe}>filter</Button>
+        <div className="personalCookbook filterContainer">
+          <div className="personalCookbook filterButtonContainer">
+            <Button className="personalCookbook filterButton" onClick={filterRecipe}>filter</Button>
           </div>
           <FormField
-            className="cookbook input"
+            className="personalCookbook input"
             value={filterKeyword}
             onChange={(newValue) => setFilterKeyword(newValue)}>
           </FormField>

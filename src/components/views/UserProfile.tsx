@@ -23,7 +23,7 @@ Icon.propTypes = {
 const UserProfile=()=>{
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const {id} = useParams();
+  const {userId} = useParams();
 
   useEffect(() => {
     const fetchData=async()=>{
@@ -36,7 +36,7 @@ const UserProfile=()=>{
           return;
         }*/
 //---------------------end of modifications
-        const response=await api.get(`/users/${id}`);
+        const response=await api.get(`/users/${userId}`);
         setUser(response.data);
       }catch(error){
         console.error(
@@ -51,7 +51,7 @@ const UserProfile=()=>{
       }
     }
     fetchData()
-  }, [id,navigate]);
+  }, [userId,navigate]);
 
 
   return(

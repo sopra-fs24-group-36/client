@@ -21,7 +21,14 @@ import defaultRecipe2 from "../../assets/defaultRecipe2.png";
 import defaultRecipe3 from "../../assets/defaultRecipe3.png";
 // @ts-ignore
 import defaultRecipe4 from "../../assets/defaultRecipe4.png";
-
+// @ts-ignore
+import defaultRecipe1UserImg from "../../assets/defaultRecipe1UserImg.png"
+// @ts-ignore
+import defaultRecipe2UserImg from "../../assets/defaultRecipe2UserImg.png"
+// @ts-ignore
+import defaultRecipe3UserImg from "../../assets/defaultRecipe3UserImg.png"
+// @ts-ignore
+import defaultRecipe4UserImg from "../../assets/defaultRecipe4UserImg.png"
 const FormField=(props)=>{
   return(
     <div className="calendar input">
@@ -30,7 +37,7 @@ const FormField=(props)=>{
         placeholder="Search for your recipes..."
         value={props.value}
         onChange={(e)=>props.onChange(e.target.value)}
-        />
+      />
     </div>
   )
 }
@@ -44,21 +51,25 @@ const defaultRecipes=[
   {
     title: "Breakfast burritos",
     image:defaultRecipe1,
+    creator:defaultRecipe1UserImg,
     id:1,
   },
   {
     title:'Quick fried rice',
     image:defaultRecipe2,
+    creator:defaultRecipe2UserImg,
     id:2,
   },
   {
     title:'Spring onion soup',
     image:defaultRecipe3,
+    creator:defaultRecipe3UserImg,
     id:3,
   },
   {
     title:'Pork medallions',
     image:defaultRecipe4,
+    creator:defaultRecipe4UserImg,
     id:4,
   }
 ]
@@ -71,7 +82,7 @@ const defaultCalendar=[
     date: "2024-4-29",
     image: "defaultRecipe1",
     timeSlot: "Morning",
-    creator: "User1"
+    creator:defaultRecipe1UserImg,
   },
   {
     id: 2,
@@ -80,7 +91,7 @@ const defaultCalendar=[
     date: "2024-4-21",
     image: "defaultRecipe2",
     timeSlot: "Morning",
-    creator: "User2"
+    creator:defaultRecipe1UserImg,
   },
   {
     id: 3,
@@ -89,7 +100,7 @@ const defaultCalendar=[
     date: "2024-4-22",
     image: "defaultRecipe2",
     timeSlot: "Afternoon",
-    creator: "User2"
+    creator:defaultRecipe1UserImg,
   },
   {
     id: 4,
@@ -98,12 +109,12 @@ const defaultCalendar=[
     date: "2024-4-23",
     image: "3",
     timeSlot: "Evening",
-    creator: "User3"
+    creator:defaultRecipe1UserImg,
   },
 ]
-const Calendar = () =>{
+const GroupCalendar=()=>{
   const navigate = useNavigate();
-  const {userId} = useParams();
+  const {groupId} = useParams();
   const [filterKeyword, setFilterKeyword]=useState<string>(null)
   //TODO:replace defaultCalendar with null when connecting with backend
   const [calendar,setCalendar]=useState(defaultCalendar);
@@ -141,9 +152,9 @@ const Calendar = () =>{
   const getDatesOfWeek=(date)=>{
     const result=[];
     const start=new Date(date);
-/*    getDate() returns the date of start(which day of the month is
-    getDay() returns the day of the week of 'start', 0 means sunday, 1 means monday
-    the following line sets 'start' to the first day of this week(sunday)*/
+    /*    getDate() returns the date of start(which day of the month is
+        getDay() returns the day of the week of 'start', 0 means sunday, 1 means monday
+        the following line sets 'start' to the first day of this week(sunday)*/
     start.setDate(start.getDate()-start.getDay());
     for(let i =0;i<7;i++){
       const current=new Date(start);
@@ -184,7 +195,7 @@ const Calendar = () =>{
       timeSlot:timeSlot,
     }
 
-    await api.post(`/users/${userId}/calendars/${recipe.id}`, requestBody)
+    await api.post(`/users/${groupId}/calendars/${recipe.id}`, requestBody)
       .then(()=>{
         setShouldFetchCalendar(true);
       })
@@ -223,7 +234,7 @@ const Calendar = () =>{
   const handleRemove= async (eventId)=>{
     try{
       //TODO:add the following line
-      /*await api.delete(`users/${userId}/calendars/${eventId}`)
+      /*await api.delete(`groups/${groupId}/calendars/${eventId}`)
       setShouldFetchCalendar(true);*/
       const updatedCalendar=calendar.filter(event=>!(event.id===eventId))
       setCalendar(updatedCalendar);
@@ -235,29 +246,29 @@ const Calendar = () =>{
   }
 
 
-    useEffect(()=>{
-      async function fetchData(){
-        try{
-          //TODO:add the fetchData func when connecting with backend
-          /*const responseRecipe=await api.get(`/users/${userId}/cookbooks`);
-          setAllRecipes(responseRecipe.data);
-          setSearchedRecipes(responseRecipe.data);
-          const responseCalendar=await api.get(`/users${userId}/calendars`);
-          setCalendar(responseCalendar.data)*/
-          setAllRecipes(defaultRecipes);
-          setSearchedRecipes(defaultRecipes);
-        }catch(error){
-          console.error("Details:", error);
-          alert(
-            "Something went wrong while fetching the data! See the console for details.");
-        }finally {
-          setShouldFetchCalendar(false);
-        }
+  useEffect(()=>{
+    async function fetchData(){
+      try{
+        //TODO:add the fetchData func when connecting with backend
+        /*const responseRecipe=await api.get(`/groups/${groupId}/cookbooks`);
+        setAllRecipes(responseRecipe.data);
+        setSearchedRecipes(responseRecipe.data);
+        const responseCalendar=await api.get(`/groups/${groupId}/calendars`);
+        setCalendar(responseCalendar.data)*/
+        setAllRecipes(defaultRecipes);
+        setSearchedRecipes(defaultRecipes);
+      }catch(error){
+        console.error("Details:", error);
+        alert(
+          "Something went wrong while fetching the data! See the console for details.");
+      }finally {
+        setShouldFetchCalendar(false);
       }
-      if (shouldFetchCalendar) {
-        fetchData();
-      }
-    },[shouldFetchCalendar]);
+    }
+    if (shouldFetchCalendar) {
+      fetchData();
+    }
+  },[shouldFetchCalendar]);
 
   return(
     <div>
@@ -266,17 +277,20 @@ const Calendar = () =>{
         showButtons={{
           recipe: true,
           group: true,
-          calendar: true,
-          shoppinglist: true,
-          invitations: true,
+          groupCalendar: true,
+          groupShoppinglist: true,
         }}
         activePage="calendar"
       />
       <div className="calendar container" >
-{/*your recipes field*/}
+        {/*group recipes field*/}
         <BaseContainer className="calendar baseContainerLeft">
           <div className="calendar headContainer1">
-            <h2 className="calendar title1">Your Recipes</h2>
+{/*
+            TODO:to get the group name
+            <h2 className="calendar title1"></h2>
+*/}
+            <h2 className="calendar title1">Carrot Crew - Recipes</h2>
           </div>
           <div className="calendar searchContainer">
             <FormField
@@ -296,7 +310,7 @@ const Calendar = () =>{
             </div>
           </div>
           <div className="calendar recipeListContainer">
-{/*TODO: display the recipes in database
+            {/*TODO: display the recipes in database
 recipes.map...*/}
             {searchedRecipes && searchedRecipes.length > 0 ?(searchedRecipes.map((recipe) => (
               <div
@@ -317,7 +331,7 @@ recipes.map...*/}
             )}
           </div>
         </BaseContainer>
-{/*calendar field*/}
+        {/*calendar field*/}
         <BaseContainer className="calendar baseContainerRight">
           <div className="calendar headContainer2">
             <div className="calendar backButtonContainer">
@@ -326,7 +340,9 @@ recipes.map...*/}
               </Button>
             </div>
             <div className="calendar titleContainer">
-              <h2 className="calendar title2">Your Calendar</h2>
+{/*              TODO: to get the group name
+              <h2 className="calendar title2"></h2>*/}
+              <h2 className="calendar title2">Carrot Crew-Calendar</h2>
             </div>
           </div>
           <div className="calendar arrowButtonContainer">
@@ -354,12 +370,17 @@ recipes.map...*/}
                   >
                     {getEventsOfTimeSlot(calendar, date, timeSlot).map(event => (
                       <div className="calendar eventContainer"
-                        key={event.id}>
-                        <h3 className="calendar eventTitle">{event.title}</h3>
+                           key={event.id}>
+                        <div className="calendar eventTitleContainer">
+                          <h3 className="calendar eventTitle">{event.title}</h3>
+                        </div>
+                        <div className="calendar creatorImgContainer">
+                          <img className="calendar creatorImg" src={event.creator} alt="Creator Image" />
+                        </div>
                         <Button
-                          className="calendar removeButton1"
+                          className="calendar removeButton2"
                           onClick={() => handleRemove(event.id)}>Remove</Button>
-{/*TODO:ADD THE FOLLOWING
+                        {/*TODO:ADD THE FOLLOWING
                           onClick={() => handleRemove(event.id,date,timeSlot)}>Remove</Button>*/}
                       </div>
                     ))}
@@ -374,4 +395,4 @@ recipes.map...*/}
     </div>
   )
 }
-export default Calendar;
+export default GroupCalendar;

@@ -15,6 +15,7 @@ import Shoppinglist from "../../views/Shoppinglist";
 import Invitations from "../../views/Invitations";
 import RecipeEdit from "../../views/EditRecipe";
 import Calendar from "../../views/Calendar";
+import GroupCalendar from "../../views/GroupCalendar"
 
 /**
  * Main router of your application.
@@ -57,6 +58,7 @@ const AppRouter = () => {
         <Route path="/groups" element={<AddGroup />} />
         {/*<Route path="/groups/:groupID/cookbooks" element={<GroupCookbook />} />*/}
         <Route path="/groups/cookbooks" element={<GroupCookbook />} />
+        <Route path={"/groups/calendars"} element={<GroupCalendar/>} />
 
         <Route path="/" element={
           <Navigate to="/users/login" replace />

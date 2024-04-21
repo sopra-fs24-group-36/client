@@ -1,6 +1,7 @@
 @import "../theme";
 
 .calendar{
+//Basic component style
   &.container{
     justify-content: space-between;
     display: flex;
@@ -15,16 +16,23 @@
   &.baseContainerRight{
     margin-left: 680px;
     width:52%;
-    justify-content: center;
     display: flex;
+    flex-direction: column;
   }
-  &.headContainer{
+  &.headContainer1{
     display: flex;
     justify-content: center;
     align-items: center;
     position:sticky;
     z-index: 1;
     height: 80px;
+    margin:-0px 20px 0px 20px;
+  }
+  &.headContainer2{
+    display: flex;
+    align-items: center;
+    height: 10%;
+    margin:15px 20px 0px 15px;
   }
   &.titleContainer{
     text-align: center;
@@ -42,9 +50,10 @@
     margin-right: 30px;
   }
   &.arrowButtonContainer{
-    margin: 70px 30px 0px 30px;
+    margin: 0px 30px 0px 600px;
     display: flex;
     height: 50px;
+    clear: both;
   }
   &.arrowButton{
     background-color: $light_green;
@@ -158,6 +167,111 @@
     border-radius: 50%;
   }
   &.recipeImg img{
+    width: 100%;
+    height: 100%;
+  }
+  //styles related to calendar
+  &.calendarContainer{
+    background-color: $light_green;
+    padding:10px;
+    margin:10px 10px 10px 10px;
+    height: 80%;
+    max-height: 800px;
+    border-radius: 0.75em;
+  }
+  &.calendarForm{
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    grid-template-rows: auto repeat(3, 1fr);
+    height: 100%;
+    border-width: 3px 1px 3px 3px;
+    border-color: $container_dark;
+    border-style: solid ;
+  }
+
+  &.date{
+    background-color: $light_pink;
+    border-width: 0px 2px 2px 0px;
+    border-style: solid;
+    padding: 10px;
+    font-weight:bold;
+    display: flex;
+    place-items: center;
+  }
+  &.timeSlot{
+    min-height: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0; 
+    border-width:0px 2px 0px 0px;
+    border-style: solid;
+    overflow-y: auto;
+  }
+  &.timeSlot.morning{
+    background-color:$light_yellow;
+  }
+  &.timeSlot.afternoon{
+    background-color:$light_brown;
+  }
+  &.timeSlot.evening{
+    background-color: rgba($grey_blue, 0.27);
+  }
+  &.eventContainer{
+    background-color: $container_dark;
+    color: $textColor;
+    border-radius: 0.75em;
+    display: flex;
+    justify-content: center;
+    min-height: 80px;
+    width:80%;
+    padding: 0.1em;
+    margin:3px 3px 3px 3px;
+    flex-wrap: wrap;
+  }
+  &.eventTitleContainer{
+    background-color: $dark_pink;
+    border-radius: 0.75em;
+    min-height: 20px;
+    margin:0px 0px 3px 0px;
+  }
+  &.eventTitle{
+    text-align: center;
+    word-wrap: break-word;
+    font-size: 10px;
+    margin:3px 1px 1px 1px;
+  }
+  &.removeButton1{
+    border-radius: 0.75em;
+    width:95%;
+    font-size: 12px;
+  }
+  &.removeButton2{
+    margin:0px 0px -5px 0px;
+    border-radius: 0.75em;
+    width:95%;
+    font-size: 12px;
+    background-color: transparent;
+    border: none;
+    color: inherit;
+    outline: none;
+    cursor: pointer;
+  }
+  &.creatorImgContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top:5px;
+  }
+  &.creatorImg{
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+  }
+  &.creatorImg img{
     width: 100%;
     height: 100%;
   }

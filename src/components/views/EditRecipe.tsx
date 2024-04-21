@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef} from "react";
 import { api, handleError } from "helpers/api";
-import {Form, useNavigate, useParams} from "react-router-dom";
+import { useNavigate, useParams} from "react-router-dom";
 import { Button } from "components/ui/Button";
 import "styles/views/EditRecipe.scss";
 import PropTypes from "prop-types";
@@ -19,9 +19,8 @@ const FormField = (props) => { /*general form fields for inputting information (
       <label className="recipes label">{props.label}</label>
       <input
         className="recipes input"
-        placeholder="enter here..."
-        value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
+        value = {props.value || ""}
       />
     </div>
   );
@@ -73,77 +72,192 @@ StepsField.propTypes = {
 const editRecipe = () => {
   const navigate = useNavigate();
   const {authorID, recipeID} = useParams(); //User ID of recipe's author and recipeID 
-  const [recipe, setRecipe] = useState(null); //getting the recipe we are currently viewing 
+  const [currentRecipe, setCurrentRecipe] = useState(null); //getting the recipe we are currently viewing 
 
   const currentUserID = localStorage.getItem("userID"); 
-  const [title, set_recipe_title] = useState<string>(null);
-  const [link, set_recipe_link] = useState<string>(null);
-  const [shortDescription, set_recipe_description] = useState<string>(null); 
-  const [image, set_recipe_image] = useState<string>(null); 
-  const [cookingTime, set_recipe_prep] = useState<string>(null); 
-  const [ingredients, set_recipe_ing] = useState<string[]>([]);
-  const [amount, set_recipe_amount] = useState<string[]>([]);
-  const [instructions, set_recipe_steps] = useState<string[]>([]);
-  const [tags, set_recipe_tags] = useState<string[]>([]);
-  const [cookbooks, set_cookbooks] = useState<string[]>([]);
-  
+  let [title, set_recipe_title] = useState<string>("");
+  let [link, set_recipe_link] = useState<string>("");
+  let [shortDescription, set_recipe_description] = useState<string>(""); 
+  let [image, set_recipe_image] = useState<string>(""); 
+  let [cookingTime, set_recipe_prep] = useState<string>(""); 
+  let [ingredients, set_recipe_ing] = useState<string[]>([]);
+  let [amounts, set_recipe_amount] = useState<string[]>([]);
+  let [instructions, set_recipe_steps] = useState<string[]>([]);
+  let [tags, set_recipe_tags] = useState<string[]>([]);
+
+  const [groupList, setGroupList] = useState<object[]>([]);
+  const [groupState, setGroupState] = useState(false); 
+  let [groups, set_groups] = useState<Int16Array[]>([]);
+
+  const doLink = () =>{
+    if(currentRecipe.link=== null){
+      return "No link set";
+    }
+    else{
+      return currentRecipe.link; 
+    }
+  }
+
+  const handleTitleChange = (value) =>{
+    setCurrentRecipe({...currentRecipe, title:value});
+  }
+
+  const handleDescriptionChange = (value) => {
+    setCurrentRecipe({...currentRecipe, shortDescription:value});
+  }
+
+  const handleTimeChange = (value) => {
+    setCurrentRecipe({...currentRecipe, cookingTime:value});
+  }
+
+  const handleLinkChange = (value) => {
+    setCurrentRecipe({...currentRecipe, link:value});
+  }
+
+  const handleImageChange = (value) => {
+    setCurrentRecipe({...currentRecipe, image:value});
+  }
+
+  const handleAmountChange = (value) => {
+    setCurrentRecipe(prevRecipe => ({
+      ...prevRecipe, 
+      amounts: value
+    }));
+  }
+
+  const handleIngredientChange = (value) => {
+    setCurrentRecipe(prevRecipe => ({
+      ...prevRecipe, 
+      ingredients:value
+    }));
+  }
+
+  const handleStepsChange = (value) => {
+    setCurrentRecipe(prevRecipe => ({
+      ...prevRecipe, 
+      instructions:value
+    }));
+  }
 
   const addField = () =>{ /*to add a field for adding ingredients and their amount*/
-    set_recipe_ing([...ingredients, ""]);
-    set_recipe_amount([...amount, ""]);
+    handleIngredientChange([...currentRecipe.ingredients, ""]);
+    handleAmountChange([...currentRecipe.amounts, ""]);
   }
 
   const addStep = () =>{/*to add a field for adding steps to complete recipe*/
-    set_recipe_steps([...instructions, ""]);
+    handleStepsChange([...currentRecipe.instructions, ""]);
   }
 
   const addRecipeTag = (tag) =>{ /*to add a tag to a recipe*/
-    const isSelected = tags.includes(tag); /*to see if something has already been selected, we check if there is a tag in the recipe_tags list*/
-      if (isSelected) {
-        set_recipe_tags(prevTags => prevTags.filter((selectedTag) => selectedTag !== tag)); /*if there is a tag, check the current one clicked is not the same */
-      } else {
-        if(tags.length <= 3){
-          set_recipe_tags([...tags, tag]);
-        }
-        else{
-          console.log("Maximum number of tags reached");
-        }
+    const isSelected = currentRecipe.tags.includes(tag); /*to see if something has already been selected, we check if there is a tag in the recipe_tags list*/
+    if (isSelected) {
+      setCurrentRecipe(prevRecipe => ({//if tag is already in list 
+        ...prevRecipe, 
+        tags: prevRecipe.tags.filter((selectedTag => selectedTag !== tag) //create a new array containing all tags other than the one we want to remove 
+        )})); /*if there is a tag, check the current one clicked is not the same */
+    } else {
+      if(currentRecipe.tags.length <= 3){
+        setCurrentRecipe(prevRecipe => ({
+          ...prevRecipe, 
+          tags: [...prevRecipe.tags, tag] //create a new array with the old tags plus the new tag appended to the end 
+        }));
+      }
+      else{
+        console.log("Maximum number of tags reached");
       }
     }
-
-  const addGroupTag = (tag) =>{ /*to add a group tag to a recipe*/
-    const isSelected = cookbooks.includes(tag);
-    if (isSelected) {
-      set_cookbooks(prevTags => prevTags.filter((selectedTag) => selectedTag !== tag));
-    } else {
-      set_cookbooks([...tags, tag]);
-    }
   }
+
+  const addGroupTag = (id) =>{ /*to add a group tag to a recipe*/
+    const isSelected = currentRecipe.groups.includes(id); /*to see if something has already been selected, we check if there is a tag in the recipe_tags list*/
+    if (isSelected) {
+      setCurrentRecipe(prevRecipe => ({//if tag is already in list 
+        ...prevRecipe, 
+        groups: prevRecipe.groups.filter((selectedID => selectedID !== id) //create a new array containing all tags other than the one we want to remove 
+        )})); /*if there is a tag, check the current one clicked is not the same */
+    } else {
+      setCurrentRecipe(prevRecipe => ({
+        ...prevRecipe, 
+        groups: [...prevRecipe.groups, id] //create a new array with the old tags plus the new tag appended to the end 
+      }));
+    }
+  }; 
   
+  //retrieving the current recipe information 
   useEffect(() => { //retrieve the recipe based on the ID from the URL 
     async function fetchData(){
       try{
         const response = await api.get(`/users/${authorID}/cookbooks/${recipeID}`);
-        console.log(response);
         // delays continuous execution of an async operation for 1 second -> can be removed 
         await new Promise((resolve) => setTimeout(resolve, 500));
         //returned recipe based on the id from the URL 
-        setRecipe(response.data);
+        setCurrentRecipe(response.data);
       }catch(error){
         console.error(
-          `Something went wrong while fetching the users: \n${handleError(error)}`
+          `Something went wrong while fetching the recipe: \n${handleError(error)}`
         );
         console.error("Details:", error);
-        alert("Something went wrong while fetching the users! See the console for details.");
+        alert("Something went wrong while fetching the recipe! See the console for details.");
       };
     };
     fetchData(); 
   }, []);
 
-  const saveChanges = async() => {
+  //get all the groups the currently logged in user is a part of
+  useEffect(()=>{
+    async function fetchData(){
+      try{
+        const response = await api.get(`/users/${currentUserID}/groups`);
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        setGroupState(true);
+        setGroupList(response.data);
+      }catch(error){
+        console.error(`Something went wrong while fetching the groups: \n${handleError(error)}`);
+        console.error("Details:", error);
+        alert("Something went wrong while fetching the groups! See the console for details.");
+      };
+    };
+    fetchData();
+  }, []);
+
+  const doNoGroup = () => {
+    
+    return <p className = "Home noGroupText">not part of any groups yet</p>;
+  }
+
+  //show group as selected if the currently viewing recipe is already a part of the group 
+  const showGroups = () =>{
+    const validGroups = groupList.filter(group => group);
+    if(validGroups.length>0){
+      return validGroups.map((group, index) => (
+        <Button 
+          key = {index}
+          className={`recipes tag ${currentRecipe.groups.includes(group.groupID) ? "selected" : ""}`}
+          onClick={() =>addGroupTag(group.groupID)}>
+          {group.groupName}
+        </Button>
+      ));
+    }
+    else{
+      return doNoGroup(); 
+    }
+  };
+
+  //submitting the information 
+  const handleSubmit = async() => {
+    title = currentRecipe.title; 
+    shortDescription = currentRecipe.shortDescription; 
+    cookingTime = currentRecipe.cookingTime;
+    link = currentRecipe.link; 
+    amounts = currentRecipe.amounts; 
+    ingredients = currentRecipe.ingredients; 
+    instructions = currentRecipe.instructions; 
+    tags = currentRecipe.tags; 
+    groups = currentRecipe.groups; 
+
     try{
       if(link){ /*if we have a link, we save the following information*/
-        const requestBody1=JSON.stringify({title, shortDescription, cookingTime, image, link, tags, cookbooks});
+        const requestBody1=JSON.stringify({title, shortDescription, cookingTime, image, link, tags, groups});
         const response1 = await api.put(`/users/${currentUserID}/cookbooks/${recipeID}`, requestBody1);
         const recipe = new Recipe(response1.data); 
         localStorage.setItem("recipeID", recipe.id); //not 100% sure if we need this, need to check with getting a recipe
@@ -151,7 +265,7 @@ const editRecipe = () => {
       }
       else{
         const requestBody2=JSON.stringify({/*if we have no link, we have steps and ingredients and save the following information*/
-        title, shortDescription, cookingTime, image, amount, ingredients, instructions, tags, cookbooks});
+          title, shortDescription, cookingTime, image, amounts, ingredients, instructions, tags, groups});
         const response2 = await api.put(`/users/${currentUserID}/cookbooks/${recipeID}`, requestBody2);
         const recipe = new Recipe(response2.data); 
         localStorage.setItem("recipeID", recipe.id); //not 100% sure if we need this, need to check with getting a recipe
@@ -160,22 +274,22 @@ const editRecipe = () => {
     }
     catch(error){
       alert(
-      `Something went wrong when saving the recipe: \n${handleError(error)}`,
-    );
-    set_recipe_title("");
-    set_recipe_link("");
-    set_recipe_description("");
-    set_recipe_image("");
-    set_recipe_prep("");
-    set_recipe_ing();
-    set_recipe_amount([]);
-    set_recipe_steps([]);
-    set_recipe_tags([]);
-    set_cookbooks([]);    
+        `Something went wrong when saving the recipe: \n${handleError(error)}`,
+      );
+      set_recipe_title("");
+      set_recipe_link("");
+      set_recipe_description("");
+      set_recipe_image("");
+      set_recipe_prep("");
+      set_recipe_ing();
+      set_recipe_amount([]);
+      set_recipe_steps([]);
+      set_recipe_tags([]);
+      set_groups([]);    
     }
   }
   let content; 
-  if(!recipe){
+  if(!currentRecipe){
     content = <Spinner/>; //had to use the spinner because it takes a while to render the content 
   }else content =  (
     <div>
@@ -205,8 +319,8 @@ const editRecipe = () => {
             <Button 
               /*button is disabled unless we have a link or we have some steps*/
               className="recipes add"
-              disabled={!link && !instructions.some(step => step.trim() !== "")} /*checks if there are no recipe steps with content -> curtesy of chatGPT*/
-              onClick={()=>saveChanges()}>
+              /*checks if there are no recipe steps with content -> curtesy of chatGPT*/
+              onClick={()=>handleSubmit()}>
               Update Recipe
             </Button>
           </div>
@@ -214,162 +328,143 @@ const editRecipe = () => {
         <div className = "recipes container">
           <div className = "recipes formLeft">
             <div className ="recipes imageContainer"
-              onChange={(img: string) => set_recipe_image(img)}>
+              value = {currentRecipe.image}
+              onChange={(value) => handleImageChange(value)}>
               <img src={select_image} alt="icon" className = "recipes image"></img>
             </div>
             <FormField
-              label ="Add a title:"
-              value = {title}
-              placeholder = {recipe.title}
-              onChange={(rt: string) => set_recipe_title(rt)}>
+              label ="Edit title:"
+              value = {currentRecipe.title}
+              onChange={(value) => handleTitleChange(value)}>
             </FormField>
             <FormField
-              label ="Description:"
-              value = {shortDescription}
-              onChange={(rd: string) => set_recipe_description(rd)}>
+              label ="Edit description:"
+              value = {currentRecipe.shortDescription}
+              onChange={(value) => handleDescriptionChange(value)}>
             </FormField>
             <FormField
-              label ="Preparation time:"
-              value = {cookingTime}
-              onChange={(rp: string) => set_recipe_prep(rp)}>
+              label ="Edit preparation time:"
+              value = {currentRecipe.cookingTime}
+              onChange={(value) => handleTimeChange(value)}>
             </FormField>
           </div>
           <div className = "recipes formRight">
             <FormField
               label="Add a recipe by URL link:"
-              value = {link}
-              onChange = {(rl:string) => set_recipe_link(rl)}>
+              value = {doLink()}
+              onChange = {(value) => handleLinkChange(value)}>
             </FormField>
             <div className="recipes ingredients">
-              <p className ="recipes p">Add all ingredients:</p>
+              <p className ="recipes p">Edit ingredients:</p>
               <div className="recipes ingredientsHeader">
                 <p className ="recipes ingredientsHeaderAmount">Amount:</p>
                 <p className ="recipes ingredientsHeaderIng">Ingredient:</p>
               </div>
-              {ingredients.map((_, index) => (
+              {currentRecipe.amounts.map((amount, index) => (
                 <div key={index} className="recipes ingredientFields">
                   <div className="recipes ingredientsAmount">
                     <IngredientsField
-                      value={amount[index]} 
+                      value={amount} 
                       onChange={(value) => {
-                        const newAmounts = [...amount]; /*creating a copy of recipe_ing_amount*/
-                        newAmounts[index] = value; /*setting the index from the amount to the value*/
-                        set_recipe_amount(newAmounts); /*overwriting previous aray with newAmounts array*/
+                        const newAmounts = [...currentRecipe.amounts]; /* Copying current amounts array */
+                        newAmounts[index] = value; /* Setting the index from the amount to the value */
+                        handleAmountChange(newAmounts); /* Overwriting previous array with newAmounts array */
                       }}
                     />
                   </div>
                   <div className="recipes ingredientsIng">
                     <IngredientsField
-                      value={ingredients[index]}
+                      value={currentRecipe.ingredients[index]} /* Using currentRecipe.ingredients array */
                       onChange={(value) => {
-                        const newIngredients = [...ingredients];
-                        newIngredients[index] = value;
-                        set_recipe_ing(newIngredients);
+                        const newIngredients = [...currentRecipe.ingredients]; /* Copying current ingredients array */
+                        newIngredients[index] = value; /* Setting the index from the ingredient to the value */
+                        handleIngredientChange(newIngredients); /* Overwriting previous array with newIngredients array */
                       }}
                     />
                   </div>
                 </div>
               ))}
-            </div>
-            <div className="recipes plusButton">
-              <Button className="recipes plus" onClick={addField}>
-                +
-              </Button>
-            </div>
-            <div className = "recipes steps">
-              <p className ="recipes p">Add all steps:</p>
-              {instructions.map((step, index) => (
-                <div key = {index} className = "recipes stepField">
-                  <div className="recipes stepNumber">{index+1}.</div>
-                  <StepsField
-                    value = {step}
-                    onChange={(value)=>{
-                      const newSteps = [...instructions];
-                      newSteps[index] = value; 
-                      set_recipe_steps(newSteps);
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-            <div className="recipes plusButton">
-              <Button className="recipes plus" onClick={addStep}>
-                +
-              </Button>
-            </div>
-            <div className = "recipes tags">
-              <p className ="recipes p tags">Select tags (max 3):</p>
-              <Button 
-                className={`recipes tag ${tags.includes("VEGETARIAN") ? "selected" : ""}`}
-                onClick={() => addRecipeTag("VEGETARIAN")}
-                disabled={tags.length >= 3 && !tags.includes("VEGETARIAN")}>
-                Vegetarian
-              </Button>
-              <Button 
-                className={`recipes tag ${tags.includes("VEGAN") ? "selected" : ""}`}
-                onClick={() => addRecipeTag("VEGAN")}
-                disabled={tags.length >= 3 && !tags.includes("VEGAN")}>
-                Vegan
-              </Button>
-              <Button 
-                className={`recipes tag ${tags.includes("LACTOSEFREE") ? "selected" : ""}`}
-                onClick={() =>addRecipeTag("LACTOSEFREE")}
-                disabled={tags.length >= 3 && !tags.includes("LACTOSEFREE")} >
-                Lactose-free
-              </Button>
-              <Button 
-                className={`recipes tag ${tags.includes("GLUTENFREE") ? "selected" : ""}`}
-                onClick={() =>addRecipeTag("GLUTENFREE")}
-                disabled={tags.length >= 3 && !tags.includes("GLUTENFREE")}>
-                Gluten-free
-              </Button>
-              <Button 
-                className={`recipes tag ${tags.includes("BREAKFAST") ? "selected" : ""}`}
-                onClick={() =>addRecipeTag("BREAKFAST")}
-                disabled={tags.length >= 3 && !tags.includes("BREAKFAST")}>
-                Breakfast
-              </Button>
-              <Button 
-                className={`recipes tag ${tags.includes("LUNCH") ? "selected" : ""}`}
-                onClick={() =>addRecipeTag("LUNCH")}
-                disabled={tags.length >= 3 && !tags.includes("LUNCH")}>
-                Lunch
-              </Button>
-              <Button 
-                className={`recipes tag ${tags.includes("APÉRO") ? "selected" : ""}`}
-                onClick={() =>addRecipeTag("APÉRO")}
-                disabled={tags.length >= 3 && !tags.includes("APÉRO")}>
-                Apéro
-              </Button>
-              <Button 
-                className={`recipes tag ${tags.includes("DESSERT") ? "selected" : ""}`}
-                onClick={() =>addRecipeTag("DESSERT")}
-                disabled={tags.length >= 3 && !tags.includes("DESSERT")}>
-                Desert
-              </Button>
-            </div>
-            <div className = "recipes tags groups">
-              <p className ="recipes p tags">Select Groups:</p>
-              <Button 
-                className={`recipes tag ${cookbooks.includes("Carrot Crew") ? "selected" : ""}`}
-                onClick={() =>addGroupTag("Carrot Crew")}>
-                Carrot Crew
-              </Button>
-              <Button 
-                className={`recipes tag ${cookbooks.includes("Spice Girls") ? "selected" : ""}`}
-                onClick={() =>addGroupTag("Spice Girls")}>
-                Spice Girls
-              </Button>
-              <Button 
-                className={`recipes tag ${cookbooks.includes("Lords of Wings") ? "selected" : ""}`}
-                onClick={() =>addGroupTag("Lords of Wings")}>
-                Lords of Wings
-              </Button>
-              <Button 
-                className={`recipes tag ${cookbooks.includes("Pasta La Vista") ? "selected" : ""}`}
-                onClick={() =>addGroupTag("Pasta La Vista")}>
-                Pasta La Vista
-              </Button>
+              <div className="recipes plusButton">
+                <Button className="recipes plus" onClick={addField}>
+                  +
+                </Button>
+              </div>
+              <div className = "recipes steps">
+                <p className ="recipes p">Edit steps:</p>
+                {currentRecipe.instructions.map((step, index) => (
+                  <div key = {index} className = "recipes stepField">
+                    <div className="recipes stepNumber">{index+1}.</div>
+                    <StepsField
+                      value = {step}
+                      onChange={(value)=>{
+                        const newSteps = [...currentRecipe.instructions];
+                        newSteps[index] = value; 
+                        handleStepsChange(newSteps);
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="recipes plusButton">
+                <Button className="recipes plus" onClick={addStep}>
+                  +
+                </Button>
+              </div>
+              <div className = "recipes tags">
+                <p className ="recipes p tags">Edit tags (max 3):</p>
+                <Button 
+                  className={`recipes tag ${currentRecipe.tags.includes("VEGETARIAN") ? "selected" : ""}`} 
+                  onClick={() => addRecipeTag("VEGETARIAN")}
+                  disabled={currentRecipe.tags.length >= 3 && !currentRecipe.tags.includes("VEGETARIAN")}>
+                  Vegetarian
+                </Button>
+                <Button 
+                  className={`recipes tag ${currentRecipe.tags.includes("VEGAN") ? "selected" : ""}`}
+                  onClick={() => addRecipeTag("VEGAN")}
+                  disabled={currentRecipe.tags.length >= 3 && !currentRecipe.tags.includes("VEGAN")}>
+                  Vegan
+                </Button>
+                <Button 
+                  className={`recipes tag ${currentRecipe.tags.includes("LACTOSEFREE") ? "selected" : ""}`}
+                  onClick={() =>addRecipeTag("LACTOSEFREE")}
+                  disabled={currentRecipe.tags.length >= 3 && !currentRecipe.tags.includes("LACTOSEFREE")} >
+                  Lactose-free
+                </Button>
+                <Button 
+                  className={`recipes tag ${currentRecipe.tags.includes("GLUTENFREE") ? "selected" : ""}`}
+                  onClick={() =>addRecipeTag("GLUTENFREE")}
+                  disabled={currentRecipe.tags.length >= 3 && !currentRecipe.tags.includes("GLUTENFREE")}>
+                  Gluten-free
+                </Button>
+                <Button 
+                  className={`recipes tag ${currentRecipe.tags.includes("BREAKFAST") ? "selected" : ""}`}
+                  onClick={() =>addRecipeTag("BREAKFAST")}
+                  disabled={currentRecipe.tags.length >= 3 && !currentRecipe.tags.includes("BREAKFAST")}>
+                  Breakfast
+                </Button>
+                <Button 
+                  className={`recipes tag ${currentRecipe.tags.includes("LUNCH") ? "selected" : ""}`}
+                  onClick={() =>addRecipeTag("LUNCH")}
+                  disabled={currentRecipe.tags.length >= 3 && !currentRecipe.tags.includes("LUNCH")}>
+                  Lunch
+                </Button>
+                <Button 
+                  className={`recipes tag ${currentRecipe.tags.includes("APÉRO") ? "selected" : ""}`}
+                  onClick={() =>addRecipeTag("APÉRO")}
+                  disabled={currentRecipe.tags.length >= 3 && !currentRecipe.tags.includes("APÉRO")}>
+                  Apéro
+                </Button>
+                <Button 
+                  className={`recipes tag ${currentRecipe.tags.includes("DESSERT") ? "selected" : ""}`}
+                  onClick={() =>addRecipeTag("DESSERT")}
+                  disabled={currentRecipe.tags.length >= 3 && !currentRecipe.tags.includes("DESSERT")}>
+                  Desert
+                </Button>
+              </div>
+              <div className = "recipes tags groups">
+                <p className ="recipes p tags">Edit Groups:</p>
+                {showGroups()}
+              </div>
             </div>
           </div>
         </div>

@@ -57,7 +57,7 @@ ItemField.propTypes = {
   onRemove: PropTypes.func,
 };
 
-const Shoppinglist = () => {
+const GroupShoppinglist = () => {
   const navigate = useNavigate();
   const [items, set_items] = useState([]);
   const [new_item, set_new_item] = useState("");
@@ -79,7 +79,7 @@ const Shoppinglist = () => {
     set_items([]);
   };
 
-  /*TODO：Add item to the database
+  /*TODO：Add item to the database, Fetch group name
   const saveChanges = async () => {
     try {
       const requestBody = JSON.stringify({
@@ -101,12 +101,13 @@ const Shoppinglist = () => {
       <Dashboard
         showButtons={{
           recipe: true,
-          group: true,
-          calendar: true,
-          shoppinglist: true,
+          groupCalendar: true,
+          groupShoppinglist: true,
           invitations: true,
+          inviteUser: true,
+          leaveGroup: true,
         }}
-        activePage="shoppinglist"
+        activePage="leaveGroup"
       />
       <BaseContainer>
         <div className="shoppinglist headerContainer">
@@ -116,7 +117,7 @@ const Shoppinglist = () => {
               onClick={() => navigate("/home")}
             >Back</Button>
           </div>
-          <h2 className="shoppinglist title">Shopping List</h2>
+          <h2 className="shoppinglist title">Carrot Crew - Shopping List</h2>
         </div>
 
         <div className="shoppinglist container">
@@ -155,4 +156,4 @@ const Shoppinglist = () => {
   );
 };
 
-export default Shoppinglist;
+export default GroupShoppinglist;

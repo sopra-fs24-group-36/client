@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 import "../../styles/views/Header_new.scss";
 import { Button } from "components/ui/Button";
 // @ts-ignore
@@ -19,19 +18,25 @@ import { api, handleError } from "helpers/api";
 const Header_new = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState<string>(null);
+  const userID = localStorage.getItem("userID");
 
   const doProfile = () => {
-    navigate("/users/profile");
+    navigate(`/users/${userID}`);
   };
+
+  useEffect(() =>{
+    getUsername();
+  }, [])
+
+
   //to show the userame in the header -> get request not implemented yet in backend
   const getUsername = async () => {
     try{
       //get current user 
-      const currentUserID = localStorage.getItem("userID"); //get the username of the currently logged in user 
-      const response = await api.get(`/users/${currentUserID}`)
-      const user = new User(response.data); //user returned from getting the user 
-      const uname = user.username;
-      setUsername(uname) //getting the username so we a) know who is currently logged in and b) can say Hello {username}!
+      const userID = localStorage.getItem("userID");
+      const response = await api.get(`/users/${userID}`);
+      const uname = response.data.username;
+      setUsername(uname);//getting the username so we can show in the header 
     }
     catch (error) {
       console.error(`Error getting username: ${handleError(error)}`);
@@ -42,7 +47,7 @@ const Header_new = () => {
     <div className="header_new container">
       <Button className="header_new userProfile" onClick={doProfile}>
         <img src={User} alt="Profile Picture" className="header_new profileImage" />
-        <h2 className="header_new title">username</h2> 
+        <h2 className="header_new title">{username}</h2> 
       </Button>
     </div>
   );

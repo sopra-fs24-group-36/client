@@ -5,12 +5,11 @@
   margin-left: calc(15% + 80px);
   border-radius: $borderRadius; 
   background-color: $true_green;
-  display: inline-block; 
   vertical-align: top;
   width:calc(85% - 90px); /*subtracting all the margins off the dashboard and the base container from the remaining width*/ 
-  margin-top: 30px; 
-  position: fixed; 
+  position: absolute; 
   height: calc(100% - 210px);
   margin-top: 115px; 
-  overflow: auto;
+  overflow-y: auto;
+  padding-bottom: 70px;
 }

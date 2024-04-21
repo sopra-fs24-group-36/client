@@ -28,7 +28,7 @@ const FormField=(props)=>{
         placeholder="Search for your recipes..."
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
-        />
+      />
     </div>
   );
 };
@@ -74,29 +74,29 @@ const defaultRecipes = [
   {
     title: "Breakfast burritos",
     shortDescription: "Fat and easy recipe for a good start of your day.",
-    cooking_time:'30min',
-    tags:'vegetarian',
+    cooking_time:"30min",
+    tags:"vegetarian",
     image:defaultRecipe1,
   },
   {
-    title:'Quick fried rice',
-    shortDescription:'Not enough time? No problem, because this recipe is fast and delicious',
-    cooking_time:'25 min',
-    tags:'vegetarian',
+    title:"Quick fried rice",
+    shortDescription:"Not enough time? No problem, because this recipe is fast and delicious",
+    cooking_time:"25 min",
+    tags:"vegetarian",
     image:defaultRecipe2,
   },
   {
-    title:'Spring onion soup',
-    shortDescription:'Enjoy our spring onion soup, bursting with fresh, vibrant flavour',
-    cooking_time:'30 min',
-    tags:'vegetarian',
+    title:"Spring onion soup",
+    shortDescription:"Enjoy our spring onion soup, bursting with fresh, vibrant flavour",
+    cooking_time:"30 min",
+    tags:"vegetarian",
     image:defaultRecipe3,
   },
   {
-    title:'Pork medallions',
-    shortDescription:'Juicy pork medallions, perfectly seared for exquisite flavour.',
-    cooking_time:'45min',
-    tags:'dinner',
+    title:"Pork medallions",
+    shortDescription:"Juicy pork medallions, perfectly seared for exquisite flavour.",
+    cooking_time:"45min",
+    tags:"dinner",
     image:defaultRecipe4,
   },
 ]
@@ -142,12 +142,8 @@ const PersonalCookbook=()=>{
             error
           )}`
           );
-          console.error("Details:", error);
-          alert(
-          "Something went wrong while fetching the users! See the console for details."
-        );
+        }
       }
-    }
     fetchData();
   }, []);
 
@@ -166,6 +162,7 @@ const PersonalCookbook=()=>{
         activePage=""
       />
       <BaseContainer>
+
 {/*head field*/}
         <div className="personalCookbook headerContainer">
           <div className="personalCookbook backButtonContainer">

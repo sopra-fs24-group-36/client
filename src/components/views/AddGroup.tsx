@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { api, handleError } from "helpers/api";
 import User from "models/User";
 import { Form, useNavigate } from "react-router-dom";
@@ -52,19 +52,20 @@ MembersField.propTypes = {
 
 const AddGroup = () => {
   const navigate = useNavigate();
-  const [group_name, set_group_name] = useState("");
-  const [group_members, set_group_members] = useState([]);
+  const [name, set_group_name] = useState("");
+  const [membersNames, set_group_members] = useState([]);
   const [new_member, set_new_member] = useState("");
+  const [user_email, setEmail] = useState<string>(null);
 
   const addMember = () => {
     if (new_member.trim() !== "") { // Make sure the input is not empty
-      set_group_members([...group_members, new_member]);
+      set_group_members([...membersNames, new_member]);
       set_new_member("");
     }
   };
 
   const removeMember = (index) => {
-    const new_members = [...group_members];
+    const new_members = [...membersNames];
     new_members.splice(index, 1);
     set_group_members(new_members);
   };
@@ -72,11 +73,30 @@ const AddGroup = () => {
   const addImage = () => { /*to add an image to a group*/
   };
 
+  const getEmail = async () => {
+    try{
+      //get current user 
+      const userID = localStorage.getItem("userID");
+      const response = await api.get(`/users/${userID}`);
+      const email = response.data.email;
+      console.log(email);
+      setEmail(email);//getting the username so we can show in the header 
+    }
+    catch (error) {
+      console.error(`Error getting username: ${handleError(error)}`);
+    }
+  }
+
+  useEffect(() =>{
+    getEmail();
+  }, [])
+
   const saveChanges = async () => {
     try {
+      const updatedMembersNames = [...membersNames, user_email];
       const requestBody = JSON.stringify({
-        group_name: group_name,
-        group_members: group_members,
+        name: name,
+        membersNames: updatedMembersNames,
       });
       const response = await api.post("/groups", requestBody);
       const group = new Group(response.data);
@@ -113,7 +133,7 @@ const AddGroup = () => {
           <div className="groups addButtonContainer">
             <Button
               className="group add"
-              disabled={group_name.trim() === "" || group_members.length === 0}
+              disabled={name.trim() === "" || membersNames.length === 0}
               onClick={() => saveChanges()}>
               Add Group
             </Button>
@@ -133,13 +153,13 @@ const AddGroup = () => {
             <div className="groups addNameContainer">
               <label className="groups label">Add a name:</label>
               <FormField
-                value={group_name}
+                value={name}
                 onChange={(rl: string) => set_group_name(rl)}
               ></FormField>
             </div>
 
             <p className="groups p">Add group members:</p>
-            {group_members.map((new_member, index) => (
+            {membersNames.map((new_member, index) => (
               <MembersField
                 key={index}
                 value={new_member}

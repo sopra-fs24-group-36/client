@@ -58,11 +58,8 @@ const AppRouter = () => {
         <Route path="/invitations" element={<Invitations />} />
 
         <Route path="/groups" element={<AddGroup />} />
-        {/*<Route path="/groups/:groupID/cookbooks" element={<GroupCookbook />} />*/}
-        <Route path="/groups/cookbooks" element={<GroupCookbook />} />
-        {/*<Route path="/groups/:groupID/shoppinglists" element={<GroupShoppinglist />} />*/}
-        <Route path="/groups/shoppinglists" element={<GroupShoppinglist />} />
-
+        <Route path="/groups/:groupID/cookbooks" element={<GroupCookbook />} />
+        <Route path="/groups/:groupID/shoppinglists" element={<GroupShoppinglist />} />
 
         <Route path="/" element={
           <Navigate to="/users/login" replace />

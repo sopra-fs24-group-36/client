@@ -122,4 +122,13 @@
   &.recipeTags{
     color: $container-dark;
   }
+  &.noRecipeText{
+    font-weight: bold;
+    color: $light_pink;
+    font-size: 30px;
+    font-style: italic;
+    text-align: center;
+    padding-top: 100px;
+    padding-bottom: 60px;
+  }
 }

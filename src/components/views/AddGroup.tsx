@@ -37,7 +37,11 @@ const MembersField = (props) => {
   return (
     <div className="groups membersField">
       <input className="groups membersInput" value={props.value} readOnly />
-      <Button className="group plus" onClick={props.onRemove}>
+      <Button
+        className="group plus"
+        onClick={props.onRemove}
+        disabled = {props.value===props.currentUserEmail}
+      >
         Remove
       </Button>
     </div>
@@ -48,6 +52,7 @@ const MembersField = (props) => {
 MembersField.propTypes = {
   value: PropTypes.string,
   onRemove: PropTypes.func,
+  currentUserEmail: PropTypes.string,
 };
 
 const AddGroup = () => {
@@ -56,6 +61,7 @@ const AddGroup = () => {
   const [membersNames, set_group_members] = useState([]);
   const [new_member, set_new_member] = useState("");
   const [user_email, setEmail] = useState<string>(null);
+  const [userID, setUserID] = useState<string>(null);
 
   const addMember = () => {
     if (new_member.trim() !== "") { // Make sure the input is not empty
@@ -76,11 +82,11 @@ const AddGroup = () => {
   const getEmail = async () => {
     try{
       //get current user 
-      const userID = localStorage.getItem("userID");
+      setUserID(parseInt(localStorage.getItem("userID")));
       const response = await api.get(`/users/${userID}`);
       const email = response.data.email;
       console.log(email);
-      setEmail(email);//getting the username so we can show in the header 
+      setEmail(email);//getting the username so we can show in the header
     }
     catch (error) {
       console.error(`Error getting username: ${handleError(error)}`);
@@ -93,10 +99,11 @@ const AddGroup = () => {
 
   const saveChanges = async () => {
     try {
-      const updatedMembersNames = [...membersNames, user_email];
       const requestBody = JSON.stringify({
         name: name,
-        membersNames: updatedMembersNames,
+        membersNames: membersNames,
+        image: select_image,
+        creator: userID,
       });
       const response = await api.post("/groups", requestBody);
       const group = new Group(response.data);
@@ -104,6 +111,7 @@ const AddGroup = () => {
       console.error("An error occurred while creating groups:", error);
       alert("Creating a group failed because the details were incomplete.");
     }
+    navigate("/home")
   };
 
   return (
@@ -163,6 +171,7 @@ const AddGroup = () => {
               <MembersField
                 key={index}
                 value={new_member}
+                currentUserEmail={user_email}
                 onRemove={() => removeMember(index)}
               />
             ))}

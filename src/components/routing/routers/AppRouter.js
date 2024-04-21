@@ -51,8 +51,8 @@ const AppRouter = () => {
         {/*  <Route path="/users/login" element={<Login/>} />*/}
         {/*</Route>*/}
 
-        <Route path="/users/profile" element={<UserProfile />} />
-        <Route path="/users/profile/edit" element={<EditProfile />} />
+        <Route path="/users/:userID" element={<UserProfile />} />
+        <Route path="/users/:userID/edit" element={<EditProfile />} />
         <Route path="/users/cookbooks" element={<PersonalCookbook />} />
         <Route path="/shoppinglists" element={<Shoppinglist />} />
         <Route path="/invitations" element={<Invitations />} />

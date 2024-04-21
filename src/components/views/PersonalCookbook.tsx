@@ -64,7 +64,7 @@ const PersonalCookbook = () => {
             id: recipe.id,
             title: recipe.title,
             shortDescription: recipe.shortDescription,
-            cooking_time: recipe.cooking_time,
+            cookingTime: recipe.cookingTime,
             tags: recipe.tags,
             image: recipe.image,
           }));
@@ -96,7 +96,7 @@ const PersonalCookbook = () => {
         <div className="cookbook recipeContent">
           <h2 className="cookbook recipeTitle">{title}</h2>
           <p className="cookbook recipeDescription">Description:{description}</p>
-          <p className="cookbook recipeTime">Total Time;{time}</p>
+          <p className="cookbook recipeTime">Total Time:{time}</p>
           <p className="cookbook recipeTags">Tags:{tag}</p>
         </div>
       </button>
@@ -112,7 +112,7 @@ const PersonalCookbook = () => {
           id={recipe.id}
           title={recipe.title}
           description={recipe.shortDescription}
-          time={recipe.cooking_time}
+          time={recipe.cookingTime}
           tag={recipe.tags}
           imageUrl={recipe.image}
         />

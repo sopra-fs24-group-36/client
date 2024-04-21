@@ -8,7 +8,7 @@ class Arecipe {
     this.shortDescription = null;
     this.token = null;
     this.link = null;
-    this.cooking_time = null;
+    this.cookingTime = null;
     this.ingredients = null;
     this.instructions=null;
     this.image=null;

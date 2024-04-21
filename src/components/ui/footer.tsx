@@ -12,13 +12,13 @@ import rightBrok from "../../assets/rightBrok.png"
  * @FunctionalComponent
  */
 
-const FormField = (props) => {
+const FormField = (props) => { /*general form fields for inputting information (e.g. title, description, etc.)*/
   return (
-    <div className="footer field">
-      <label className="footer label">{props.label}</label>
+    <div className="recipes field">
+      <label className="recipes label">{props.label}</label>
       <input
-        className="footer input"
-        placeholder="search here..."
+        className="recipes input"
+        placeholder="enter here..."
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
       />
@@ -41,6 +41,8 @@ const Footer = () => {
   const [image, set_recipe_image] = useState<string>(null); 
   const [cookingTime, set_recipe_prep] = useState<string>(null); 
 
+  const [searchQuery, set_search_query] = useState<string>('');
+
   const AddRecipe = async() =>{
     try{
       const requestBody = JSON.stringify({title, shortDescription, cookingTime, image, link})
@@ -59,13 +61,21 @@ const Footer = () => {
 
   return (
     <div className = "footer content">
-      <div className="footer searchBar">
-        <h2 className="footer title">Search for recipe</h2>
-        <FormField>
-        </FormField>
-        <div  className="footer button-container">
-          <Button className="footer-button">Search</Button>
-        </div>    
+      <div className = "footer searchbar">
+        <div className = "footer searchTitle">
+          <p>Search for recipes:</p>
+        </div>
+        <div className = "footer searchContent">
+          <FormField
+            value = {title}
+            onChange={(rt: string) => set_recipe_title(rt)}>
+          </FormField>
+        </div>
+        <div className = "footer searchButton">
+          <Button className = "footer-button">
+            Search
+          </Button>
+        </div>
       </div>
       <div className = "footer recipesContainer">
         <div className = "footer recipe">
@@ -76,28 +86,7 @@ const Footer = () => {
               </p>
             </div>
             <div className = "footer recipeImageContainer">
-              <img src={rightBrok} alt="Broccoli" className="Home icon" />
-            </div>
-            <div className = "footer recipeDescriptionContainer">
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-            </div>
-            <div className = "footer recipeButton">
-              <Button className = "footer-footerButton">View recipe</Button>
-            </div>
-            <div className = "footer recipeButton">
-              <Button className = "footer-footerButton">Add recipe</Button>
-            </div>
-          </div>
-        </div>
-        <div className = "footer recipe">
-          <div className = "footer recipeContent">
-            <div className ="footer recipeTitleContainer">
-              <p className = "footer recipeTitle">
-                The second Recipe
-              </p>
-            </div>
-            <div className = "footer recipeImageContainer">
-              <img src={rightBrok} alt="Broccoli" className="Home icon" />
+            <img src={rightBrok} alt="Broccoli" className="Home icon" />
             </div>
             <div className = "footer recipeDescriptionContainer">
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>

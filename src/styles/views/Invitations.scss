@@ -17,85 +17,79 @@
     margin-right: 200px;
   }
 
-  &.container {
-    position: relative;
-    align-items: center;
+  &.backContainer {
+    display: flex;
+    flex-direction:column;
     justify-content: center;
-    min-height: 400px;
-    width: 60%;
+    min-height: 200px;
+    width: 40%;
     margin: 0 auto;
     background-color: $light_green;
     border-radius: $borderRadius;
-    margin-bottom: 20px;
+    text-align: center;
   }
   &.invitationContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    text-align: center;
-    width: 100%;
-    margin-bottom: 15px;
+    margin:10px 0px 0px 0px;
+    max-height: 400px;
+    overflow-y: auto;
   }
   &.noInvitation{
-    padding-top:30px;
+    font-style: italic;
+    color: $true_green;
+    font-size: 30px;
+    font-weight: bold;
+    margin:0px 0px 0px 5px;
   }
   &.invitationField {
     display: flex;
-    justify-content: left;
-    position: relative;
-    height: 35px;
+    justify-content:flex-start ;
+    min-height: 70px;
     width: 90%;
-    border: none;
     border-radius: $borderRadius;
-    margin-bottom: 10px;
-    margin-top:10px;
+    margin:5px 0px 10px 0px;
     align-items: center;
-    background-color: $true_green;
+    background-color: $container_dark;
     color:$textColor;
   }
-  &.invitationHead{
+  &.invitationImgContainer {
     display: flex;
-    justify-content: space-between;
-    font-size: 20px;
-    font-weight: bold;
-    padding-top: 20px;
-    margin-left:-40px;
-    padding-left:40px;
-    padding-right: 20px;
-    padding-bottom: 5px;
+    justify-content: center;
+    margin:0px 0px 0px 5px;
   }
-  &.column1{
-    width:30%;
-    text-align: left;
-  }
-  &.column2{
-    width:35%;
-    text-align: left;
-  }
-  &.column3{
-    width:17.5%;
-    display: flex;
-    text-align: left;
-  }
-  &.acceptButton,&.denyButton{
-    background-color: $light_green;
-    height:30px;
-    width:30px;
+  &.invitationImg{
+    width: 70px;
+    height: 70px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left:50px;
-    color:$dark_pink;
-    font-size: 30px;
+    border-radius: 50%;
   }
-  &.acceptButton:hover::after{
-    content: '✔';
-    position: absolute;
+  &.invitationImg img{
+    width: 100%;
+    height: 100%;
   }
-  &.denyButton:hover::after {
-    content: '×';
-    position: absolute;
+  &.invitationGroupName{
+    color:$textColor;
+    margin:0px 0px 0px 7px;
+    font-size:20px;
+    flex: 1 1 auto; /* Allow expansion and contraction */
+    white-space: normal; /* Allow line breaks */
+    word-wrap: break-word; /* Break words when necessary */
   }
 
+  &.buttonContainer{
+
+  }
+  &.acceptButton{
+    background-color: $dark_pink;
+    color: $textColor;
+  }
+  &.declineButton{
+    background-color: $light_green;
+    color:$container_dark;
+    margin:0px 5px 0px 10px;
+  }
 }

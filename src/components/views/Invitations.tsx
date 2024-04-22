@@ -9,24 +9,70 @@ import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import BaseContainer from "components/ui/BaseContainer_new";
 import Header_new from "components/views/Header_new";
-
+// @ts-ignore
+import defaultRecipe1UserImg from "../../assets/defaultRecipe1UserImg.png"
+// @ts-ignore
+import defaultRecipe2UserImg from "../../assets/defaultRecipe2UserImg.png"
+// @ts-ignore
+import defaultRecipe3UserImg from "../../assets/defaultRecipe3UserImg.png"
+// @ts-ignore
+import defaultRecipe4UserImg from "../../assets/defaultRecipe4UserImg.png"
 
 //TODO: define the Invitation
 interface Invitation{
 }
+const defaultInvitations=[
+  {
+    id:1,
+    groupName:"Carrot Crew",
+    groupImage:defaultRecipe1UserImg,
+  },
+  {
+    id:2,
+    groupName:"Spicy Girls",
+    groupImage:defaultRecipe2UserImg,
+  },
+  {
+    id:3,
+    groupName:"Lords Of Wings",
+    groupImage:defaultRecipe3UserImg,
+  },
+  {
+    id:4,
+    groupName:"Pasta La Vista",
+    groupImage:defaultRecipe4UserImg,
+  },
+  {
+    id:5,
+    groupName:"Carrot Crew",
+    groupImage:defaultRecipe1UserImg,
+  },
+  {
+    id:6,
+    groupName:"Carrot Crew",
+    groupImage:defaultRecipe1UserImg,
+  },
+  {
+    id:7,
+    groupName:"Carrot Crew",
+    groupImage:defaultRecipe1UserImg,
+  },
+
+]
+
 
 const invitationField=(props)=>{}
 
-const Invitations = (invitation) => {
+const Invitations = () => {
   const navigate = useNavigate();
-  const {userid} = useParams();
+  const {userID} = useParams();
   const [refreshinvitation,setRefreshinvitation]=useState(false);
-  const [invitations,setInvitations]=useState<Invitation[]>(null)
-
+  const [invitations,setInvitations]=useState<Invitation[]>(null);
+  //TODO:
   useEffect(()=>{
     async function fetchInvitations(){
       try{
-        const response=await api.get(`/users/${userid}/invitations`)
+        const response=await api.get(`/users/${userID}/invitations`)
         setInvitations(response.data);
       }catch (error) {
         console.error(
@@ -44,20 +90,18 @@ const Invitations = (invitation) => {
   }, [refreshinvitation]);
   const handleAccept= async (invitation)=>{
     try{
-      const response=await  api.put(`users/${userid}/${invitation.id}/accept`);
-      //TODO:navigate means refresh data and allow us to see the joined group right now??
-      navigate("/home")
+      const response=await  api.post(`users/${userID}/accept/${invitation.groupID}`);
+      setRefreshinvitation(prev=>!prev);
     }catch (error){
       alert("Accepting failed.");
     }
   }
-  const handleDeny=async (invitation)=>{
+  const handleDecline=async (invitation)=>{
     try{
-      const response=await  api.put(`users/${userid}/${invitation.id}/deny`);
-      //after denying an invitation, reload the user's invitations
+      const response=await  api.post(`users/${userID}/deny/${invitation.groupID}`);
       setRefreshinvitation(prev=>!prev);
     }catch (error){
-      alert("Denying failed.");
+      alert("Declining failed.");
     }
   }
 
@@ -84,97 +128,40 @@ const Invitations = (invitation) => {
           </div>
           <h2 className="invitations title">Invitations</h2>
         </div>
-        {/*default invitations*/}
-        <ul className="invitations container">
-          <li className="invitations invitationHead">
-            <div className="invitations column1">Group Game</div>
-            <div className="invitations column2">Inviter&apos;s Email</div>
-            <div className="invitations column3">Accept</div>
-            <div className="invitations column3">Deny</div>
-          </li>
-          <li className="invitations invitationField">
-            <div
-              style={{ paddingLeft: "10px" }}
-              className="invitations column1">
-              Carrot Crew
-            </div>
-            <div className="invitations column2">brocc.oli@domain.com</div>
-            <div className="invitations column3">
-              <Button
-                className="invitations acceptButton"
-                onClick={() => handleAccept(invitation)}>
-              </Button>
-            </div>
-            <div className="invitations column3">
-              <Button
-                className="invitations denyButton"
-                onClick={() => handleDeny(invitation)}>
-              </Button>
-            </div>
-          </li>
-          <li className="invitations invitationField">
-            <div
-              style={{ paddingLeft: "10px" }}
-              className="invitations column1">
-              Potato Crew
-            </div>
-            <div className="invitations column2">brocc.oli@domain.com</div>
-            <div className="invitations column3">
-              <Button
-                className="invitations acceptButton"
-                onClick={() => handleAccept(invitation)}>
-              </Button>
-            </div>
-            <div className="invitations column3">
-              <Button
-                className="invitations denyButton"
-                onClick={() => handleDeny(invitation)}>
-              </Button>
-            </div>
-          </li>
-          {/*TODO:display the actual invitation data rather than the default
-        </ul>
-        {invitations.length===0?(
-          <p className="invitations noInvitation">No invitations....</p>
-        ):(
-          <ul className="invitations container">
-            <li className="invitations invitationHead">
-              <div className="invitations column1">Group Game</div>
-              <div className="invitations column2">Inviter&apos;s Email</div>
-              <div className="invitations column3">Accept</div>
-              <div className="invitations column3">Deny</div>
-            </li>
-            <div>
+        <div className="invitations backContainer">
+          {(invitations?.length ?? 0) === 0 ? (
+            <p className="invitations noInvitation">No invitations yet....</p>
+          ):(
+            <div className="invitations invitationContainer">
               {invitations.map(invitation=> (
-                <li key={invitation.id} className="invitations invitationField">
-                  <div
-                    style={{ paddingLeft: "10px" }}
-                    className="invitations column1">
-                    invitation.groupName
+                <div key={invitation.id} className="invitations invitationField">
+                  <div className="invitations invitationImgContainer">
+                    <img className="invitations invitationImg" src={invitation.groupImage} alt="Group Image"/>
                   </div>
-                  <div className="invitations column2">
-                    invitation.inviterEmail
+                  <div className="invitations invitationGroupName">
+                    {invitation.groupName}
                   </div>
-                  <div className="invitations column3">
+                  <div className="invitations buttonContainer">
                     <Button
                       className="invitations acceptButton"
                       onClick={() => handleAccept(invitation)}>
+                      Accept
                     </Button>
                   </div>
-                  <div className="invitations column3">
+                  <div className="invitations buttonContainer">
                     <Button
-                      className="invitations denyButton"
-                      onClick={() => handleDeny(invitation)}>
+                      className="invitations declineButton"
+                      onClick={() => handleDecline(invitation)}>
+                      Decline
                     </Button>
                   </div>
-                </li>
+                </div>
               ))}
             </div>
-
-          </ul>*/}
-        </ul>
-
+          )}
+        </div>
       </BaseContainer>
+      <Footer></Footer>
     </div>
   )
 }

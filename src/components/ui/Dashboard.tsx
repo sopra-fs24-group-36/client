@@ -34,7 +34,7 @@ const Dashboard = ({ showButtons, activePage }) => {
     navigate(`/groups/${groupID}/shoppinglists`);
   };
   const doInvitations = async () => {
-    navigate("/invitations");
+    navigate(`/users/${userID}/invitations`);
   };
   const doLeaveGroup = async () => {
     /*TODO: to leave a group DELETE
@@ -42,6 +42,7 @@ const Dashboard = ({ showButtons, activePage }) => {
     navigate("/home");
   };
   const doLogout = async () => {
+    //TODO:clear local storage
     navigate("/users/login");
   };
 

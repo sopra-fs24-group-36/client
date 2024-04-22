@@ -59,7 +59,7 @@ const AppRouter = () => {
         <Route path="/calendars" element={<Calendar />} />
         <Route path={"/groups/calendars"} element={<GroupCalendar/>} />
         <Route path="/users/:userID/shoppinglists" element={<Shoppinglist />} />
-        <Route path="/invitations" element={<Invitations />} />
+        <Route path="/users/:userID/invitations" element={<Invitations />} />
 
         <Route path="/groups" element={<AddGroup />} />
         <Route path="/groups/:groupID/cookbooks" element={<GroupCookbook />} />

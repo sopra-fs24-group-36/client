@@ -5,6 +5,7 @@ import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
 import "styles/views/PersonalCookbook.scss";
 import User from "models/User";
+import Recipe from "models/Recipe"
 import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import Header_new from "components/views/Header_new";
@@ -13,9 +14,9 @@ import BaseContainer from "components/ui/BaseContainer_new";
 
 const FormField = (props) => {
   return (
-    <div className="cookbook field">
+    <div className="personalCookbook field">
       <input
-        className="cookbook input"
+        className="personalCookbook input"
         placeholder="Search for your recipes by name or tag"
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
@@ -103,23 +104,23 @@ const PersonalCookbook = () => {
 
 
   const Recipe = ({ id, title, description, time, tag, imageUrl, onClick }: any) => (
-    <div className="cookbook recipeContainer">
-      <button className="cookbook recipeButton" onClick={() => navigate(`/users/${userID}/cookbooks/${id}`)}>
-        <div className="cookbook recipeImgContainer">
-          <img className="cookbook recipeImg" src={imageUrl} alt="Recipe Image" />
+    <div className="personalCookbook recipeContainer">
+      <button className="personalCookbook recipeButton" onClick={() => navigate(`/users/${userID}/cookbooks/${id}`)}>
+        <div className="personalCookbook recipeImgContainer">
+          <img className="personalCookbook recipeImg" src={imageUrl} alt="Recipe Image" />
         </div>
-        <div className="cookbook recipeContent">
-          <h2 className="cookbook recipeTitle">{title}</h2>
-          <p className="cookbook recipeDescription">Description:{description}</p>
-          <p className="cookbook recipeTime">Total Time:{time}</p>
-          <p className="cookbook recipeTags">Tags:{tag.join(",")}</p>
+        <div className="personalCookbook recipeContent">
+          <h2 className="personalCookbook recipeTitle">{title}</h2>
+          <p className="personalCookbook recipeDescription">Description:{description}</p>
+          <p className="personalCookbook recipeTime">Total Time:{time}</p>
+          <p className="personalCookbook recipeTags">Tags:{tag.join(",")}</p>
         </div>
       </button>
     </div>
 
   );
   const RecipeList = ({ recipes, onClickRecipe }: any) => (
-    <div className="cookbook recipeListContainer">
+    <div className="personalCookbook recipeListContainer">
       {recipes.map((recipe: any, index: number) => (
         <Recipe
           key={index}
@@ -149,29 +150,30 @@ const PersonalCookbook = () => {
         activePage=""
       />
       <BaseContainer>
-        {/*head field*/}
-        <div className="cookbook headerContainer">
-          <div className="cookbook backButtonContainer">
-            <Button className="cookbook backButton" onClick={() => navigate("/home")}>
+
+{/*head field*/}
+        <div className="personalCookbook headerContainer">
+          <div className="personalCookbook backButtonContainer">
+            <Button className="backButton" onClick={() => navigate(`/home`)}>
               Back
             </Button>
           </div>
-          <div className="cookbook titleContainer">
-            <h2 className="cookbook title">Personal Cookbook</h2>
+          <div className="personalCookbook titleContainer">
+            <h2 className="personalCookbook title">Personal Cookbook</h2>
           </div>
-          <div className="cookbook backButtonContainer">
-            <Button className="cookbook backButton" onClick={deleteRecipe}>
+          <div className="personalCookbook backButtonContainer">
+            <Button className=" backButton" onClick={deleteRecipe()}>
               Delete Recipes
             </Button>
           </div>
         </div>
-        {/*filter field*/}
-        <div className="cookbook filterContainer">
-          <div className="cookbook filterButtonContainer">
-            <Button className="cookbook filterButton" onClick={filterRecipe}>filter</Button>
+{/*filter field*/}
+        <div className="personalCookbook filterContainer">
+          <div className="personalCookbook filterButtonContainer">
+            <Button className="personalCookbook filterButton" onClick={filterRecipe}>filter</Button>
           </div>
           <FormField
-            className="cookbook input"
+            className="personalCookbook input"
             value={filterKeyword}
             onChange={handleFilterChange}>
           </FormField>

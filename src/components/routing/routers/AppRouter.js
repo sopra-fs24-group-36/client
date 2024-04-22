@@ -15,6 +15,8 @@ import AddGroup from "../../views/AddGroup";
 import Shoppinglist from "../../views/Shoppinglist";
 import Invitations from "../../views/Invitations";
 import RecipeEdit from "../../views/EditRecipe";
+import Calendar from "../../views/Calendar";
+import GroupCalendar from "../../views/GroupCalendar"
 import GroupShoppinglist from "../../views/GroupShoppinglist";
 import { EditRecipeGuard } from "../routeProtectors/EditRecipeGuard";
 
@@ -54,6 +56,8 @@ const AppRouter = () => {
         <Route path="/users/:userID" element={<UserProfile />} />
         <Route path="/users/:userID/edit" element={<EditProfile />} />
         <Route path="/users/cookbooks" element={<PersonalCookbook />} />
+        <Route path="/calendars" element={<Calendar />} />
+        <Route path={"/groups/calendars"} element={<GroupCalendar/>} />
         <Route path="/users/:userID/shoppinglists" element={<Shoppinglist />} />
         <Route path="/invitations" element={<Invitations />} />
 

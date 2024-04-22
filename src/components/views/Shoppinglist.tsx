@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { api, handleError } from "helpers/api";
 import User from "models/User";
-import { Form, useNavigate } from "react-router-dom";
+import { Form, useNavigate, useParams } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import "styles/views/Shoppinglist.scss";
 import PropTypes from "prop-types";
@@ -34,9 +34,19 @@ FormField.propTypes = {
 };
 
 const ItemField = (props) => {
+  const { userID } = useParams();
   const [isChecked, set_isChecked] = useState(false);
-  const handleCheck = () => {
+
+  const removeItem = async (index) => {
     set_isChecked(!isChecked);
+    try {
+      const requestBody = JSON.stringify({
+        "item": props.value
+      });
+      const response = await api.put(`/users/${userID}/shoppinglists`, requestBody);
+    } catch (error) {
+      alert("An error occurred while remove items");
+    }
   };
   
   return (
@@ -44,7 +54,7 @@ const ItemField = (props) => {
       <input className="shoppinglist itemsInput" value={props.value} readOnly />
       <Button
         className={`shoppinglist check ${isChecked ? "checked" : ""}`}
-        onClick={handleCheck}
+        onClick={removeItem}
       >
         {isChecked ? "×" : ""}
       </Button>
@@ -54,45 +64,50 @@ const ItemField = (props) => {
 
 ItemField.propTypes = {
   value: PropTypes.string,
-  onRemove: PropTypes.func,
 };
 
 const Shoppinglist = () => {
   const navigate = useNavigate();
+  const { userID } = useParams();
   const [items, set_items] = useState([]);
   const [new_item, set_new_item] = useState("");
 
-  const addItem = () => {
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await api.get(`/users/${userID}/shoppinglists`);
+        set_items(response.data.items);
+      } catch (error) {
+        alert("Something went wrong while fetching the items!");
+      }
+    }
+    fetchData();
+  }, [userID]);
+
+  const addItem = async () => {
     if (new_item.trim() !== "") { // Make sure the input is not empty
       set_items([...items, new_item]);
       set_new_item("");
+      try {
+        const requestBody = JSON.stringify({
+          "item":new_item
+        });
+        const response = await api.post(`/users/${userID}/shoppinglists`, requestBody);
+      } catch (error) {
+        alert("An error occurred while adding items");
+      }
     }
   };
 
-  const removeItem = (index) => {
-    const new_item = [...items];
-    new_item.splice(index, 1);
-    set_items(new_item);
-  };
-
-  const clearAll = () => {
+  const clearAll = async () => {
     set_items([]);
-  };
-
-  /*TODO：Add item to the database
-  const saveChanges = async () => {
     try {
-      const requestBody = JSON.stringify({
-        group_name: group_name,
-        group_members: items,
-      });
-      const response = await api.post("/groups", requestBody);
+      const response = await api.delete(`/users/${userID}/shoppinglists`);
     } catch (error) {
-      console.error("An error occurred while creating groups:", error);
-      alert("Creating a group failed because the details were incomplete.");
+      alert("An error occurred while clear all items");
     }
   };
-  */
+
 
 
   return (
@@ -126,7 +141,6 @@ const Shoppinglist = () => {
               <ItemField
                 key={index}
                 value={new_item}
-                onRemove={() => removeItem(index)}
               />
             ))}
           </div>

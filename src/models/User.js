@@ -9,7 +9,7 @@ class User {
     this.token = null;
     this.status = null;
     this.email = null;
-    this.creationdate = null;
+    this.creationDate = null;
     this.profilePicture=null;
     Object.assign(this, data);
   }

@@ -101,14 +101,14 @@ const Register = () => {
           />
           <div className="login button-container">
             <Button
-              width="50%"
+              width="45%"
               onClick={() => navigate("/users/login")}
             >
               Return
             </Button>
             <Button
               disabled={!username || !password || !email}
-              width="50%"
+              width="45%"
               onClick={() => doRegister()}
             >
               Register

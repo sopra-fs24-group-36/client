@@ -175,6 +175,7 @@ const Invitations = (invitation) => {
         </ul>
 
       </BaseContainer>
+      <Footer></Footer>
     </div>
   )
 }

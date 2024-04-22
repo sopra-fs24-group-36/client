@@ -29,6 +29,7 @@
     height: calc(100% - 210px);
     padding-top: 15px;
     right: 0; 
+    overflow-y: auto; 
   }
   &.form {
     display: flex;

@@ -58,7 +58,7 @@ const GroupCookbook = () => {
   };
 
   const handleClickRecipe = (user: User, recipeId: string) => {
-    navigate(`/users/${userID}/cookbooks/${recipeId}`);
+    navigate(`/groups/${groupID}/cookbooks/${recipeId}`);
   };
 
   const handleFilterChange = (newValue) => {
@@ -116,7 +116,7 @@ const GroupCookbook = () => {
 
   const Recipe = ({ id, title, description, time, tag, imageUrl, userImgUrl, onClick }: any) => (
     <div className="cookbook recipeContainer">
-      <button className="cookbook recipeButton" onClick={() => navigate(`/users/${userID}/cookbooks/${id}`)}>
+      <button className="cookbook recipeButton" onClick={() => navigate(`/groups/${groupID}/cookbooks/${id}`)}>
         <div className="cookbook recipeImgContainer">
           <img className="cookbook recipeImg" src={imageUrl} alt="Recipe Image" />
         </div>

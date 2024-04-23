@@ -17,50 +17,54 @@
     color: $textColor;
     font-size: 40px;
   }
-  &.filterContainer{
-    margin-left:280px;
+  &.filterContainer {
+    margin-left: 280px;
     margin-right: 150px;
-    width:35%;
-    height:35px;
+    width: 40%;
+    height: 35px;
     background-color: $light_green;
     border-radius: 0.5em;
-    position: fixed;
     display: flex;
   }
-  &.filterButton{
-    width:90px;
+
+  &.filterButton {
+    width: 90px;
     height: 30px;
-    background-color:$dark_green;
-    color:$textColor;
+    background-color: $dark_green;
+    color: $textColor;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  &.filterButtonContainer{
+
+  &.filterButtonContainer {
+    width: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
     padding-left: 10px;
+    margin-right: 10px;
   }
-  &.field{
+
+  &.field {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width:500px;
-    margin-left:calc(100% - 500px);
+    width: 100%;
   }
-  &.input{
-    height: 30px;
+
+  &.input {
+    height: 85%;
     border: none;
     border-radius: 0.5em;
-    background: transparentize(white, 0.01);
+    background: $textColor;
     color: $container_dark;
     background-color: $textColor;
     text-align: left;
     align-items: center;
     justify-content: center;
-    width:100%;
+    width: 100%;
     display: flex;
   }
   &.recipeButton{

@@ -172,7 +172,6 @@ const PersonalCookbook = () => {
             <Button className="personalCookbook filterButton" onClick={filterRecipe}>filter</Button>
           </div>
           <FormField
-            className="personalCookbook input"
             value={filterKeyword}
             onChange={handleFilterChange}>
           </FormField>

@@ -276,11 +276,13 @@ const GroupCalendar=()=>{
       <Dashboard
         showButtons={{
           recipe: true,
-          group: true,
           groupCalendar: true,
           groupShoppinglist: true,
+          invitations: true,
+          inviteUser: true,
+          leaveGroup: true,
         }}
-        activePage="calendar"
+        activePage="groupCalendar"
       />
       <div className="calendar container" >
         {/*group recipes field*/}

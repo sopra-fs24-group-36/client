@@ -128,7 +128,7 @@ const GroupShoppinglist = () => {
           inviteUser: true,
           leaveGroup: true,
         }}
-        activePage="leaveGroup"
+        activePage="groupShoppinglist"
       />
       <BaseContainer>
         <div className="shoppinglist headerContainer">

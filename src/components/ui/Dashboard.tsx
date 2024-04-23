@@ -25,7 +25,7 @@ const Dashboard = ({ showButtons, activePage }) => {
     navigate("/calendars");
   };
   const doGroupCalendar = async () => {
-    navigate(`/groups/${userID}/calendars`);
+    navigate(`/groups/${groupID}/calendars`);
   };
   const doShopping = async () => {
     navigate(`/users/${userID}/shoppinglists`);

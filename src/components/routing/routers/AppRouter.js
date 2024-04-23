@@ -59,13 +59,13 @@ const AppRouter = () => {
         <Route path="/users/:userID/edit" element={<EditProfile />} />
         <Route path="/users/cookbooks" element={<PersonalCookbook />} />
         <Route path="/calendars" element={<Calendar />} />
-        <Route path={"/groups/calendars"} element={<GroupCalendar/>} />
         <Route path="/users/:userID/shoppinglists" element={<Shoppinglist />} />
         <Route path="/users/:userID/invitations" element={<Invitations />} />
 
         <Route path="/groups" element={<AddGroup />} />
         <Route path="/groups/:groupID/cookbooks" element={<GroupCookbook />} />
         <Route path="/groups/:groupID/shoppinglists" element={<GroupShoppinglist />} />
+        <Route path="/groups/:groupID/calendars" element={<GroupCalendar/>} />
 
         <Route path="/" element={
           <Navigate to="/users/login" replace />

@@ -105,6 +105,7 @@ const PersonalCookbook = () => {
     const filteredRecipes = originalRecipeList.filter(recipe => {
       const lowerCaseTitle = recipe.title.toLowerCase();
       const lowerCaseTags = recipe.tags.map(tag => tag.toLowerCase());
+
       return lowerCaseTitle.includes(lowerCaseFilterKeyword) || lowerCaseTags.includes(lowerCaseFilterKeyword);
     });
     setRecipeList(filteredRecipes);
@@ -120,6 +121,7 @@ const PersonalCookbook = () => {
   const deleteRecipe = async () => {
     if (selectedRecipeList.length === 0) {
       alert("Please select at least one recipe to delete!");
+
       return;
     }
     for (const recipeid of selectedRecipeList) {
@@ -203,7 +205,7 @@ const PersonalCookbook = () => {
         {/*head field*/}
         <div className="personalCookbook headerContainer">
           <div className="personalCookbook backButtonContainer">
-            <Button className="backButton" onClick={() => navigate(`/home`)}>
+            <Button className="backButton" onClick={() => navigate("/home")}>
               Back
             </Button>
           </div>

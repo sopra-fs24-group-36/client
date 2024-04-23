@@ -119,6 +119,7 @@ const GroupCookbook = () => {
     const filteredRecipes = originalRecipeList.filter(recipe => {
       const lowerCaseTitle = recipe.title.toLowerCase();
       const lowerCaseTags = recipe.tags.map(tag => tag.toLowerCase());
+
       return lowerCaseTitle.includes(lowerCaseFilterKeyword) || lowerCaseTags.includes(lowerCaseFilterKeyword);
     });
     setRecipeList(filteredRecipes);
@@ -135,6 +136,7 @@ const GroupCookbook = () => {
   const removeRecipe = async () => {
     if (selectedRecipeList.length === 0) {
       alert("Please select at least one recipe to delete!");
+      
       return;
     }
     for (const recipeid of selectedRecipeList) {

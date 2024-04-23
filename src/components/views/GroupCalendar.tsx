@@ -55,19 +55,19 @@ const defaultRecipes=[
     id:1,
   },
   {
-    title:'Quick fried rice',
+    title:"Quick fried rice",
     image:defaultRecipe2,
     creator:defaultRecipe2UserImg,
     id:2,
   },
   {
-    title:'Spring onion soup',
+    title:"Spring onion soup",
     image:defaultRecipe3,
     creator:defaultRecipe3UserImg,
     id:3,
   },
   {
-    title:'Pork medallions',
+    title:"Pork medallions",
     image:defaultRecipe4,
     creator:defaultRecipe4UserImg,
     id:4,
@@ -161,22 +161,26 @@ const GroupCalendar=()=>{
       current.setDate(current.getDate()+i);
       result.push(current);
     }
+
     return result;
   }
   const getDayOfWeek=(date)=>{
     const dayOfWeek = new Date(date).getDay();
-    return isNaN(dayOfWeek) ? null : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][dayOfWeek].slice(0, 2);
+
+    return isNaN(dayOfWeek) ? null : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][dayOfWeek].slice(0, 2);
   }
   const formatDate=(date)=>{
     //Display only the month and date of the date, without showing the year.
     const d=new Date(date);
-    return isNaN(d.getTime())? null:d.toLocaleDateString('de-CH',{month: '2-digit', day: '2-digit'});
+
+    return isNaN(d.getTime())? null:d.toLocaleDateString("de-CH",{month: "2-digit", day: "2-digit"});
   }
   const formatDateToYYYYMMDD=(date)=>{
     const d = new Date(date);
     const year = d.getFullYear();
-    const month = ('0' + (d.getMonth()+1)).slice(-2); // Months are 0 based. Add leading 0.
-    const day = ('0' + d.getDate()).slice(-2); // Add leading 0.
+    const month = ("0" + (d.getMonth()+1)).slice(-2); // Months are 0 based. Add leading 0.
+    const day = ("0" + d.getDate()).slice(-2); // Add leading 0.
+
     return `${year}-${month}-${day}`;
   }
 
@@ -225,6 +229,7 @@ const GroupCalendar=()=>{
         creator: draggedRecipe.creator,
       };
       setCalendar(prevCalendar => {
+
         return [...prevCalendar, newEvent];
       });
       setDraggedRecipe(null);
@@ -242,6 +247,7 @@ const GroupCalendar=()=>{
     console.error("Error removing event:", Error);
   };
   const getEventsOfTimeSlot=(calendar,date,timeSlot)=>{
+
     return calendar.filter(event => formatDateToYYYYMMDD(event.date) === formatDateToYYYYMMDD(date) && event.timeSlot === timeSlot);
   }
 
@@ -288,7 +294,7 @@ const GroupCalendar=()=>{
         {/*group recipes field*/}
         <BaseContainer className="calendar baseContainerLeft">
           <div className="calendar headContainer1">
-{/*
+            {/*
             TODO:to get the group name
             <h2 className="calendar title1"></h2>
 */}
@@ -337,12 +343,12 @@ recipes.map...*/}
         <BaseContainer className="calendar baseContainerRight">
           <div className="calendar headContainer2">
             <div className="calendar backButtonContainer">
-              <Button className="backButton" onClick={() => navigate(`/home`)}>
+              <Button className="backButton" onClick={() => navigate("/home")}>
                 Back
               </Button>
             </div>
             <div className="calendar titleContainer">
-{/*              TODO: to get the group name
+              {/*              TODO: to get the group name
               <h2 className="calendar title2"></h2>*/}
               <h2 className="calendar title2">Carrot Crew-Calendar</h2>
             </div>
@@ -362,7 +368,7 @@ recipes.map...*/}
                   {`${getDayOfWeek(date)}.${formatDate(date)}`}
                 </div>
               ))}
-              {['Morning','Afternoon','Evening'].map((timeSlot,index)=>(
+              {["Morning","Afternoon","Evening"].map((timeSlot,index)=>(
                 getDatesOfWeek(currentWeek).map(date=>(
                   <div
                     key={date}
@@ -372,7 +378,7 @@ recipes.map...*/}
                   >
                     {getEventsOfTimeSlot(calendar, date, timeSlot).map(event => (
                       <div className="calendar eventContainer"
-                           key={event.id}>
+                        key={event.id}>
                         <div className="calendar eventTitleContainer">
                           <h3 className="calendar eventTitle">{event.title}</h3>
                         </div>
@@ -397,4 +403,5 @@ recipes.map...*/}
     </div>
   )
 }
+
 export default GroupCalendar;

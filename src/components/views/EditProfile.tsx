@@ -156,7 +156,7 @@ const EditProfile = () => {
               <div>
                 <div className="userprofile imageContainer">
                   <div className="userprofile circle-img"
-                       style={{ position: "relative" }}>{/*set the father component relative and then it can be regarded as reference point*/}
+                    style={{ position: "relative" }}>{/*set the father component relative and then it can be regarded as reference point*/}
                     {user.profilePicture ? (
                       <img src={user.profilePicture} alt="Profile" />
                     ) : (

@@ -32,13 +32,13 @@ FormField.propTypes = {
 
 const GroupCookbook = () => {
   const navigate = useNavigate();
-  const [filterKeyword, setFilterKeyword] = useState<string>(null);
+  const [filterKeyword, setFilterKeyword] = useState<string>("");
   const userID = localStorage.getItem("userID"); /*getting the ID of the currently logged in user*/
   const { groupID } = useParams();
   const [groupInfo, setGroupInfo] = useState<any[]>([]);
   const [recipeState, setRecipeState] = useState(false);
   const [recipeList, setRecipeList] = useState<any[]>([]);
-  const [originalRecipeList, setOriginalRecipeList] = useState<object[]>([]); // 新增原始食谱列表状态
+  const [originalRecipeList, setOriginalRecipeList] = useState<object[]>([]);
   const [deleteState, setDeleteState] = useState(false);
   const [selectedRecipeList, setSelectedRecipeList] = useState<object[]>([]);
 
@@ -70,6 +70,7 @@ const GroupCookbook = () => {
           cookingTime: recipe.cookingTime,
           tags: recipe.tags,
           image: recipe.image,
+          autherID: recipe.authorID,
         }));
         setRecipeList(formattedRecipes);
         setOriginalRecipeList(formattedRecipes);
@@ -119,9 +120,10 @@ const GroupCookbook = () => {
     const filteredRecipes = originalRecipeList.filter(recipe => {
       const lowerCaseTitle = recipe.title.toLowerCase();
       const lowerCaseTags = recipe.tags.map(tag => tag.toLowerCase());
-      return lowerCaseTitle.includes(lowerCaseFilterKeyword) || lowerCaseTags.includes(lowerCaseFilterKeyword);
+      return lowerCaseTitle.includes(lowerCaseFilterKeyword) || lowerCaseTags.some(tag => tag.includes(lowerCaseFilterKeyword));
     });
     setRecipeList(filteredRecipes);
+    setFilterKeyword("");
   };
 
 
@@ -161,9 +163,28 @@ const GroupCookbook = () => {
   };
 
 
-  const Recipe = ({ id, title, description, time, tag, imageUrl, userImgUrl, onClick }: any) => {
+  const Recipe = ({ id, title, description, time, tag, imageUrl, autherID ,onClick }: any) => {
     const isSelected = selectedRecipeList.includes(id);
-    
+    const [userImgUrl,setUserImgUrl] = useState("");
+
+    const fetchUserImg = async (autherID: string) => {
+      try {
+        const response = await api.get(`/users/${autherID}`);
+        setUserImgUrl(response.data.profilePicture);
+      } catch (error) {
+        console.error(
+          `Something went wrong while fetching the user image: \n${handleError(
+            error,
+          )}`,
+        );
+        console.error("Details:", error);
+        alert(
+          "Something went wrong while fetching the user image! See the console for details.",
+        );
+      }
+
+    }
+    fetchUserImg(autherID);
     return (
       <div className="cookbook recipeContainer">
         <button className={`cookbook recipeButton ${isSelected ? "selected" : ""}`}
@@ -198,7 +219,7 @@ const GroupCookbook = () => {
           time={recipe.cookingTime}
           tag={recipe.tags}
           imageUrl={recipe.image}
-          userImgUrl={recipe.userImg}
+          autherID={recipe.autherID}
         />
       ))}
     </div>

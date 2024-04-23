@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../../styles/ui/Dashboard.scss";
+import { api, handleError } from "helpers/api";
 import { Button } from "components/ui/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -37,12 +38,16 @@ const Dashboard = ({ showButtons, activePage }) => {
     navigate(`/users/${userID}/invitations`);
   };
   const doLeaveGroup = async () => {
-    /*TODO: to leave a group DELETE
-    * navigate("/groups/:groupID/:id")*/
+    try {
+      const requestBody = JSON.stringify(userID);
+      const response = await api.delete(`/groups/${groupID}/${userID}`, requestBody);
+    } catch (error) {
+      alert("An error occurred while leaving the group");
+    }
     navigate("/home");
   };
   const doLogout = async () => {
-    //TODO:clear local storage
+    localStorage.clear();
     navigate("/users/login");
   };
 

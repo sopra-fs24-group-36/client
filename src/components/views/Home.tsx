@@ -18,6 +18,7 @@ import wildGarlic from "../../assets/defaultRecipe1.png";
 import potatoes from "../../assets/defaultRecipe3.png";
 // @ts-ignore
 import Group from "../../assets/defaultUser.png";
+import { isFormElement } from "react-router-dom/dist/dom";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -28,6 +29,13 @@ const Home = () => {
   const [secondRecipe, setSecondRecipe] = useState(null);
   const [thirdRecipe, setThirdRecipe] = useState(null);
   const [recipeState, setRecipeState] = useState(false);
+
+  useEffect(() => {
+    if (!userID) {
+      alert("You are not logged in!");
+      navigate("/users/login");
+    }
+  }, [userID, navigate]);
 
   const doTags = (recipeTags) => {
     let webpageTags = "";
@@ -46,16 +54,17 @@ const Home = () => {
   };
 
   const doNoRecipe = () => {
-
     return <p className="Home noRecipeText">no recipes saved yet</p>;
   };
   const doNoGroup = () => {
-
     return <p className="Home noGroupText">not part of any groups yet</p>;
   };
 
   useEffect(() => { //retrieve the recipe based on the ID from the URL 
     async function fetchData() {
+      if (!userID) {
+        return;
+      }
       try {
         const response = await api.get(`/users/${userID}/cookbooks`);
         await new Promise((resolve) => setTimeout(resolve, 500));
@@ -79,7 +88,7 @@ const Home = () => {
             setFirstRecipe(reversedData[0]);
           }
         }
-        //returned recipe based on the id from the URL 
+        //returned recipe based on the id from the URL
       } catch (error) {
         console.error(
           `Something went wrong while fetching the recipes: \n${handleError(error)}`,
@@ -87,12 +96,16 @@ const Home = () => {
         console.error("Details:", error);
         alert("Something went wrong while fetching the recipes! See the console for details.");
       }
-      ;
-    };
+    }
+
     fetchData();
   }, []);
 
   useEffect(() => {
+    if (!userID) {
+      return;
+    }
+
     async function fetchData() {
       try {
         const response = await api.get(`/users/${userID}/groups`);
@@ -103,8 +116,8 @@ const Home = () => {
         console.error("Details:", error);
         alert("Something went wrong while fetching the groups! See the console for details.");
       }
-      ;
-    };
+    }
+
     fetchData();
   }, []);
 

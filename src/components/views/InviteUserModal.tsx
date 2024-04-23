@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { api, handleError } from "helpers/api";
 import PropTypes from "prop-types";
 import { Button } from "components/ui/Button";
 import ReactDOM from "react-dom";
 import "styles/views/InviteUserModal.scss";
+import { useParams } from "react-router-dom";
 
 const FormField = (props) => {
   return (
@@ -25,9 +27,19 @@ FormField.propTypes = {
 
 const InviteUserModal = ({ open, onClose }) => {
   const [email, setEmail] = useState("");
+  const {groupID}=useParams();
   if (!open) return null;
 
   const handleInvite = async () => {
+    try{
+      const requestBody=JSON.stringify({
+        email:email,
+      })
+      const response=await api.post(`/groups/${groupID}/invitations`,requestBody);
+    }catch (error){
+      console.error("An error occurred while inviting a user:",error);
+      alert("Inviting a user failed.");
+    }
     /*TODO: handel invite a user
     *  check if email is vaild, send invitation*/
     onClose();

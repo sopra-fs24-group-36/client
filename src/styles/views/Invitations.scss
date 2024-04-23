@@ -14,31 +14,29 @@
     font-size: 40px;
     text-align: center;
     flex: 1;
-    margin-right: 200px;
+    margin-right: 220px;
   }
-
   &.backContainer {
     display: flex;
     flex-direction:column;
     justify-content: center;
-    min-height: 200px;
-    width: 40%;
+    align-items: center;
+    min-height: 380px;
+    width: 37%;
     margin: 0 auto;
     background-color: $light_green;
-    border-radius: $borderRadius;
-    text-align: center;
+    border: 2px solid #000000;
   }
   &.invitationContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin:10px 0px 0px 0px;
     max-height: 400px;
     overflow-y: auto;
   }
   &.noInvitation{
     font-style: italic;
-    color: $true_green;
+    color: $light_pink;
     font-size: 30px;
     font-weight: bold;
     margin:0px 0px 0px 5px;
@@ -46,13 +44,14 @@
   &.invitationField {
     display: flex;
     justify-content:flex-start ;
-    min-height: 70px;
-    width: 90%;
+    min-height: 85px;
+    width: 80%;
     border-radius: $borderRadius;
-    margin:5px 0px 10px 0px;
     align-items: center;
     background-color: $container_dark;
     color:$textColor;
+    margin-bottom: 15px;
+    min-width: 370px;
   }
   &.invitationImgContainer {
     display: flex;
@@ -73,7 +72,7 @@
   }
   &.invitationGroupName{
     color:$textColor;
-    margin:0px 0px 0px 7px;
+    margin:0px 0px 0px 10px;
     font-size:20px;
     flex: 1 1 auto; /* Allow expansion and contraction */
     white-space: normal; /* Allow line breaks */
@@ -81,14 +80,15 @@
   }
 
   &.buttonContainer{
-
+    display: flex;
+    justify-content: center;
   }
   &.acceptButton{
     background-color: $dark_pink;
     color: $textColor;
   }
   &.declineButton{
-    background-color: $light_green;
+    background-color: $light_yellow;
     color:$container_dark;
     margin:0px 5px 0px 10px;
   }

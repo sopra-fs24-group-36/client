@@ -9,56 +9,10 @@ import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import BaseContainer from "components/ui/BaseContainer_new";
 import Header_new from "components/views/Header_new";
-// @ts-ignore
-import defaultRecipe1UserImg from "../../assets/defaultRecipe1UserImg.png"
-// @ts-ignore
-import defaultRecipe2UserImg from "../../assets/defaultRecipe2UserImg.png"
-// @ts-ignore
-import defaultRecipe3UserImg from "../../assets/defaultRecipe3UserImg.png"
-// @ts-ignore
-import defaultRecipe4UserImg from "../../assets/defaultRecipe4UserImg.png"
 
-//TODO: define the Invitation
+//TODO: definethe Invitation
 interface Invitation{
 }
-const defaultInvitations=[
-  {
-    id:1,
-    groupName:"Carrot Crew",
-    groupImage:defaultRecipe1UserImg,
-  },
-  {
-    id:2,
-    groupName:"Spicy Girls",
-    groupImage:defaultRecipe2UserImg,
-  },
-  {
-    id:3,
-    groupName:"Lords Of Wings",
-    groupImage:defaultRecipe3UserImg,
-  },
-  {
-    id:4,
-    groupName:"Pasta La Vista",
-    groupImage:defaultRecipe4UserImg,
-  },
-  {
-    id:5,
-    groupName:"Carrot Crew",
-    groupImage:defaultRecipe1UserImg,
-  },
-  {
-    id:6,
-    groupName:"Carrot Crew",
-    groupImage:defaultRecipe1UserImg,
-  },
-  {
-    id:7,
-    groupName:"Carrot Crew",
-    groupImage:defaultRecipe1UserImg,
-  },
-
-]
 
 
 const invitationField=(props)=>{}
@@ -66,7 +20,7 @@ const invitationField=(props)=>{}
 const Invitations = () => {
   const navigate = useNavigate();
   const {userID} = useParams();
-  const [refreshinvitation,setRefreshinvitation]=useState(false);
+  const [refreshInvitation,setRefreshInvitation]=useState(false);
   const [invitations,setInvitations]=useState<Invitation[]>(null);
   //TODO:
   useEffect(()=>{
@@ -87,11 +41,11 @@ const Invitations = () => {
       }
     }
     fetchInvitations();
-  }, [refreshinvitation]);
+  }, [refreshInvitation]);
   const handleAccept= async (invitation)=>{
     try{
       const response=await  api.post(`users/${userID}/accept/${invitation.groupID}`);
-      setRefreshinvitation(prev=>!prev);
+      setRefreshInvitation(prev=>!prev);
     }catch (error){
       alert("Accepting failed.");
     }
@@ -99,7 +53,7 @@ const Invitations = () => {
   const handleDecline=async (invitation)=>{
     try{
       const response=await  api.post(`users/${userID}/deny/${invitation.groupID}`);
-      setRefreshinvitation(prev=>!prev);
+      setRefreshInvitation(prev=>!prev);
     }catch (error){
       alert("Declining failed.");
     }
@@ -135,27 +89,28 @@ const Invitations = () => {
             <div className="invitations invitationContainer">
               {invitations.map(invitation=> (
                 <div key={invitation.id} className="invitations invitationField">
-                  <div className="invitations invitationImgContainer">
-                    <img className="invitations invitationImg" src={invitation.groupImage} alt="Group Image"/>
-                  </div>
-                  <div className="invitations invitationGroupName">
-                    {invitation.groupName}
-                  </div>
-                  <div className="invitations buttonContainer">
-                    <Button
-                      className="invitations acceptButton"
-                      onClick={() => handleAccept(invitation)}>
-                      Accept
-                    </Button>
-                  </div>
-                  <div className="invitations buttonContainer">
-                    <Button
-                      className="invitations declineButton"
-                      onClick={() => handleDecline(invitation)}>
-                      Decline
-                    </Button>
-                  </div>
+                    <div className="invitations invitationImgContainer">
+                      <img className="invitations invitationImg" src={invitation.groupImage} alt="Group Image" />
+                    </div>
+                    <div className="invitations invitationGroupName">
+                      {invitation.groupName}
+                    </div>
+                    <div className="invitations buttonContainer">
+                      <Button
+                        className="invitations acceptButton"
+                        onClick={() => handleAccept(invitation)}>
+                        Accept
+                      </Button>
+                    </div>
+                    <div className="invitations buttonContainer">
+                      <Button
+                        className="invitations declineButton"
+                        onClick={() => handleDecline(invitation)}>
+                        Decline
+                      </Button>
+                    </div>
                 </div>
+
               ))}
             </div>
           )}

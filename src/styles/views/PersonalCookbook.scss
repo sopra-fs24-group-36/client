@@ -24,6 +24,7 @@
     height:35px;
     background-color: $light_green;
     border-radius: 0.5em;
+    position: fixed;
     display: flex;
   }
   &.filterButton{

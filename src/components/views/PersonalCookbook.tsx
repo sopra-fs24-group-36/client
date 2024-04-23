@@ -167,7 +167,6 @@ const PersonalCookbook = () => {
             </Button>
           </div>
         </div>
-{/*filter field*/}
         <div className="personalCookbook filterContainer">
           <div className="personalCookbook filterButtonContainer">
             <Button className="personalCookbook filterButton" onClick={filterRecipe}>filter</Button>
@@ -178,7 +177,6 @@ const PersonalCookbook = () => {
             onChange={handleFilterChange}>
           </FormField>
         </div>
-        {/*recipe field*/}
         <RecipeList recipes={recipeList} onClickRecipe={handleClickRecipe} />
       </BaseContainer>
       <Footer>

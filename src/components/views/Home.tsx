@@ -153,7 +153,7 @@ const Home = () => {
       return validGroups.map((group, index) => (
         <div key={index} className="Home buttonContainer">
           <Button className="Home group"
-                  onClick={() => navigate(`/groups/${group.groupID}/cookbooks/`)}>
+            onClick={() => navigate(`/groups/${group.groupID}/cookbooks/`)}>
             <img src={group.groupImage} alt="Group" className="Home groupImage" />
             {group.groupName}
           </Button>

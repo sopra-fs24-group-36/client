@@ -33,7 +33,7 @@ FormField.propTypes = {
 
 const PersonalCookbook = () => {
   const navigate = useNavigate();
-  const [filterKeyword, setFilterKeyword] = useState<string>(null);
+  const [filterKeyword, setFilterKeyword] = useState<string>("");
   const userID = localStorage.getItem("userID"); /*getting the ID of the currently logged in user*/
   const [recipeState, setRecipeState] = useState(false);
   const [recipeList, setRecipeList] = useState<object[]>([]);
@@ -105,11 +105,12 @@ const PersonalCookbook = () => {
     const filteredRecipes = originalRecipeList.filter(recipe => {
       const lowerCaseTitle = recipe.title.toLowerCase();
       const lowerCaseTags = recipe.tags.map(tag => tag.toLowerCase());
-
-      return lowerCaseTitle.includes(lowerCaseFilterKeyword) || lowerCaseTags.includes(lowerCaseFilterKeyword);
+      return lowerCaseTitle.includes(lowerCaseFilterKeyword) || lowerCaseTags.some(tag => tag.includes(lowerCaseFilterKeyword));
     });
     setRecipeList(filteredRecipes);
+    setFilterKeyword("");
   };
+
 
   const handelSelectRecipe = (recipe: Recipe) => {
     setDeleteState(!deleteState);
@@ -121,7 +122,6 @@ const PersonalCookbook = () => {
   const deleteRecipe = async () => {
     if (selectedRecipeList.length === 0) {
       alert("Please select at least one recipe to delete!");
-
       return;
     }
     for (const recipeid of selectedRecipeList) {
@@ -150,11 +150,11 @@ const PersonalCookbook = () => {
 
   const Recipe = ({ id, title, description, time, tag, imageUrl, onClick }: any) => {
     const isSelected = selectedRecipeList.includes(id);
-    
+
     return (
       <div className="personalCookbook recipeContainer">
         <button className={`personalCookbook recipeButton ${isSelected ? "selected" : ""}`}
-          onClick={onClick}
+                onClick={onClick}
         >
           <div className="personalCookbook recipeImgContainer">
             <img className="personalCookbook recipeImg" src={imageUrl} alt="Recipe Image" />
@@ -205,7 +205,7 @@ const PersonalCookbook = () => {
         {/*head field*/}
         <div className="personalCookbook headerContainer">
           <div className="personalCookbook backButtonContainer">
-            <Button className="backButton" onClick={() => navigate("/home")}>
+            <Button className="backButton" onClick={() => navigate(`/home`)}>
               Back
             </Button>
           </div>

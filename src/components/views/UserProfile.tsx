@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { api, handleError } from "helpers/api";
-import User from "models/User";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import "styles/views/UserProfile.scss";
 import BaseContainer from "components/ui/BaseContainer";
-import PropTypes from "prop-types";
 // @ts-ignore
 import rightBrok from "../../assets/rightBrok.png";
 // @ts-ignore
 import leftBrok from "../../assets/leftBrok.png";
-// @ts-ignore
-import defaultUser from "../../assets/defaultUser.png";
 
 
 const UserProfile = () => {
@@ -56,11 +52,7 @@ const UserProfile = () => {
             <div>
               <div className="userprofile imageContainer">
                 <div className="userprofile circle-img">
-                  {user.profilePicture ? (
-                    <img src={user.profilePicture} alt="Profile" />
-                  ) : (
-                    <img src={defaultUser} alt="Default Profile" />
-                  )}
+                  <img src={user.profilePicture} alt="Profile" />
                 </div>
               </div>
               <div>

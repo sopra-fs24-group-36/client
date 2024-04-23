@@ -19,6 +19,7 @@ import Calendar from "../../views/Calendar";
 import GroupCalendar from "../../views/GroupCalendar"
 import GroupShoppinglist from "../../views/GroupShoppinglist";
 import { EditRecipeGuard } from "../routeProtectors/EditRecipeGuard";
+import { GroupRecipeGuard } from "../routeProtectors/GroupRecipeGuard";
 
 /**
  * Main router of your application.
@@ -39,8 +40,9 @@ const AppRouter = () => {
 
         <Route path="/recipes" element={<AddRecipe />} />
 
+        <Route path="/groups/:group_ID/cookbooks/:recipeID" element={<GroupRecipe />} />
+
         <Route path="/users/:authorID/cookbooks/:recipeID" element={<UserRecipe />} />
-        <Route path="/groups/:groupID/cookbooks/:recipeID" element={<GroupRecipe />} />
 
         <Route path="/users/:authorID/cookbooks/:recipeID/edit" element={<EditRecipeGuard/>}>
           <Route path="/users/:authorID/cookbooks/:recipeID/edit" element={<RecipeEdit />} />

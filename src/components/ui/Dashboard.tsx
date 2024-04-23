@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/ui/Dashboard.scss";
 import { api, handleError } from "helpers/api";
 import { Button } from "components/ui/Button";
@@ -15,6 +15,13 @@ const Dashboard = ({ showButtons, activePage }) => {
 
   const userID = parseInt(localStorage.getItem("userID"));
   const [isInviteUserModalOpen, setIsInviteUserModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (!userID) {
+      alert("You are not logged in!");
+      navigate("/users/login");
+    }
+  }, [userID, navigate]);
 
   const doRecipe = async () => {
     navigate("/recipes");

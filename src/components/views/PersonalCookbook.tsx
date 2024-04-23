@@ -5,7 +5,7 @@ import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
 import "styles/views/PersonalCookbook.scss";
 import User from "models/User";
-import Recipe from "models/Recipe"
+import Recipe from "models/Recipe";
 import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import Header_new from "components/views/Header_new";
@@ -37,8 +37,68 @@ const PersonalCookbook = () => {
   const userID = localStorage.getItem("userID"); /*getting the ID of the currently logged in user*/
   const [recipeState, setRecipeState] = useState(false);
   const [recipeList, setRecipeList] = useState<object[]>([]);
-  const [originalRecipeList, setOriginalRecipeList] = useState<object[]>([]); // 新增原始食谱列表状态
+  const [originalRecipeList, setOriginalRecipeList] = useState<object[]>([]);
+  const [deleteState, setDeleteState] = useState(false);
+  const [selectedRecipeList, setSelectedRecipeList] = useState<object[]>([]);
 
+  const fetchData = async () => {
+    try {
+      const response = await api.get(`/users/${userID}/cookbooks`);
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      setRecipeState(true);
+      if (!response || response.length === 0) {
+        return doNoRecipe();
+      } else {
+        const formattedRecipes = response.data.map((recipe: any) => ({
+          id: recipe.id,
+          title: recipe.title,
+          shortDescription: recipe.shortDescription,
+          cookingTime: recipe.cookingTime,
+          tags: recipe.tags,
+          image: recipe.image,
+        }));
+        setRecipeList(formattedRecipes);
+        setOriginalRecipeList(formattedRecipes);
+      }
+    } catch (error) {
+      console.error(
+        `Something went wrong while fetching the recipes: \n${handleError(
+          error,
+        )}`,
+      );
+      console.error("Details:", error);
+      alert(
+        "Something went wrong while fetching the users! See the console for details.",
+      );
+    }
+    setSelectedRecipeList([]);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const doNoRecipe = () => {
+    return <p className="cookbook noRecipeText">no recipes saved yet</p>;
+  };
+
+  const handleClickRecipe = (recipeId: string) => {
+    if (!deleteState) {
+      navigate(`/users/${userID}/cookbooks/${recipeId}`);
+    } else {
+      if (selectedRecipeList.includes(recipeId)) {
+        // if already selected, remove it
+        setSelectedRecipeList(selectedRecipeList.filter(id => id !== recipeId));
+      } else {
+        // if not selected, add it
+        setSelectedRecipeList([...selectedRecipeList, recipeId]);
+      }
+    }
+  };
+
+  const handleFilterChange = (newValue) => {
+    setFilterKeyword(newValue);
+  };
 
   const filterRecipe = () => {
     const lowerCaseFilterKeyword = filterKeyword.toLowerCase();
@@ -50,75 +110,64 @@ const PersonalCookbook = () => {
     setRecipeList(filteredRecipes);
   };
 
-
-  const deleteRecipe = () => {
-    //TODO:add the deleteRecipe when connecting with backend
-
-  };
-  const doNoRecipe = () => {
-    return <p className="cookbook noRecipeText">no recipes saved yet</p>;
-  };
-  const handleClickRecipe = (user: User, recipeId: string) => {
-    navigate(`/users/${userID}/cookbooks/${recipeId}`);
+  const handelSelectRecipe = (recipe: Recipe) => {
+    setDeleteState(!deleteState);
+    if (deleteState === true) {
+      deleteRecipe();
+    }
   };
 
-  const handleFilterChange = (newValue) => {
-    setFilterKeyword(newValue);
-  };
-
-  useEffect(() => {
-    async function fetchData() {
+  const deleteRecipe = async () => {
+    if (selectedRecipeList.length === 0) {
+      alert("Please select at least one recipe to delete!");
+      return;
+    }
+    for (const recipeid of selectedRecipeList) {
       try {
-        const response = await api.get(`/users/${userID}/cookbooks`);
+        const requestBody = JSON.stringify(recipeid);
+        const response = await api.delete(`/users/${userID}/cookbooks/${recipeid}`, requestBody);
         await new Promise((resolve) => setTimeout(resolve, 500));
-        setRecipeState(true);
-        if (!response || response.length === 0) {
-          return doNoRecipe();
-        } else {
-          const formattedRecipes = response.data.map((recipe: any) => ({
-            id: recipe.id,
-            title: recipe.title,
-            shortDescription: recipe.shortDescription,
-            cookingTime: recipe.cookingTime,
-            tags: recipe.tags,
-            image: recipe.image,
-          }));
-          setRecipeList(formattedRecipes);
-          setOriginalRecipeList(formattedRecipes);
+        if (!response) {
+          alert("Something went wrong while deleting the recipes!");
         }
       } catch (error) {
         console.error(
-          `Something went wrong while fetching the recipes: \n${handleError(
+          `Something went wrong while deleting the recipes: \n${handleError(
             error,
           )}`,
         );
         console.error("Details:", error);
         alert(
-          "Something went wrong while fetching the users! See the console for details.",
+          "Something went wrong while deleting the recipe! See the console for details.",
         );
       }
     }
-
     fetchData();
-  }, []);
+  };
 
 
-  const Recipe = ({ id, title, description, time, tag, imageUrl, onClick }: any) => (
-    <div className="personalCookbook recipeContainer">
-      <button className="personalCookbook recipeButton" onClick={() => navigate(`/users/${userID}/cookbooks/${id}`)}>
-        <div className="personalCookbook recipeImgContainer">
-          <img className="personalCookbook recipeImg" src={imageUrl} alt="Recipe Image" />
-        </div>
-        <div className="personalCookbook recipeContent">
-          <h2 className="personalCookbook recipeTitle">{title}</h2>
-          <p className="personalCookbook recipeDescription">Description:{description}</p>
-          <p className="personalCookbook recipeTime">Total Time:{time}</p>
-          <p className="personalCookbook recipeTags">Tags:{tag.join(",")}</p>
-        </div>
-      </button>
-    </div>
+  const Recipe = ({ id, title, description, time, tag, imageUrl, onClick }: any) => {
+    const isSelected = selectedRecipeList.includes(id);
+    
+    return (
+      <div className="personalCookbook recipeContainer">
+        <button className={`personalCookbook recipeButton ${isSelected ? "selected" : ""}`}
+          onClick={onClick}
+        >
+          <div className="personalCookbook recipeImgContainer">
+            <img className="personalCookbook recipeImg" src={imageUrl} alt="Recipe Image" />
+          </div>
+          <div className="personalCookbook recipeContent">
+            <h2 className="personalCookbook recipeTitle">{title}</h2>
+            <p className="personalCookbook recipeDescription">Description:{description}</p>
+            <p className="personalCookbook recipeTime">Total Time:{time}</p>
+            <p className="personalCookbook recipeTags">Tags:{tag.join(",")}</p>
+          </div>
+        </button>
+      </div>
+    );
+  };
 
-  );
   const RecipeList = ({ recipes, onClickRecipe }: any) => (
     <div className="personalCookbook recipeListContainer">
       {recipes.map((recipe: any, index: number) => (
@@ -151,7 +200,7 @@ const PersonalCookbook = () => {
       />
       <BaseContainer>
 
-{/*head field*/}
+        {/*head field*/}
         <div className="personalCookbook headerContainer">
           <div className="personalCookbook backButtonContainer">
             <Button className="backButton" onClick={() => navigate(`/home`)}>
@@ -161,11 +210,15 @@ const PersonalCookbook = () => {
           <div className="personalCookbook titleContainer">
             <h2 className="personalCookbook title">Personal Cookbook</h2>
           </div>
+
           <div className="personalCookbook backButtonContainer">
-            <Button className=" backButton" onClick={deleteRecipe()}>
+            <Button
+              className={`${deleteState ? "hightlightButton" : "backButton"}`}
+              onClick={handelSelectRecipe}>
               Delete Recipes
             </Button>
           </div>
+
         </div>
         <div className="personalCookbook filterContainer">
           <div className="personalCookbook filterButtonContainer">

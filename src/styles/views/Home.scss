@@ -11,7 +11,7 @@
     vertical-align: top;
     width: 50%;
     margin-top: 115px; 
-    position: fixed; 
+    position: absolute; 
     height: calc(100% - 210px);
     padding-top: 15px;
     overflow-y:auto; 
@@ -25,10 +25,11 @@
     display: inline-block; 
     vertical-align: top;
     margin-top: 115px; 
-    position: fixed; 
+    position: absolute; 
     height: calc(100% - 210px);
     padding-top: 15px;
     right: 0; 
+    overflow-y: auto; 
   }
   &.form {
     display: flex;
@@ -67,6 +68,24 @@
     padding-right: 30px;
     margin-right:30px; 
     margin-left:30px; 
+  }
+  &.noRecipeText{
+    font-weight: bold;
+    color: $light_pink; 
+    font-size: 30px; 
+    font-style: italic;
+    text-align: center;
+    padding-top: 100px;
+    padding-bottom: 60px;
+  }
+  &.noGroupText{
+    font-weight: bold;
+    color: $true_green; 
+    font-size: 30px; 
+    font-style: italic;
+    text-align: center;
+    padding-top: 115px;
+    padding-bottom: 60px;
   }
   &.recipeImage{
     width: 40%;
@@ -109,11 +128,12 @@
   &.recipeTags, 
   &.recipeTime{
     color: $container_dark; 
-    font-size: 12px;
+    font-size: 16px;
     text-align: left;
     font-weight: 400px;
   }
   &.recipesButtonContainer{
     padding: 60px 0px 60px 0px; 
   }
+
 }

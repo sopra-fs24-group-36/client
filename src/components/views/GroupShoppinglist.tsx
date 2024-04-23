@@ -34,21 +34,21 @@ FormField.propTypes = {
 };
 
 const ItemField = (props) => {
-  const { userID } = useParams();
+  const { groupID } = useParams();
   const [isChecked, set_isChecked] = useState(false);
 
   const removeItem = async (index) => {
     set_isChecked(!isChecked);
     try {
       const requestBody = JSON.stringify({
-        "item": props.value
+        "item": props.value,
       });
-      const response = await api.put(`/users/${userID}/shoppinglists`, requestBody);
+      const response = await api.put(`/groups/${groupID}/shoppinglists`, requestBody);
     } catch (error) {
       alert("An error occurred while remove items");
     }
   };
-  
+
   return (
     <div className="shoppinglist itemsField">
       <input className="shoppinglist itemsInput" value={props.value} readOnly />
@@ -66,23 +66,30 @@ ItemField.propTypes = {
   value: PropTypes.string,
 };
 
-const Shoppinglist = () => {
+const GroupShoppinglist = () => {
   const navigate = useNavigate();
-  const { userID } = useParams();
+  const { groupID } = useParams();
+  const [groupInfo, setGroupInfo] = useState<any[]>([]);
   const [items, set_items] = useState([]);
   const [new_item, set_new_item] = useState("");
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await api.get(`/users/${userID}/shoppinglists`);
+        const response = await api.get(`/groups/${groupID}/shoppinglists`);
         set_items(response.data.items);
       } catch (error) {
         alert("Something went wrong while fetching the items!");
       }
+      try {
+        const response = await api.get(`/groups/${groupID}`);
+        setGroupInfo(response.data);
+      } catch (error) {
+        alert("Something went wrong while fetching the group");
+      }
     }
     fetchData();
-  }, [userID]);
+  }, [groupID]);
 
   const addItem = async () => {
     if (new_item.trim() !== "") { // Make sure the input is not empty
@@ -90,9 +97,9 @@ const Shoppinglist = () => {
       set_new_item("");
       try {
         const requestBody = JSON.stringify({
-          "item":new_item
+          "item": new_item,
         });
-        const response = await api.post(`/users/${userID}/shoppinglists`, requestBody);
+        const response = await api.post(`/groups/${groupID}/shoppinglists`, requestBody);
       } catch (error) {
         alert("An error occurred while adding items");
       }
@@ -102,7 +109,7 @@ const Shoppinglist = () => {
   const clearAll = async () => {
     set_items([]);
     try {
-      const response = await api.delete(`/users/${userID}/shoppinglists`);
+      const response = await api.delete(`/groups/${groupID}/shoppinglists`);
     } catch (error) {
       alert("An error occurred while clear all items");
     }
@@ -115,12 +122,13 @@ const Shoppinglist = () => {
       <Dashboard
         showButtons={{
           recipe: true,
-          group: true,
-          calendar: true,
-          shoppinglist: true,
+          groupCalendar: true,
+          groupShoppinglist: true,
           invitations: true,
+          inviteUser: true,
+          leaveGroup: true,
         }}
-        activePage="shoppinglist"
+        activePage="groupShoppinglist"
       />
       <BaseContainer>
         <div className="shoppinglist headerContainer">
@@ -130,7 +138,7 @@ const Shoppinglist = () => {
               onClick={() => navigate("/home")}
             >Back</Button>
           </div>
-          <h2 className="shoppinglist title">Shopping List</h2>
+          <h2 className="shoppinglist title">{groupInfo.name} - Shopping List</h2>
         </div>
 
         <div className="shoppinglist container">
@@ -168,4 +176,4 @@ const Shoppinglist = () => {
   );
 };
 
-export default Shoppinglist;
+export default GroupShoppinglist;

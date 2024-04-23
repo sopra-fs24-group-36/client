@@ -1,15 +1,32 @@
 @import "../theme";
 
 .footer {
-  &.container {
-    background-color: $dark_pink;
-    margin: 10px; 
-    border-radius: $borderRadius;
-    position: fixed; 
+  position: absolute;
+  width: 100%;
+  &.content{
+    width: 100%;
+    bottom: 0;
+  }
+  &.searchbar{
     bottom: 0; 
+    background-color: $dark_pink;
+    height: 85px; 
+    color: $container_dark; 
+    border-radius: $borderRadius;
+    margin: 0 10px; 
     width: calc(100% - 20px); 
+    display: flex;
+  }
+  &.searchContent{
+    justify-content: center;
+  }
+  &.searchButton{
     display: flex; 
-    height: 70px;
+    justify-content: flex-end;
+  }
+  &.searchTitle{
+    margin: 0 auto; 
+    display: flex;
   }
 
   &.title {
@@ -19,39 +36,96 @@
     padding-left: 30px; 
     display: flex; 
     padding-right: 30px; 
-    overflow: hidden;
-    
+    align-items: center;
   }
-  &.field {
+  
+  &.recipe{
+    position: relative;
+    background-color: $true_green;
+    border-radius: $borderRadius;
+    margin: 10px; 
+    padding: 15px; 
+    width: calc(25% - 20px);
+    display: inline-block;
+    flex-direction: column;
+    height: 400px; 
+  }
+  &.recipeContent{
+    background-color: $light_green;
+    border-radius: $borderRadius;
+    padding: 10px; 
+    height: calc(100% - 30px); 
+    width: calc(100% - 30px); 
     display: flex;
     flex-direction: column;
+  }
+  &.recipeTitleContainer{
+    flex-direction: column;
     justify-content: center;
-    display: flex; 
-    align-items: center;
-    width: calc(100% - 430px); 
+    position: relative; 
+    margin-bottom: 60px;
   }
-  &.input {
-    height: 35px;
-    padding-left: 15px;
-    margin-left: -4px;
-    border: none;
-    border-radius: 0.75em;
-    background: transparentize(white, 0.85);
-    color: $textColor;
-    background-color: $light_green;
-    align-items: center;
-    width: 100%; 
+  &.recipeTitle{
+    font-size: 20px;
+    font-weight: bold;
+    color: $container_dark;
+    text-align: center;
+    margin: 0px; 
   }
-  &.label {
-    color: $textColor;
-    text-transform: lowercase;
-    font-weight: 300;
+  &.recipeImageContainer{
+    position: relative; 
+    text-align: center;
   }
-  &.button-container {
-    display: flex;
-    justify-content: center;
-    margin-right: 30px; 
-    align-items: center;
-    margin-left: 30px; 
+  &.recipeImage{
+    position: relative; 
+    align-self: center;
+    max-width: 150px;
   }
+  &.recipeDescriptionContainer{
+    position: relative; 
+  }
+  &.recipeButton{
+    position: relative;
+    padding-bottom: 10px;
+  }
+  &.noRecipe{
+    text-align: center;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 1.2em; 
+    color: $container_dark;
+    padding-bottom: 30px; 
+  }
+}
+
+.footer-field {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 15px; 
+  padding-bottom: 10px; 
+  margin: 0px 20px; 
+  width: calc(100% - 160px); 
+}
+.footer-input {
+  height: 35px;
+  padding-left: 15px;
+  margin-left: -4px;
+  border: none;
+  border-radius: 0.75em;
+  color: $container_dark;
+  background-color: rgb(255, 255, 255, 0.6);
+  background-color: $light_green;
+  display: flex;
+}
+.footer-label {
+  color: $container_dark;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+  padding-top: 10px; 
+  font-weight: bold;
+}
+.footer-searchButton {
+  margin-bottom: 10px;
+  margin-top: 40px; 
 }

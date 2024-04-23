@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { api, handleError } from "helpers/api";
-import { Form, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import "styles/views/Recipe.scss";
-import PropTypes from "prop-types";
 import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import BaseContainer from "components/ui/BaseContainer_new";
@@ -13,14 +12,15 @@ import {Spinner} from "components/ui/Spinner";
 import select_image from "../../assets/select_image.png";
 
 
-const Recipe = () => {
+const GroupRecipe = () => {
   const navigate = useNavigate();
-  const {authorID, recipeID} = useParams(); //User ID of recipe's author and recipeID 
+  const {groupID, recipeID} = useParams(); //User ID of recipe's author and recipeID 
   const [recipe, setRecipe] = useState(null); //getting the recipe we are currently viewing 
   const userID = localStorage.getItem("userID");
+  const [recipeAuthorID, setauthorID] = useState(null);
 
   const editRecipe = () => {
-    navigate(`/users/${authorID}/cookbooks/${recipeID}/edit`)
+    navigate(`/users/${userID}/cookbooks/${recipeID}/edit`)
   };
 
 
@@ -44,7 +44,6 @@ const Recipe = () => {
   const doIngredients = () => {
     const recipeIngredients = recipe.ingredients;
     const recipeAmounts = recipe.amounts;
-    console.log(recipeAmounts);
     if (recipeIngredients.length === 0) {
       return <p>This recipe has no ingredients</p>
     }
@@ -71,12 +70,12 @@ const Recipe = () => {
   useEffect(() => { //retrieve the recipe based on the ID from the URL 
     async function fetchData(){
       try{
-        const response = await api.get(`/users/${authorID}/cookbooks/${recipeID}`);
-        console.log(response);
+        const response = await api.get(`/groups/${groupID}/cookbooks/${recipeID}`);
         // delays continuous execution of an async operation for 0.5 second -> can be removed 
         await new Promise((resolve) => setTimeout(resolve, 500));
         //returned recipe based on the id from the URL 
-        setRecipe(response.data)
+        setRecipe(response.data);
+        setauthorID(response.data.authorID);
       }catch(error){
         console.error(
           `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -96,7 +95,7 @@ const Recipe = () => {
     window.open(recipe.link);
     navigate("/home"); //potentially needs taking out when we connect to cookbooks 
   }else{
-    const canEdit = userID === authorID; 
+    const canEdit = parseInt(userID, 10) === parseInt(recipeAuthorID, 10); //had to make sure both are integers
     content = (
       <div>
         <Header_new></Header_new>
@@ -113,7 +112,8 @@ const Recipe = () => {
         <BaseContainer>
           <div className="recipe headerContainer">
             <div className="recipe backButtonContainer">
-              <Button className="backButton">
+              <Button className="backButton"
+                onClick={()=>navigate(-1)}>
                 Back
               </Button>
             </div>
@@ -177,4 +177,4 @@ const Recipe = () => {
   )
 };
 
-export default Recipe;
+export default GroupRecipe;

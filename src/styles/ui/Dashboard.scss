@@ -10,10 +10,9 @@
     border-radius: $borderRadius;
     padding-top: 15px;
     padding-bottom: 30px; 
-    display: inline-block;
     vertical-align: top;
     height: calc(100% - 210px);
-    position: fixed; 
+    position: absolute;
     margin-top: 115px; 
   }
   

@@ -58,7 +58,7 @@ const Register = () => {
       localStorage.setItem("userID", user.id);
       // Store the token into the local storage.
       localStorage.setItem("token", user.token);
-      navigate("/home"); //navigating to home after successful login
+      navigate("/users/login"); //navigating to home after successful login
     } catch (error) {
       alert(
         `Something went wrong during the register: \n${handleError(error)}`,
@@ -101,14 +101,14 @@ const Register = () => {
           />
           <div className="login button-container">
             <Button
-              width="50%"
+              width="45%"
               onClick={() => navigate("/users/login")}
             >
               Return
             </Button>
             <Button
               disabled={!username || !password || !email}
-              width="50%"
+              width="45%"
               onClick={() => doRegister()}
             >
               Register

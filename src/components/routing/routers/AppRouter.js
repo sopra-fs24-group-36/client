@@ -8,12 +8,18 @@ import Home from "../../views/Home";
 import UserProfile from "../../views/UserProfile";
 import EditProfile from "../../views/EditProfile";
 import PersonalCookbook from "../../views/PersonalCookbook";
-import Recipe from "../../views/Recipe";
+import UserRecipe from "../../views/UserRecipe";
+import GroupRecipe from "../../views/GroupRecipe";
 import GroupCookbook from "../../views/GroupCookbook";
 import AddGroup from "../../views/AddGroup";
 import Shoppinglist from "../../views/Shoppinglist";
 import Invitations from "../../views/Invitations";
 import RecipeEdit from "../../views/EditRecipe";
+import Calendar from "../../views/Calendar";
+import GroupCalendar from "../../views/GroupCalendar"
+import GroupShoppinglist from "../../views/GroupShoppinglist";
+import { EditRecipeGuard } from "../routeProtectors/EditRecipeGuard";
+import { GroupRecipeGuard } from "../routeProtectors/GroupRecipeGuard";
 
 /**
  * Main router of your application.
@@ -25,7 +31,6 @@ import RecipeEdit from "../../views/EditRecipe";
  * Documentation about routing in React: https://reactrouter.com/en/main/start/tutorial
  */
 
-//RECIPE LINK NEEDS TO BE CHANGED /users/{userID}/cookbooks/{recipeID}*/ 
 const AppRouter = () => {
   return (
     <BrowserRouter>
@@ -35,9 +40,13 @@ const AppRouter = () => {
 
         <Route path="/recipes" element={<AddRecipe />} />
 
-        <Route path="/users/:authorID/cookbooks/:recipeID" element={<Recipe />} />
+        <Route path="/groups/:group_ID/cookbooks/:recipeID" element={<GroupRecipe />} />
 
-        <Route path="/users/:authorID/cookbooks/:recipeID/edit" element={<RecipeEdit />} />
+        <Route path="/users/:authorID/cookbooks/:recipeID" element={<UserRecipe />} />
+
+        <Route path="/users/:authorID/cookbooks/:recipeID/edit" element={<EditRecipeGuard/>}>
+          <Route path="/users/:authorID/cookbooks/:recipeID/edit" element={<RecipeEdit />} />
+        </Route>
 
         <Route path="/users" element={<Register />} />
 
@@ -46,15 +55,17 @@ const AppRouter = () => {
         {/*  <Route path="/users/login" element={<Login/>} />*/}
         {/*</Route>*/}
 
-        <Route path="/users/profile" element={<UserProfile />} />
-        <Route path="/users/profile/edit" element={<EditProfile />} />
+        <Route path="/users/:userID" element={<UserProfile />} />
+        <Route path="/users/:userID/edit" element={<EditProfile />} />
         <Route path="/users/cookbooks" element={<PersonalCookbook />} />
-        <Route path="/shoppinglists" element={<Shoppinglist />} />
-        <Route path="/invitations" element={<Invitations/>} />
+        <Route path="/calendars" element={<Calendar />} />
+        <Route path="/users/:userID/shoppinglists" element={<Shoppinglist />} />
+        <Route path="/users/:userID/invitations" element={<Invitations />} />
 
         <Route path="/groups" element={<AddGroup />} />
-        {/*<Route path="/groups/:groupID/cookbooks" element={<GroupCookbook />} />*/}
-        <Route path="/groups/cookbooks" element={<GroupCookbook />} />
+        <Route path="/groups/:groupID/cookbooks" element={<GroupCookbook />} />
+        <Route path="/groups/:groupID/shoppinglists" element={<GroupShoppinglist />} />
+        <Route path="/groups/:groupID/calendars" element={<GroupCalendar/>} />
 
         <Route path="/" element={
           <Navigate to="/users/login" replace />

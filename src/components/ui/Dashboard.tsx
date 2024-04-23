@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/ui/Dashboard.scss";
+import { api, handleError } from "helpers/api";
 import { Button } from "components/ui/Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 // @ts-ignore
 import login from "../../assets/login.png";
@@ -10,7 +11,17 @@ import InviteUserModal from "components/views/InviteUserModal";
 
 const Dashboard = ({ showButtons, activePage }) => {
   const navigate = useNavigate();
+  const { groupID } = useParams();
+
+  const userID = parseInt(localStorage.getItem("userID"));
   const [isInviteUserModalOpen, setIsInviteUserModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (!userID) {
+      alert("You are not logged in!");
+      navigate("/users/login");
+    }
+  }, [userID, navigate]);
 
   const doRecipe = async () => {
     navigate("/recipes");
@@ -22,27 +33,28 @@ const Dashboard = ({ showButtons, activePage }) => {
     navigate("/calendars");
   };
   const doGroupCalendar = async () => {
-    /*TODO: to navigate to a group's calendar
-     navigate("/groups/:id/calendars");*/
-    navigate("/groups/calendars");
+    navigate(`/groups/${groupID}/calendars`);
   };
   const doShopping = async () => {
-    navigate("/shoppinglists");
+    navigate(`/users/${userID}/shoppinglists`);
   };
   const doGroupShopping = async () => {
-    /*TODO: to navigate to a group's shopping list
-     navigate("/groups/:id/shoppinglists")*/
-    navigate("/groups/shoppinglists");
+    navigate(`/groups/${groupID}/shoppinglists`);
   };
   const doInvitations = async () => {
-    navigate("/invitations");
+    navigate(`/users/${userID}/invitations`);
   };
   const doLeaveGroup = async () => {
-    /*TODO: to leave a group DELETE
-    * navigate("/groups/:groupID/:id")*/
+    try {
+      const requestBody = JSON.stringify(userID);
+      const response = await api.delete(`/groups/${groupID}/${userID}`, requestBody);
+    } catch (error) {
+      alert("An error occurred while leaving the group");
+    }
     navigate("/home");
   };
   const doLogout = async () => {
+    localStorage.clear();
     navigate("/users/login");
   };
 
@@ -115,12 +127,12 @@ const Dashboard = ({ showButtons, activePage }) => {
         <div className="dashboard button-container">
           <Button
             className={`db${activePage === "inviteUser" ? " highlight" : ""}`}
-            onClick={()=>setIsInviteUserModalOpen(true)}>
+            onClick={() => setIsInviteUserModalOpen(true)}>
             Invite a user
           </Button>
           <InviteUserModal
             open={isInviteUserModalOpen}
-            onClose={()=>setIsInviteUserModalOpen(false)}>
+            onClose={() => setIsInviteUserModalOpen(false)}>
           </InviteUserModal>
         </div>
       )}

@@ -1,135 +1,170 @@
 @import "../theme";
 
-.cookbook{
-  &.headerContainer{
+.cookbook {
+  &.headerContainer {
     justify-content: space-between;
     display: flex;
     align-items: center;
   }
-  &.titleContainer{
-     text-align: center;
+
+  &.titleContainer {
+    text-align: center;
   }
-  &.backButtonContainer{
+
+  &.backButtonContainer {
     margin-left: 60px;
     margin-right: 60px;
   }
-  &.title{
+
+  &.title {
     color: $textColor;
     font-size: 40px;
   }
-  &.filterContainer{
-    margin-left:280px;
+
+  &.filterContainer {
+    margin-left: 280px;
     margin-right: 150px;
-    width:35%;
-    height:35px;
+    width: 40%;
+    height: 35px;
     background-color: $light_green;
     border-radius: 0.5em;
-    position: fixed;
     display: flex;
   }
-  &.filterButton{
-    width:90px;
+
+  &.filterButton {
+    width: 90px;
     height: 30px;
-    background-color:$dark_green;
-    color:$textColor;
+    background-color: $dark_green;
+    color: $textColor;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  &.filterButtonContainer{
+
+  &.filterButtonContainer {
+    width: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
     padding-left: 10px;
+    margin-right: 10px;
   }
-  &.field{
+
+  &.field {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width:500px;
-    margin-left:calc(100% - 500px);
+    width: 100%;
   }
-  &.input{
-    height: 30px;
+
+  &.input {
+    height: 85%;
     border: none;
     border-radius: 0.5em;
-    background: transparentize(white, 0.01);
+    background: $textColor;
     color: $container_dark;
     background-color: $textColor;
     text-align: left;
     align-items: center;
     justify-content: center;
-    width:100%;
+    width: 100%;
     display: flex;
   }
-  &.recipeButton{
+
+  &.recipeButton {
     background-color: $light_green;
     padding: 10px;
     cursor: pointer;
-    width:400px;
-    height:200px;
+    width: 400px;
+    height: 200px;
     display: flex;
     align-items: center;
     border: none;
     border-radius: 0.75em;
   }
-  &.recipeContainer{
+
+  .selected {
+    border: 5px solid black;
+    background-color: $light_pink;
+  }
+
+  &.recipeContainer {
     display: flex;
     //align-items: center;
-    width:40%;
-    margin:5px;
-    margin-left:100px;
-    padding:10px;
+    width: 40%;
+    margin: 5px;
+    margin-left: 100px;
+    padding: 10px;
     gap: 20px;
     justify-content: space-between;
     align-items: flex-end;
     position: relative;
   }
-  &.recipeListContainer{
+
+  &.recipeListContainer {
     display: flex;
-    flex-wrap: wrap;//to wrap to the next line if there isn't enough space horizontally
+    flex-wrap: wrap; //to wrap to the next line if there isn't enough space horizontally
     overflow-y: scroll;
-    max-height: 400px;
-    margin-top:40px;
+    height: 320px;
+    margin-top: 40px;
   }
+
   &.recipeContent {
     flex-grow: 1;
     text-align: left;
     position: relative;
   }
-  &.recipeTitle{
+
+  &.recipeTitle {
     font-weight: bold;
-    color:$container_dark;
+    color: $container_dark;
     font-size: 20px;
   }
+
   &.recipeImgContainer {
     flex-shrink: 0;
-    margin:15px;
+    margin: 15px;
     align-items: center;
   }
-  &.recipeImg{
-    width:150px;
-    height:150px;
-    margin-right:10px;
+
+  &.recipeImg {
+    width: 150px;
+    height: 150px;
+    margin-right: 10px;
   }
+
   &.recipeUserImgContainer {
     position: absolute;
     bottom: 10px;
     right: 65px;
   }
-  &.recipeUserImg{
-    width:50px;
-    height:50px;
-    margin-right:10px;
+
+  &.recipeUserImg {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
   }
-  &.recipeDescription{
+
+  &.recipeDescription {
     color: $container-dark;
   }
-  &.recipeTotalTime{
+
+  &.recipeTotalTime {
     color: $container-dark;
   }
-  &.recipeTags{
+
+  &.recipeTags {
     color: $container-dark;
+  }
+
+  &.noRecipeText {
+    font-weight: bold;
+    color: $light_pink;
+    font-size: 30px;
+    font-style: italic;
+    text-align: center;
+    padding-top: 100px;
+    padding-bottom: 60px;
   }
 }

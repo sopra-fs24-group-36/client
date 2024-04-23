@@ -30,12 +30,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Replace environment variables in app.yaml
+        uses: 73h/gae-app-yaml-replace-env-variables@v0.3
+        env: 
+          RECIPES_API_KEY: ${{secrets.API_KEY}}
+          RECIPES_API_ID: ${{secrets.API_ID}}
+        with: 
+          app_yaml_path: "app.yaml"
+
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "20.x"
       - run: npm install
       - run: npm run build
+        env: 
+          REACT_FOOTER_API_KEY: ${{secrets.API_KEY}}
+          REACT_FOOTER_API_ID: ${{secrets.API_ID}}
 
       - name: Deploy to App Engine
         id: deploy

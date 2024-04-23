@@ -28,6 +28,15 @@
   transition: all 0.3s ease;
 }
 
+.hightlightButton {
+  background-color: $dark_pink;
+  color: $container_dark;
+  padding: 15px 60px;
+  height: 40px;
+  align-items: center;
+  display: flex;
+  font-size: 20px;
+}
 .backButton {
   background-color: $light_green;
   color: $container_dark;
@@ -81,6 +90,17 @@
   display: flex;
   align-items: center;
   padding: 15px 30px;
+  margin-right: 10px; 
+}
+
+.footer-footerButton {
+  background-color: $container_dark;
+  display: flex;
+  align-items: center;
+  padding: 15px 30px;
+  width: 100%;
+  text-align: center;
+  justify-content: center;
 }
 
 .header_new {

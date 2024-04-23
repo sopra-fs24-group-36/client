@@ -73,7 +73,6 @@ const editRecipe = () => {
   const navigate = useNavigate();
   const {authorID, recipeID} = useParams(); //User ID of recipe's author and recipeID 
   const [currentRecipe, setCurrentRecipe] = useState(null); //getting the recipe we are currently viewing 
-  const [updatedRecipe, setUpdatedRecipe] = useState(null);
 
   const currentUserID = localStorage.getItem("userID"); 
   let [title, set_recipe_title] = useState<string>("");
@@ -85,7 +84,10 @@ const editRecipe = () => {
   let [amounts, set_recipe_amount] = useState<string[]>([]);
   let [instructions, set_recipe_steps] = useState<string[]>([]);
   let [tags, set_recipe_tags] = useState<string[]>([]);
-  let [cookbooks, set_cookbooks] = useState<string[]>([]);
+
+  const [groupList, setGroupList] = useState<object[]>([]);
+  const [groupState, setGroupState] = useState(false); 
+  let [groups, set_groups] = useState<Int16Array[]>([]);
 
   const doLink = () =>{
     if(currentRecipe.link=== null){
@@ -166,14 +168,20 @@ const editRecipe = () => {
     }
   }
 
-  const addGroupTag = (tag) =>{ /*to add a group tag to a recipe*/
-    const isSelected = cookbooks.includes(tag);
+  const addGroupTag = (id) =>{ /*to add a group tag to a recipe*/
+    const isSelected = currentRecipe.groups.includes(id); /*to see if something has already been selected, we check if there is a tag in the recipe_tags list*/
     if (isSelected) {
-      set_cookbooks(prevTags => prevTags.filter((selectedTag) => selectedTag !== tag));
+      setCurrentRecipe(prevRecipe => ({//if tag is already in list 
+        ...prevRecipe, 
+        groups: prevRecipe.groups.filter((selectedID => selectedID !== id) //create a new array containing all tags other than the one we want to remove 
+        )})); /*if there is a tag, check the current one clicked is not the same */
     } else {
-      set_cookbooks([...tags, tag]);
+      setCurrentRecipe(prevRecipe => ({
+        ...prevRecipe, 
+        groups: [...prevRecipe.groups, id] //create a new array with the old tags plus the new tag appended to the end 
+      }));
     }
-  }
+  }; 
   
   //retrieving the current recipe information 
   useEffect(() => { //retrieve the recipe based on the ID from the URL 
@@ -195,6 +203,46 @@ const editRecipe = () => {
     fetchData(); 
   }, []);
 
+  //get all the groups the currently logged in user is a part of
+  useEffect(()=>{
+    async function fetchData(){
+      try{
+        const response = await api.get(`/users/${currentUserID}/groups`);
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        setGroupState(true);
+        setGroupList(response.data);
+      }catch(error){
+        console.error(`Something went wrong while fetching the groups: \n${handleError(error)}`);
+        console.error("Details:", error);
+        alert("Something went wrong while fetching the groups! See the console for details.");
+      };
+    };
+    fetchData();
+  }, []);
+
+  const doNoGroup = () => {
+    
+    return <p className = "Home noGroupText">not part of any groups yet</p>;
+  }
+
+  //show group as selected if the currently viewing recipe is already a part of the group 
+  const showGroups = () =>{
+    const validGroups = groupList.filter(group => group);
+    if(validGroups.length>0){
+      return validGroups.map((group, index) => (
+        <Button 
+          key = {index}
+          className={`recipes tag ${currentRecipe.groups.includes(group.groupID) ? "selected" : ""}`}
+          onClick={() =>addGroupTag(group.groupID)}>
+          {group.groupName}
+        </Button>
+      ));
+    }
+    else{
+      return doNoGroup(); 
+    }
+  };
+
   //submitting the information 
   const handleSubmit = async() => {
     title = currentRecipe.title; 
@@ -205,11 +253,11 @@ const editRecipe = () => {
     ingredients = currentRecipe.ingredients; 
     instructions = currentRecipe.instructions; 
     tags = currentRecipe.tags; 
-    cookbooks = currentRecipe.cookbooks; 
+    groups = currentRecipe.groups; 
 
     try{
       if(link){ /*if we have a link, we save the following information*/
-        const requestBody1=JSON.stringify({title, shortDescription, cookingTime, image, link, tags, cookbooks});
+        const requestBody1=JSON.stringify({title, shortDescription, cookingTime, image, link, tags, groups});
         const response1 = await api.put(`/users/${currentUserID}/cookbooks/${recipeID}`, requestBody1);
         const recipe = new Recipe(response1.data); 
         localStorage.setItem("recipeID", recipe.id); //not 100% sure if we need this, need to check with getting a recipe
@@ -217,7 +265,7 @@ const editRecipe = () => {
       }
       else{
         const requestBody2=JSON.stringify({/*if we have no link, we have steps and ingredients and save the following information*/
-          title, shortDescription, cookingTime, image, amounts, ingredients, instructions, tags, cookbooks});
+          title, shortDescription, cookingTime, image, amounts, ingredients, instructions, tags, groups});
         const response2 = await api.put(`/users/${currentUserID}/cookbooks/${recipeID}`, requestBody2);
         const recipe = new Recipe(response2.data); 
         localStorage.setItem("recipeID", recipe.id); //not 100% sure if we need this, need to check with getting a recipe
@@ -237,7 +285,7 @@ const editRecipe = () => {
       set_recipe_amount([]);
       set_recipe_steps([]);
       set_recipe_tags([]);
-      set_cookbooks([]);    
+      set_groups([]);    
     }
   }
   let content; 
@@ -415,26 +463,7 @@ const editRecipe = () => {
               </div>
               <div className = "recipes tags groups">
                 <p className ="recipes p tags">Edit Groups:</p>
-                <Button 
-                  className={`recipes tag ${currentRecipe.cookbooks.includes("Carrot Crew") ? "selected" : ""}`}
-                  onClick={() =>addGroupTag("Carrot Crew")}>
-                  Carrot Crew
-                </Button>
-                <Button 
-                  className={`recipes tag ${currentRecipe.cookbooks.includes("Spice Girls") ? "selected" : ""}`}
-                  onClick={() =>addGroupTag("Spice Girls")}>
-                  Spice Girls
-                </Button>
-                <Button 
-                  className={`recipes tag ${currentRecipe.cookbooks.includes("Lords of Wings") ? "selected" : ""}`}
-                  onClick={() =>addGroupTag("Lords of Wings")}>
-                  Lords of Wings
-                </Button>
-                <Button 
-                  className={`recipes tag ${currentRecipe.cookbooks.includes("Pasta La Vista") ? "selected" : ""}`}
-                  onClick={() =>addGroupTag("Pasta La Vista")}>
-                  Pasta La Vista
-                </Button>
+                {showGroups()}
               </div>
             </div>
           </div>

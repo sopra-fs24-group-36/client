@@ -10,18 +10,12 @@ import Footer from "components/ui/footer";
 import BaseContainer from "components/ui/BaseContainer_new";
 import Header_new from "components/views/Header_new";
 
-//TODO: definethe Invitation
-interface Invitation{
-}
-
-
-const invitationField=(props)=>{}
 
 const Invitations = () => {
   const navigate = useNavigate();
   const {userID} = useParams();
   const [refreshInvitation,setRefreshInvitation]=useState(false);
-  const [invitations,setInvitations]=useState<Invitation[]>(null);
+  const [invitations,setInvitations]=useState<[]>(null);
   //TODO:
   useEffect(()=>{
     async function fetchInvitations(){

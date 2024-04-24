@@ -37,7 +37,7 @@ const ItemField = (props) => {
   const { groupID } = useParams();
   const [isChecked, set_isChecked] = useState(false);
 
-  const removeItem = async (index) => {
+  const removeItem = async () => {
     set_isChecked(!isChecked);
     try {
       const requestBody = JSON.stringify({
@@ -89,6 +89,8 @@ const GroupShoppinglist = () => {
       }
     }
     fetchData();
+    const intervalId = setInterval(fetchData, 1000); // Polling every 1 seconds
+    return () => clearInterval(intervalId);
   }, [groupID]);
 
   const addItem = async () => {
@@ -144,9 +146,9 @@ const GroupShoppinglist = () => {
         <div className="shoppinglist container">
           <p className="shoppinglist p">Select Items:</p>
           <div className="shoppinglist itemsContainer">
-            {items.map((new_item, index) => (
+            {items.map((new_item) => (
               <ItemField
-                key={index}
+                key={new_item}
                 value={new_item}
               />
             ))}

@@ -45,8 +45,8 @@ jobs:
       - run: npm install
       - run: npm run build
         env: 
-          API_ID: ${{ secrets.API_ID }}
-          API_KEY: ${{ secrets.API_KEY }}
+          REACT_APP_API_ID: ${{ secrets.API_ID }}
+          REACT_APP_API_KEY: ${{ secrets.API_KEY }}
 
       - name: Deploy to App Engine
         id: deploy

@@ -39,9 +39,7 @@ const Footer = () => {
   const [searchQuery, set_search_query] = useState<string>("");
   const [searchResults, setSearchResults] = useState<object[]>([]);
   const appID = process.env.REACT_APP_API_ID;
-  console.log(appID); 
   const appKEY = process.env.REACT_APP_API_KEY;
-  console.log(appKEY);
 
   const addRecipe = async(title, cookingTime, link) =>{
     try{
@@ -61,8 +59,6 @@ const Footer = () => {
 
   const handleSearch = async () => {
     try {
-      console.log(appID)
-      console.log(appKEY)
       const response = await fetch(`https://api.edamam.com/search?q=${searchQuery}&app_id=${appID}&app_key=${appKEY}`);
       const data = await response.json(); 
       setSearchResults(data.hits); 

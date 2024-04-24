@@ -1,9 +1,9 @@
 # https://cloud.google.com/appengine/docs/flexible/reference/app-yaml?tab=node.js#top
 runtime: nodejs20
+
 env_variables: 
-  APP_ENV: production
-  API_KEY: $API_KEY
-  API_ID: $API_ID
+  API_ID: ${{ secrets.API_ID }}
+  API_KEY: ${{ secrets.API_KEY }}
 
 handlers:
   - url: /static/js/(.*)

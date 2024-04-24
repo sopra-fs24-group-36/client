@@ -2,22 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useParams, Navigate, Outlet } from "react-router-dom";
 import PropTypes from "prop-types";
 import { api, handleError } from "helpers/api";
+import { Spinner } from "components/ui/Spinner";
 
-export const GroupRecipeGuard = () => {
-  const { group_ID, recipeID } = useParams();
-  const userID = localStorage.getItem("userID"); 
-  let [checker, setChecker] = useState(false);
-  
+export const GroupRecipeGuard = ({ children }) => {
+  const { group_ID } = useParams();
+  const userID = localStorage.getItem("userID");
+  const [isUserInGroup, setIsUserInGroup] = useState(null);
+
   useEffect(() => {
     async function fetchData() {
       try {
         const response = await api.get(`/users/${userID}/groups`);
-        const isUserInGroup = response.data.some(group => parseInt(group.groupID) === parseInt(group_ID));
-        console.log(isUserInGroup); 
-        if(isUserInGroup === true){
-          setChecker(true); 
-        }
-        console.log(checker)
+        const userGroups = response.data.map(group => parseInt(group.groupID));
+        setIsUserInGroup(userGroups.includes(parseInt(group_ID)));
       } catch (error) {
         console.error(`Something went wrong while fetching the groups: \n${handleError(error)}`);
         console.error("Details:", error);
@@ -27,12 +24,18 @@ export const GroupRecipeGuard = () => {
     fetchData();
   }, [userID, group_ID]);
 
-  if (checker) {
-    return <Outlet />;
+  if (isUserInGroup === null) {
+    // Loading state, you may want to render a spinner or a loading indicator here
+    return <Spinner/>;
   }
 
-  // If the user is not part of the group, navigate to the home page
-  return <Navigate to="/home" replace />;
+  if (!isUserInGroup) {
+    // User is not in the group, navigate to home
+    return <Navigate to="/home" replace />;
+  }
+
+  // User is in the group, render the child components
+  return <Outlet />;
 };
 
 GroupRecipeGuard.propTypes = {

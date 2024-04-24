@@ -39,7 +39,9 @@ const Footer = () => {
   const [searchQuery, set_search_query] = useState<string>("");
   const [searchResults, setSearchResults] = useState<object[]>([]);
   const appID = process.env.API_ID;
+  console.log(appID); 
   const appKEY = process.env.API_KEY;
+  console.log(appKEY);
 
   const addRecipe = async(title, cookingTime, link) =>{
     try{

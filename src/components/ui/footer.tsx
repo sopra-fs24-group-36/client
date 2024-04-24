@@ -61,6 +61,8 @@ const Footer = () => {
 
   const handleSearch = async () => {
     try {
+      console.log(appID)
+      console.log(appKEY)
       const response = await fetch(`https://api.edamam.com/search?q=${searchQuery}&app_id=${appID}&app_key=${appKEY}`);
       const data = await response.json(); 
       setSearchResults(data.hits); 

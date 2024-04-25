@@ -22,7 +22,7 @@ import { isFormElement } from "react-router-dom/dist/dom";
 
 const Home = () => {
   const navigate = useNavigate();
-  const userID = localStorage.getItem("userID"); /*getting the ID of the currently logged in user*/
+  const userID = localStorage.getItem("userID");
   const [recipeList, setRecipeList] = useState<object[]>([]);
   const [groupList, setGroupList] = useState<object[]>([]);
   const [firstRecipe, setFirstRecipe] = useState(null);

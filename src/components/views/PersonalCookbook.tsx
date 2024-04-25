@@ -105,6 +105,7 @@ const PersonalCookbook = () => {
     const filteredRecipes = originalRecipeList.filter(recipe => {
       const lowerCaseTitle = recipe.title.toLowerCase();
       const lowerCaseTags = recipe.tags.map(tag => tag.toLowerCase());
+      
       return lowerCaseTitle.includes(lowerCaseFilterKeyword) || lowerCaseTags.some(tag => tag.includes(lowerCaseFilterKeyword));
     });
     setRecipeList(filteredRecipes);
@@ -122,6 +123,7 @@ const PersonalCookbook = () => {
   const deleteRecipe = async () => {
     if (selectedRecipeList.length === 0) {
       alert("Please select at least one recipe to delete!");
+      
       return;
     }
     for (const recipeid of selectedRecipeList) {
@@ -154,7 +156,7 @@ const PersonalCookbook = () => {
     return (
       <div className="personalCookbook recipeContainer">
         <button className={`personalCookbook recipeButton ${isSelected ? "selected" : ""}`}
-                onClick={onClick}
+          onClick={onClick}
         >
           <div className="personalCookbook recipeImgContainer">
             <img className="personalCookbook recipeImg" src={imageUrl} alt="Recipe Image" />
@@ -205,7 +207,7 @@ const PersonalCookbook = () => {
         {/*head field*/}
         <div className="personalCookbook headerContainer">
           <div className="personalCookbook backButtonContainer">
-            <Button className="backButton" onClick={() => navigate(`/home`)}>
+            <Button className="backButton" onClick={() => navigate("/home")}>
               Back
             </Button>
           </div>

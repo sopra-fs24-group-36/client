@@ -194,7 +194,7 @@ const Home = () => {
             {doRecipes()}
           </div>
           <div className="Home recipesButtonContainer">
-            <Button className="Home personalRecipes" onClick={() => navigate("/users/${userID}/cookbooks")}>
+            <Button className="Home personalRecipes" onClick={() => navigate(`/users/${userID}/cookbooks/`)}>
               View all Personal Recipes
             </Button>
           </div>

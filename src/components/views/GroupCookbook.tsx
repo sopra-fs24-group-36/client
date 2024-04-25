@@ -120,6 +120,7 @@ const GroupCookbook = () => {
     const filteredRecipes = originalRecipeList.filter(recipe => {
       const lowerCaseTitle = recipe.title.toLowerCase();
       const lowerCaseTags = recipe.tags.map(tag => tag.toLowerCase());
+
       return lowerCaseTitle.includes(lowerCaseFilterKeyword) || lowerCaseTags.some(tag => tag.includes(lowerCaseFilterKeyword));
     });
     setRecipeList(filteredRecipes);
@@ -137,6 +138,7 @@ const GroupCookbook = () => {
   const removeRecipe = async () => {
     if (selectedRecipeList.length === 0) {
       alert("Please select at least one recipe to delete!");
+      
       return;
     }
     for (const recipeid of selectedRecipeList) {
@@ -185,6 +187,7 @@ const GroupCookbook = () => {
 
     }
     fetchUserImg(autherID);
+    
     return (
       <div className="cookbook recipeContainer">
         <button className={`cookbook recipeButton ${isSelected ? "selected" : ""}`}

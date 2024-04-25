@@ -133,7 +133,7 @@ const EditProfile = () => {
               <div>
                 <div className="userprofile imageContainer">
                   <div className="userprofile circle-img"
-                       style={{ position: "relative" }}>{/*set the father component relative and then it can be regarded as reference point*/}
+                    style={{ position: "relative" }}>{/*set the father component relative and then it can be regarded as reference point*/}
                     <img src={profilepicture} alt="Default Profile" />
                     <Button
                       className="userprofile button-with-picture"

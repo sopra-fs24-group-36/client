@@ -38,8 +38,8 @@ const Footer = () => {
 
   const [searchQuery, set_search_query] = useState<string>("");
   const [searchResults, setSearchResults] = useState<object[]>([]);
-  const appID = "";
-  const appKEY = "";
+  const appID = process.env.API_ID;
+  const appKEY = process.env.API_KEY;
 
   const addRecipe = async(title, cookingTime, link) =>{
     try{
@@ -84,32 +84,32 @@ const Footer = () => {
     if (validRecipes.length > 0){
       return validRecipes.map((recipe, index) => (
         <div key = {index} className = "footer recipe">
-        <div className = "footer recipeContent">
-          <div className ="footer recipeTitleContainer">
-            <p className = "footer recipeTitle">
-              {recipe.recipe.label}
-            </p>
-          </div>
-          <div className = "footer recipeImageContainer">
-            <img src={recipe.recipe.image} alt="recipeImage" className = "footer recipeImage"/>
-          </div>
-          <div className = "footer recipeDescriptionContainer">
-            <p><strong>Source:</strong> {recipe.recipe.source}</p>
-          </div>
-          <div className = "footer recipeButton">
-            <Button className = "footer-footerButton"
-              onClick = {() => doLink(recipe.recipe.url)}>
-                View recipe
-            </Button>
-          </div>
-          <div className = "footer recipeButton">
-            <Button className = "footer-footerButton"
-              onClick = {() => addRecipe(recipe.recipe.label, String(recipe.recipe.totalTime), recipe.recipe.url)}>
-              Add recipe
-            </Button>
+          <div className = "footer recipeContent">
+            <div className ="footer recipeTitleContainer">
+              <p className = "footer recipeTitle">
+                {recipe.recipe.label}
+              </p>
+            </div>
+            <div className = "footer recipeImageContainer">
+              <img src={recipe.recipe.image} alt="recipeImage" className = "footer recipeImage"/>
+            </div>
+            <div className = "footer recipeDescriptionContainer">
+              <p><strong>Source:</strong> {recipe.recipe.source}</p>
+            </div>
+            <div className = "footer recipeButton">
+              <Button className = "footer-footerButton"
+                onClick = {() => doLink(recipe.recipe.url)}>
+                  View recipe
+              </Button>
+            </div>
+            <div className = "footer recipeButton">
+              <Button className = "footer-footerButton"
+                onClick = {() => addRecipe(recipe.recipe.label, String(recipe.recipe.totalTime), recipe.recipe.url)}>
+                Add recipe
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
       ))
     }
     else{
@@ -120,14 +120,14 @@ const Footer = () => {
   return (
     <div className = "footer content">
       <div className = "footer searchbar">
-      <FormField
-        label="Search for a recipe"
-        value = {searchQuery}
-        onChange = {(sq:string) => set_search_query(sq)}>
-      </FormField>
+        <FormField
+          label="Search for a recipe"
+          value = {searchQuery}
+          onChange = {(sq:string) => set_search_query(sq)}>
+        </FormField>
         <div className = "footer-searchButton">
           <Button className = "footer-button"
-          onClick={handleSearch}>
+            onClick={handleSearch}>
             Search
           </Button>
         </div>

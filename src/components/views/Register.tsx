@@ -8,10 +8,12 @@ import "styles/views/Login.scss";
 import PropTypes from "prop-types";
 // @ts-ignore
 import rightBrok from "../../assets/rightBrok.png";
+// @ts-ignore
+import defaultUser from "../../assets/defaultUser.png";
 
 const Icon = ({ flip }) => {
   const iconClass = flip ? "icon flip-horizontal" : "icon";
-  
+
   return <img src={rightBrok} alt="Icon" className={iconClass} />;
 };
 Icon.propTypes = {
@@ -47,7 +49,13 @@ const Register = () => {
 
   const doRegister = async () => {
     try {
-      const requestBody = JSON.stringify({ username, email, password, name });
+      const requestBody = JSON.stringify({
+        username: username,
+        email: email,
+        password: password,
+        name: name,
+        profilePicture: defaultUser,
+      });
       const response = await api.post("/users", requestBody);
 
       if (!response.data) {
@@ -77,7 +85,7 @@ const Register = () => {
           <div className="login title">
             <Icon flip />
             Register
-            <Icon flip={false}/>
+            <Icon flip={false} />
           </div>
           <FormField
             label="Username:"

@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { api, handleError } from "helpers/api";
-import User from "models/User";
+import { api } from "helpers/api";
 import { useNavigate, useParams } from "react-router-dom";
-import ReactDOM from "react-dom";
 import { Button } from "components/ui/Button";
 import "styles/views/UserProfile.scss";
 import "styles/views/EditPictureModal.scss";
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
-//import Modal from "react-boostrap/Modal";
 
 // @ts-ignore
 import rightBrok from "../../assets/rightBrok.png";
 // @ts-ignore
-import defaultUser from "../../assets/defaultUser.png";
-// @ts-ignore
 import select_image from "../../assets/select_image.png";
-import UserProfile from "./UserProfile";
 // @ts-ignore
 import leftBrok from "../../assets/leftBrok.png";
 
@@ -60,42 +54,6 @@ ProfileFormField.propTypes = {
   value: PropTypes.string.isRequired,
 };
 
-const EditPictureModal = ({ open, onClose, profilepicture, setProfilepicture }) => {
-
-  if (!open) return null;
-  const handleSave = async () => {
-    setProfilepicture(profilepicture);
-    onClose();
-  };
-
-  return (
-    <>
-      <div className="editPicture backdrop"></div>
-      <div className="editPicture container">
-        <div className="editPicture title">Change Profile Picture</div>
-        <ProfileFormField
-          value={profilepicture}
-        />
-        <div className="editPicture button-container">
-          <Button className="editPicture button" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button className="editPicture highlight" onClick={handleSave}>
-            Save
-          </Button>
-        </div>
-      </div>
-    </>
-  );
-};
-
-EditPictureModal.propTypes = {
-  open: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  profilepicture: PropTypes.string.isRequired,
-  setProfilepicture: PropTypes.func.isRequired,
-};
-
 const EditProfile = () => {
   const navigate = useNavigate();
   const { userID } = useParams();
@@ -104,10 +62,9 @@ const EditProfile = () => {
   const [username, setUsername] = useState(null);
   const [name, setName] = useState(null);
   const [profilepicture, setProfilepicture] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const loggedInUser = parseInt(localStorage.getItem("userID")); /*getting the ID of the currently logged in user*/
 
-  if (parseInt(userID) !== loggedInUser){
+  if (parseInt(userID) !== loggedInUser) {
     // alert("Unauthorized Access!!");
     navigate(`/users/${userID}`);
   }
@@ -117,6 +74,7 @@ const EditProfile = () => {
       try {
         const response = await api.get(`/users/${userID}`);
         setUser(response.data);
+        setProfilepicture(response.data.profilePicture);
       } catch (error) {
         console.error("Details:", error);
         alert("Something went wrong while fetching the users! See the console for details.");
@@ -135,12 +93,31 @@ const EditProfile = () => {
         "profilePicture": profilepicture,
       });
       const response = await api.put(`/users/${userID}`, requestBody);
-      navigate(`/users/${userID}`)
+      navigate(`/users/${userID}`);
     } catch (error) {
       console.error("An error occurred while saving changes:", error);
       alert("An error occurred while saving changes. Please try again later.");
     }
   };
+
+  const addImage = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const dataURL = event.target.result;
+          setProfilepicture(dataURL);
+        };
+        reader.readAsDataURL(file as Blob);
+      }
+    };
+    input.click();
+  };
+
 
   return (
     <BaseContainer>
@@ -157,11 +134,7 @@ const EditProfile = () => {
                 <div className="userprofile imageContainer">
                   <div className="userprofile circle-img"
                        style={{ position: "relative" }}>{/*set the father component relative and then it can be regarded as reference point*/}
-                    {user.profilePicture ? (
-                      <img src={user.profilePicture} alt="Profile" />
-                    ) : (
-                      <img src={defaultUser} alt="Default Profile" />
-                    )}
+                    <img src={profilepicture} alt="Default Profile" />
                     <Button
                       className="userprofile button-with-picture"
                       style={{
@@ -170,17 +143,11 @@ const EditProfile = () => {
                         bottom: "0px",
                         backgroundImage: `url(${select_image})`,
                       }}
-                      onClick={() => setIsModalOpen(true)}>
+                      onClick={() => addImage()}>
                     </Button>
                   </div>
                 </div>
 
-                <EditPictureModal
-                  open={isModalOpen}
-                  onClose={() => setIsModalOpen(false)}
-                  profilepicture={profilepicture}
-                  setProfilepicture={setProfilepicture}
-                />
               </div>
               <div className="userprofile user-data-item">
                 <span className="userprofile item-label">ID:</span>

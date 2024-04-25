@@ -17,23 +17,24 @@ const Invitations = () => {
   const [refreshInvitation,setRefreshInvitation]=useState(false);
   const [invitations,setInvitations]=useState<[]>(null);
   //TODO:
-  useEffect(()=>{
-    async function fetchInvitations(){
-      try{
-        const response=await api.get(`/users/${userID}/invitations`)
+  useEffect(() => {
+    async function fetchInvitations() {
+      try {
+        const response = await api.get(`/users/${userID}/invitations`);
         setInvitations(response.data);
-      }catch (error) {
+      } catch (error) {
         console.error(
           `Something went wrong while fetching the users: \n${handleError(
-            error
-          )}`
+            error,
+          )}`,
         );
         console.error("Details:", error);
         alert(
-          "Something went wrong while fetching the users! See the console for details."
+          "Something went wrong while fetching the users! See the console for details.",
         );
       }
     }
+
     fetchInvitations();
   }, [refreshInvitation]);
   const handleAccept= async (invitation)=>{
@@ -51,9 +52,9 @@ const Invitations = () => {
     }catch (error){
       alert("Declining failed.");
     }
-  }
+  };
 
-  return(
+  return (
     <div>
       <Header_new></Header_new>
       <Dashboard
@@ -79,9 +80,9 @@ const Invitations = () => {
         <div className="invitations backContainer">
           {(invitations?.length ?? 0) === 0 ? (
             <p className="invitations noInvitation">No invitations yet....</p>
-          ):(
+          ) : (
             <div className="invitations invitationContainer">
-              {invitations.map(invitation=> (
+              {invitations.map(invitation => (
                 <div key={invitation.id} className="invitations invitationField">
                     <div className="invitations invitationImgContainer">
                       <img className="invitations invitationImg" src={invitation.groupImage} alt="Group Image" />
@@ -112,7 +113,7 @@ const Invitations = () => {
       </BaseContainer>
       <Footer></Footer>
     </div>
-  )
-}
+  );
+};
 
 export default Invitations;

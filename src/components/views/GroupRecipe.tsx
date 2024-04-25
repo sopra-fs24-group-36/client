@@ -9,7 +9,6 @@ import BaseContainer from "components/ui/BaseContainer_new";
 import Header_new from "components/views/Header_new";
 import {Spinner} from "components/ui/Spinner";
 // @ts-ignore
-import select_image from "../../assets/select_image.png";
 
 
 const GroupRecipe = () => {
@@ -131,7 +130,7 @@ const GroupRecipe = () => {
           <div className="recipe container">
             <div className="recipe left">
               <div className="recipe imageContainer">
-                <img src={select_image} alt="icon" className="recipes image"></img>
+                <img src={recipe.image} alt="icon" className="recipe image"></img>
               </div>
               <div className="recipe rating">
               </div>

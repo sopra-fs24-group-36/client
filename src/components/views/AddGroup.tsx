@@ -40,7 +40,7 @@ const MembersField = (props) => {
       <Button
         className="group plus"
         onClick={props.onRemove}
-        disabled = {props.value===props.currentUserEmail}
+        disabled={props.value === props.currentUserEmail}
       >
         Remove
       </Button>
@@ -62,6 +62,7 @@ const AddGroup = () => {
   const [new_member, set_new_member] = useState("");
   const [user_email, setEmail] = useState<string>(null);
   const [userID, setUserID] = useState<string>(null);
+  const [selectedImage, set_selectedImage] = useState(null);
 
   const addMember = () => {
     if (new_member.trim() !== "") { // Make sure the input is not empty
@@ -76,33 +77,49 @@ const AddGroup = () => {
     set_group_members(new_members);
   };
 
-  const addImage = () => { /*to add an image to a group*/
+  const addImage = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const dataURL = event.target.result;
+          set_selectedImage(dataURL);
+        };
+        reader.readAsDataURL(file as Blob);
+      }
+    };
+    input.click();
   };
 
+
   const getEmail = async () => {
-    try{
+    try {
       //get current user 
       setUserID(parseInt(localStorage.getItem("userID")));
       const response = await api.get(`/users/${userID}`);
       const email = response.data.email;
       console.log(email);
       setEmail(email);//getting the username so we can show in the header
-    }
-    catch (error) {
+    } catch (error) {
       console.error(`Error getting username: ${handleError(error)}`);
     }
-  }
+  };
 
-  useEffect(() =>{
+  useEffect(() => {
     getEmail();
-  }, [])
+    set_selectedImage(select_image);
+  }, []);
 
   const saveChanges = async () => {
     try {
       const requestBody = JSON.stringify({
         name: name,
         membersNames: membersNames,
-        image: select_image,
+        image: selectedImage,
         creator: userID,
       });
       const response = await api.post("/groups", requestBody);
@@ -111,7 +128,7 @@ const AddGroup = () => {
       console.error("An error occurred while creating groups:", error);
       alert("Creating a group failed because the details were incomplete.");
     }
-    navigate("/home")
+    navigate("/home");
   };
 
   return (
@@ -153,7 +170,7 @@ const AddGroup = () => {
               className="groups imageContainer"
               onClick={addImage}
             >
-              <img src={select_image} alt="icon" className="groups image"></img>
+              <img src={selectedImage} alt="icon" className="groups image"></img>
             </div>
           </div>
 

@@ -30,7 +30,7 @@ const FormField=(props)=>{
         placeholder="Search for your recipes..."
         value={props.value}
         onChange={(e)=>props.onChange(e.target.value)}
-        />
+      />
     </div>
   )
 }
@@ -47,17 +47,17 @@ const defaultRecipes=[
     id:1,
   },
   {
-    title:'Quick fried rice',
+    title:"Quick fried rice",
     image:defaultRecipe2,
     id:2,
   },
   {
-    title:'Spring onion soup',
+    title:"Spring onion soup",
     image:defaultRecipe3,
     id:3,
   },
   {
-    title:'Pork medallions',
+    title:"Pork medallions",
     image:defaultRecipe4,
     id:4,
   }
@@ -141,7 +141,7 @@ const Calendar = () =>{
   const getDatesOfWeek=(date)=>{
     const result=[];
     const start=new Date(date);
-/*    getDate() returns the date of start(which day of the month is
+    /*    getDate() returns the date of start(which day of the month is
     getDay() returns the day of the week of 'start', 0 means sunday, 1 means monday
     the following line sets 'start' to the first day of this week(sunday)*/
     start.setDate(start.getDate()-start.getDay());
@@ -150,22 +150,26 @@ const Calendar = () =>{
       current.setDate(current.getDate()+i);
       result.push(current);
     }
+
     return result;
   }
   const getDayOfWeek=(date)=>{
     const dayOfWeek = new Date(date).getDay();
-    return isNaN(dayOfWeek) ? null : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][dayOfWeek].slice(0, 2);
+
+    return isNaN(dayOfWeek) ? null : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][dayOfWeek].slice(0, 2);
   }
   const formatDate=(date)=>{
     //Display only the month and date of the date, without showing the year.
     const d=new Date(date);
-    return isNaN(d.getTime())? null:d.toLocaleDateString('de-CH',{month: '2-digit', day: '2-digit'});
+
+    return isNaN(d.getTime())? null:d.toLocaleDateString("de-CH",{month: "2-digit", day: "2-digit"});
   }
   const formatDateToYYYYMMDD=(date)=>{
     const d = new Date(date);
     const year = d.getFullYear();
-    const month = ('0' + (d.getMonth()+1)).slice(-2); // Months are 0 based. Add leading 0.
-    const day = ('0' + d.getDate()).slice(-2); // Add leading 0.
+    const month = ("0" + (d.getMonth()+1)).slice(-2); // Months are 0 based. Add leading 0.
+    const day = ("0" + d.getDate()).slice(-2); // Add leading 0.
+
     return `${year}-${month}-${day}`;
   }
 
@@ -231,33 +235,34 @@ const Calendar = () =>{
     console.error("Error removing event:", Error);
   };
   const getEventsOfTimeSlot=(calendar,date,timeSlot)=>{
+
     return calendar.filter(event => formatDateToYYYYMMDD(event.date) === formatDateToYYYYMMDD(date) && event.timeSlot === timeSlot);
   }
 
 
-    useEffect(()=>{
-      async function fetchData(){
-        try{
-          //TODO:add the fetchData func when connecting with backend
-          /*const responseRecipe=await api.get(`/users/${userId}/cookbooks`);
-          setAllRecipes(responseRecipe.data);
-          setSearchedRecipes(responseRecipe.data);
-          const responseCalendar=await api.get(`/users${userId}/calendars`);
-          setCalendar(responseCalendar.data)*/
-          setAllRecipes(defaultRecipes);
-          setSearchedRecipes(defaultRecipes);
-        }catch(error){
-          console.error("Details:", error);
-          alert(
-            "Something went wrong while fetching the data! See the console for details.");
-        }finally {
-          setShouldFetchCalendar(false);
-        }
+  useEffect(()=>{
+    async function fetchData(){
+      try{
+        //TODO:add the fetchData func when connecting with backend
+        /*const responseRecipe=await api.get(`/users/${userId}/cookbooks`);
+        setAllRecipes(responseRecipe.data);
+        setSearchedRecipes(responseRecipe.data);
+        const responseCalendar=await api.get(`/users${userId}/calendars`);
+        setCalendar(responseCalendar.data)*/
+        setAllRecipes(defaultRecipes);
+        setSearchedRecipes(defaultRecipes);
+      }catch(error){
+        console.error("Details:", error);
+        alert(
+          "Something went wrong while fetching the data! See the console for details.");
+      }finally {
+        setShouldFetchCalendar(false);
       }
-      if (shouldFetchCalendar) {
-        fetchData();
-      }
-    },[shouldFetchCalendar]);
+    }
+    if (shouldFetchCalendar) {
+      fetchData();
+    }
+  },[shouldFetchCalendar]);
 
   return(
     <div>
@@ -273,7 +278,7 @@ const Calendar = () =>{
         activePage="calendar"
       />
       <div className="calendar container" >
-{/*your recipes field*/}
+        {/*your recipes field*/}
         <BaseContainer className="calendar baseContainerLeft">
           <div className="calendar headContainer1">
             <h2 className="calendar title1">Your Recipes</h2>
@@ -296,7 +301,7 @@ const Calendar = () =>{
             </div>
           </div>
           <div className="calendar recipeListContainer">
-{/*TODO: display the recipes in database
+            {/*TODO: display the recipes in database
 recipes.map...*/}
             {searchedRecipes && searchedRecipes.length > 0 ?(searchedRecipes.map((recipe) => (
               <div
@@ -317,11 +322,11 @@ recipes.map...*/}
             )}
           </div>
         </BaseContainer>
-{/*calendar field*/}
+        {/*calendar field*/}
         <BaseContainer className="calendar baseContainerRight">
           <div className="calendar headContainer2">
             <div className="calendar backButtonContainer">
-              <Button className="backButton" onClick={() => navigate(`/home`)}>
+              <Button className="backButton" onClick={() => navigate("/home")}>
                 Back
               </Button>
             </div>
@@ -344,7 +349,7 @@ recipes.map...*/}
                   {`${getDayOfWeek(date)}.${formatDate(date)}`}
                 </div>
               ))}
-              {['Morning','Afternoon','Evening'].map((timeSlot,index)=>(
+              {["Morning","Afternoon","Evening"].map((timeSlot,index)=>(
                 getDatesOfWeek(currentWeek).map(date=>(
                   <div
                     key={date}
@@ -359,7 +364,7 @@ recipes.map...*/}
                         <Button
                           className="calendar removeButton1"
                           onClick={() => handleRemove(event.id)}>Remove</Button>
-{/*TODO:ADD THE FOLLOWING
+                        {/*TODO:ADD THE FOLLOWING
                           onClick={() => handleRemove(event.id,date,timeSlot)}>Remove</Button>*/}
                       </div>
                     ))}
@@ -374,4 +379,5 @@ recipes.map...*/}
     </div>
   )
 }
+
 export default Calendar;

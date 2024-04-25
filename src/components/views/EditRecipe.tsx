@@ -87,7 +87,9 @@ const editRecipe = () => {
 
   const [groupList, setGroupList] = useState<object[]>([]);
   const [groupState, setGroupState] = useState(false); 
-  let [groups, set_groups] = useState<Int16Array[]>([]);
+  let [groups, set_groups] = useState<Int16Array[]>([])
+
+  const [recipeImg, setRecipeImg] = useState(select_image);
 
   const doLink = () =>{
     if(currentRecipe.link=== null){
@@ -115,7 +117,22 @@ const editRecipe = () => {
   }
 
   const handleImageChange = (value) => {
-    setCurrentRecipe({...currentRecipe, image:value});
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const dataURL = event.target.result;
+          setCurrentRecipe({...currentRecipe, image:dataURL});
+          setRecipeImg(dataURL);
+        };
+        reader.readAsDataURL(file as Blob);
+      }
+    };
+    input.click();
   }
 
   const handleAmountChange = (value) => {
@@ -200,7 +217,7 @@ const editRecipe = () => {
         alert("Something went wrong while fetching the recipe! See the console for details.");
       };
     };
-    fetchData(); 
+    fetchData();
   }, []);
 
   //get all the groups the currently logged in user is a part of
@@ -253,7 +270,8 @@ const editRecipe = () => {
     ingredients = currentRecipe.ingredients; 
     instructions = currentRecipe.instructions; 
     tags = currentRecipe.tags; 
-    groups = currentRecipe.groups; 
+    groups = currentRecipe.groups;
+    image = currentRecipe.image;
 
     try{
       if(link){ /*if we have a link, we save the following information*/
@@ -329,9 +347,8 @@ const editRecipe = () => {
         <div className = "recipes container">
           <div className = "recipes formLeft">
             <div className ="recipes imageContainer"
-              value = {currentRecipe.image}
-              onChange={(value) => handleImageChange(value)}>
-              <img src={select_image} alt="icon" className = "recipes image"></img>
+              onClick={handleImageChange}>
+              <img src={recipeImg} alt="icon" className = "recipes image"></img>
             </div>
             <FormField
               label ="Edit title:"

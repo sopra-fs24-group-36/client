@@ -163,9 +163,9 @@ const PersonalCookbook = () => {
           </div>
           <div className="personalCookbook recipeContent">
             <h2 className="personalCookbook recipeTitle">{title}</h2>
-            <p className="personalCookbook recipeDescription">Description:{description}</p>
-            <p className="personalCookbook recipeTime">Total Time:{time}</p>
-            <p className="personalCookbook recipeTags">Tags:{tag.join(",")}</p>
+            <p className="personalCookbook recipeDescription">Description: {description}</p>
+            <p className="personalCookbook recipeTime">Total Time: {time}</p>
+            <p className="personalCookbook recipeTags">Tags: {tag.join(",")}</p>
           </div>
         </button>
       </div>

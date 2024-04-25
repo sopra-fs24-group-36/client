@@ -38,12 +38,12 @@ const Footer = () => {
 
   const [searchQuery, set_search_query] = useState<string>("");
   const [searchResults, setSearchResults] = useState<object[]>([]);
-  const appID = process.env.REACT_APP_API_ID;
-  const appKEY = process.env.REACT_APP_API_KEY;
+  const appID = "20ac2f64";
+  const appKEY = "34f7dbdac195f356f05ce6f1658c76fc" ;
 
-  const addRecipe = async(title, cookingTime, link) =>{
+  const addRecipe = async(title, cookingTime, link, image) =>{
     try{
-      const requestBody = JSON.stringify({title, cookingTime, link})
+      const requestBody = JSON.stringify({title, cookingTime, link, image})
       const response = await api.post(`/users/${currentUserID}/cookbooks`, requestBody);
       const recipe = new Recipe(response.data);
       localStorage.setItem("recipeID", recipe.id); //not 100% sure if we need this, need to check with getting a recipe
@@ -62,7 +62,7 @@ const Footer = () => {
       const response = await fetch(`https://api.edamam.com/search?q=${searchQuery}&app_id=${appID}&app_key=${appKEY}`);
       const data = await response.json(); 
       setSearchResults(data.hits); 
-      console.log(searchResults)
+      console.log(data.hits)
     }catch (error){
       alert(
         `Something went wrong when saving the recipe: \n${handleError(error)}`,
@@ -104,7 +104,7 @@ const Footer = () => {
             </div>
             <div className = "footer recipeButton">
               <Button className = "footer-footerButton"
-                onClick = {() => addRecipe(recipe.recipe.label, String(recipe.recipe.totalTime), recipe.recipe.url)}>
+                onClick = {() => addRecipe(recipe.recipe.label, String(recipe.recipe.totalTime), recipe.recipe.url, recipe.recipe.image)}>
                 Add recipe
               </Button>
             </div>

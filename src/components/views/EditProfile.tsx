@@ -74,7 +74,7 @@ const EditProfile = () => {
       try {
         const response = await api.get(`/users/${userID}`);
         setUser(response.data);
-        setProfilepicture(user.profilePicture);
+        setProfilepicture(response.data.profilePicture);
       } catch (error) {
         console.error("Details:", error);
         alert("Something went wrong while fetching the users! See the console for details.");

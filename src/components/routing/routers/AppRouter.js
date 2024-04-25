@@ -40,7 +40,9 @@ const AppRouter = () => {
 
         <Route path="/recipes" element={<AddRecipe />} />
 
-        <Route path="/groups/:group_ID/cookbooks/:recipeID" element={<GroupRecipe />} />
+        <Route path = "/groups/:group_ID/cookbooks/:recipeID" element = {<GroupRecipeGuard/>}>
+          <Route path="/groups/:group_ID/cookbooks/:recipeID" element={<GroupRecipe />} />
+        </Route>
 
         <Route path="/users/:authorID/cookbooks/:recipeID" element={<UserRecipe />} />
 

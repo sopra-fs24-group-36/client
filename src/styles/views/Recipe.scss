@@ -7,8 +7,6 @@
     border-radius: $borderRadius;
     margin-bottom: 15px;
     overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
   }
   &.headerContainer{
     justify-content: center;
@@ -22,7 +20,8 @@
   }
   &.titleContainer{
     text-align: center;
-    margin: 0 auto; 
+    margin: 0 auto;
+    max-width: 50%;
   }
   &.editButtonContainer{
     margin-right: 30px; 

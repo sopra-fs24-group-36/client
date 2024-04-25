@@ -30,7 +30,7 @@ const Dashboard = ({ showButtons, activePage }) => {
     navigate("/groups");
   };
   const doCalendar = async () => {
-    navigate("/calendars");
+    navigate(`/users/${userID}/calendars`);
   };
   const doGroupCalendar = async () => {
     navigate(`/groups/${groupID}/calendars`);

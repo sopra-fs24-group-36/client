@@ -4,8 +4,9 @@ import PropTypes from "prop-types";
 import { api, handleError } from "helpers/api";
 import { Spinner } from "components/ui/Spinner";
 
-export const GroupRecipeGuard = ({ children }) => {
-  const { group_ID } = useParams();
+export const GroupGuard = ({ children }) => {
+  const { groupID, recipe_ID } = useParams();
+  const group_ID = groupID
   const userID = localStorage.getItem("userID");
   const [isUserInGroup, setIsUserInGroup] = useState(null);
 
@@ -38,8 +39,8 @@ export const GroupRecipeGuard = ({ children }) => {
   return <Outlet />;
 };
 
-GroupRecipeGuard.propTypes = {
+GroupGuard.propTypes = {
   children: PropTypes.node,
 };
 
-export default GroupRecipeGuard;
+export default GroupGuard;

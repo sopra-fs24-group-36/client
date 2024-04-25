@@ -27,6 +27,7 @@ const FormField = (props) => {
         className="login input"
         placeholder="type here..."
         value={props.value}
+        type = {props.type}
         onChange={(e) => props.onChange(e.target.value)}
       />
     </div>
@@ -37,6 +38,7 @@ FormField.propTypes = {
   label: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func,
+  type: PropTypes.string,
 };
 
 const Register = () => {
@@ -90,21 +92,25 @@ const Register = () => {
             label="Username:"
             value={username}
             onChange={(un: string) => setUsername(un)}
+            type="text"
           />
           <FormField
-            label="Name(optional):"
+            label="Name (optional):"
             value={name}
             onChange={(un: string) => setName(un)}
+            type="text"
           />
           <FormField
             label="Email:"
             value={email}
             onChange={(e) => setEmail(e)}
+            type="text"
           />
           <FormField
             label="Password:"
             value={password}
             onChange={(n) => setPassword(n)}
+            type="password"
           />
           <div className="login button-container">
             <Button

@@ -348,7 +348,7 @@ const editRecipe = () => {
           <div className = "recipes formLeft">
             <div className ="recipes imageContainer"
               onClick={handleImageChange}>
-              <img src={recipeImg} alt="icon" className = "recipes image"></img>
+              <img src={currentRecipe.image} alt="icon" className = "recipes image"></img>
             </div>
             <FormField
               label ="Edit title:"

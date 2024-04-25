@@ -90,6 +90,7 @@ const GroupShoppinglist = () => {
     }
     fetchData();
     const intervalId = setInterval(fetchData, 1000); // Polling every 1 seconds
+
     return () => clearInterval(intervalId);
   }, [groupID]);
 

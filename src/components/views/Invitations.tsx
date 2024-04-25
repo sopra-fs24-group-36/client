@@ -13,9 +13,9 @@ import Header_new from "components/views/Header_new";
 
 const Invitations = () => {
   const navigate = useNavigate();
-  const {userID} = useParams();
-  const [refreshInvitation,setRefreshInvitation]=useState(false);
-  const [invitations,setInvitations]=useState<[]>(null);
+  const { userID } = useParams();
+  const [refreshInvitation, setRefreshInvitation] = useState(false);
+  const [invitations, setInvitations] = useState<[]>(null);
   //TODO:
   useEffect(() => {
     async function fetchInvitations() {
@@ -37,19 +37,19 @@ const Invitations = () => {
 
     fetchInvitations();
   }, [refreshInvitation]);
-  const handleAccept= async (invitation)=>{
-    try{
-      const response=await  api.post(`users/${userID}/accept/${invitation.groupID}`);
-      setRefreshInvitation(prev=>!prev);
-    }catch (error){
+  const handleAccept = async (invitation) => {
+    try {
+      const response = await api.post(`users/${userID}/accept/${invitation.groupID}`);
+      setRefreshInvitation(prev => !prev);
+    } catch (error) {
       alert("Accepting failed.");
     }
-  }
-  const handleDecline=async (invitation)=>{
-    try{
-      const response=await  api.post(`users/${userID}/deny/${invitation.groupID}`);
-      setRefreshInvitation(prev=>!prev);
-    }catch (error){
+  };
+  const handleDecline = async (invitation) => {
+    try {
+      const response = await api.post(`users/${userID}/deny/${invitation.groupID}`);
+      setRefreshInvitation(prev => !prev);
+    } catch (error) {
       alert("Declining failed.");
     }
   };
@@ -84,26 +84,26 @@ const Invitations = () => {
             <div className="invitations invitationContainer">
               {invitations.map(invitation => (
                 <div key={invitation.id} className="invitations invitationField">
-                    <div className="invitations invitationImgContainer">
-                      <img className="invitations invitationImg" src={invitation.groupImage} alt="Group Image" />
-                    </div>
-                    <div className="invitations invitationGroupName">
-                      {invitation.groupName}
-                    </div>
-                    <div className="invitations buttonContainer">
-                      <Button
-                        className="invitations acceptButton"
-                        onClick={() => handleAccept(invitation)}>
-                        Accept
-                      </Button>
-                    </div>
-                    <div className="invitations buttonContainer">
-                      <Button
-                        className="invitations declineButton"
-                        onClick={() => handleDecline(invitation)}>
-                        Decline
-                      </Button>
-                    </div>
+                  <div className="invitations invitationImgContainer">
+                    <img className="invitations invitationImg" src={invitation.groupImage} alt="Group Image" />
+                  </div>
+                  <div className="invitations invitationGroupName">
+                    {invitation.groupName}
+                  </div>
+                  <div className="invitations buttonContainer">
+                    <Button
+                      className="invitations acceptButton"
+                      onClick={() => handleAccept(invitation)}>
+                      Accept
+                    </Button>
+                  </div>
+                  <div className="invitations buttonContainer">
+                    <Button
+                      className="invitations declineButton"
+                      onClick={() => handleDecline(invitation)}>
+                      Decline
+                    </Button>
+                  </div>
                 </div>
 
               ))}

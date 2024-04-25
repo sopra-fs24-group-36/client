@@ -291,6 +291,7 @@ const editRecipe = () => {
   let content; 
   if(!currentRecipe){
     content = <Spinner/>; //had to use the spinner because it takes a while to render the content 
+    content = <Spinner/>; //had to use the spinner because it takes a while to render the content
   }else content =  (
     <div>
       <Header_new></Header_new>

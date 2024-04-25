@@ -89,7 +89,7 @@ const GroupRecipe = () => {
 
   let content;
   if(!recipe){
-    content = <Spinner/>; //had to use the spinner because it takes a while to render the content 
+    content = <Spinner/>; //had to use the spinner because it takes a while to render the content
   }
   else if (recipe.link){
     window.open(recipe.link);

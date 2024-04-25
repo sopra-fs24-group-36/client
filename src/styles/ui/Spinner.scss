@@ -3,32 +3,41 @@
 .loading-spinner {
     display: inline-block;
     position: relative;
-    width: 60px;
-    height: 35px;
-
+    width: 120px;
+    height: 120px;
     & div {
-        position: absolute;
+        /*position: absolute;
         top: 5px;
         width: 11px;
-        height: 11px;
+        height: 11px;*/
+        display: inline-block;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 60px;
+        height: 35px;
         border-radius: 50%;
-        background: $dark_green;
+        background: url("../../assets/rightBrok.png");
+        background-size: cover;
         animation-timing-function: cubic-bezier(0, 1, 1, 0);
 
         &:nth-child(1) {
-            left: 6px;
+            left:0px;
             animation: loading-spinner1 0.6s infinite;
         }
         &:nth-child(2) {
-            left: 6px;
+            left:70px;
             animation: loading-spinner2 0.6s infinite;
         }
         &:nth-child(3) {
-            left: 26px;
+            left:180px;
             animation: loading-spinner2 0.6s infinite;
         }
         &:nth-child(4) {
-            left: 45px;
+            left:250px;
             animation: loading-spinner3 0.6s infinite;
         }
     }
@@ -57,4 +66,3 @@
         transform: scale(0);
     }
 }
-

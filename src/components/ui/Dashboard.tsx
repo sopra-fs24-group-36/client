@@ -54,6 +54,12 @@ const Dashboard = ({ showButtons, activePage }) => {
     navigate("/home");
   };
   const doLogout = async () => {
+    try {
+      const requestBody = JSON.stringify(userID);
+      const response = await api.post(`/users/logout/${userID}`, requestBody);
+    } catch (error) {
+      alert("An error occurred while logging out");
+    }
     localStorage.clear();
     navigate("/users/login");
   };

@@ -3,7 +3,6 @@ import { api } from "helpers/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import "styles/views/UserProfile.scss";
-import "styles/views/EditPictureModal.scss";
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
 

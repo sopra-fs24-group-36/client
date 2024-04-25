@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../../styles/views/Header_new.scss";
+import "../../styles/ui/Header_new.scss";
 import { Button } from "components/ui/Button";
 import { useNavigate } from "react-router-dom";
 import { api, handleError } from "helpers/api";

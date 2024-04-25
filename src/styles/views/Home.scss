@@ -5,32 +5,35 @@
     min-height: 300px;
     flex-direction: column;
     background-color: $true_green;
-    margin-left: calc(15% + 80px);
-    border-radius: $borderRadius; 
-    display: inline-block; 
+    margin-left: calc(15% + 50px);
+    border-radius: $borderRadius;
+    display: inline-block;
     vertical-align: top;
     width: 50%;
-    margin-top: 115px; 
-    position: absolute; 
+    margin-top: 115px;
+    position: absolute;
     height: calc(100% - 210px);
     padding-top: 15px;
-    overflow-y:auto; 
+    overflow-y: auto;
   }
+
   &.containerRight {
     min-height: 300px;
     flex-direction: column;
-    left: calc(65% + 100px);
-    margin-right: 10px; 
-    border-radius: $borderRadius; 
-    display: inline-block; 
+    left: calc(65% + 50px);
+    width: calc(35% - 50px);
+    margin-right: 10px;
+    border-radius: $borderRadius;
+    display: inline-block;
     vertical-align: top;
-    margin-top: 115px; 
-    position: absolute; 
+    margin-top: 115px;
+    position: absolute;
     height: calc(100% - 210px);
     padding-top: 15px;
-    right: 0; 
-    overflow-y: auto; 
+    right: 0;
+    overflow-y: auto;
   }
+
   &.form {
     display: flex;
     flex-direction: column;
@@ -47,93 +50,131 @@
     transition: opacity 0.5s ease, transform 0.5s ease;
     box-shadow: $dropShadow;
   }
-  &.header{
+
+  &.header {
     text-align: center;
     line-height: 0.5; /*to display personal and cookbook under each other */
-    display: flex; 
+    display: flex;
     align-items: center;
     justify-content: center;
   }
-  &.icon{
+
+  &.icon {
     margin-left: 60px;
     margin-right: 60px;
     top: 10px;
   }
-  &.personalTitle{
+
+  &.personalTitle {
     color: $textColor;
     font-size: 40px;
   }
-  &.recipeContainer{
+
+  &.recipeContainer {
     padding-left: 30px;
     padding-right: 30px;
-    margin-right:30px; 
-    margin-left:30px; 
+    margin-right: 30px;
+    margin-left: 30px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
-  &.noRecipeText{
+
+  &.noRecipeText {
     font-weight: bold;
-    color: $light_pink; 
-    font-size: 30px; 
+    color: $light_pink;
+    font-size: 30px;
     font-style: italic;
     text-align: center;
     padding-top: 100px;
     padding-bottom: 60px;
   }
-  &.noGroupText{
+
+  &.noGroupText {
     font-weight: bold;
-    color: $true_green; 
-    font-size: 30px; 
+    color: $true_green;
+    font-size: 30px;
     font-style: italic;
     text-align: center;
     padding-top: 115px;
     padding-bottom: 60px;
   }
-  &.recipeImage{
+
+  &.recipe {
+    background-color: $light_green;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border: none;
+    border-radius: 0.75em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &.recipeImage {
     width: 40%;
-    padding-left: 15px; 
     border-radius: $borderRadius;
     max-width: 300px; /*so everything does not go huge on a larger screen*/
   }
-  &.recipeInfo{
-    padding: 0px 15px 0px 15px; 
+
+  &.recipeInfo {
+    padding: 0px 15px 0px 15px;
+    flex-grow: 1;
+    text-align: left;
+    position: relative;
   }
-  &.groupImage{
+
+  &.groupImage {
     width: 23%;
     max-width: 80px; /*to keep the group images inside the buttons*/
-    padding-left: 15px; 
+    padding-left: 15px;
     border-radius: 50%;
-    margin-right: 15px; 
+    margin-right: 15px;
   }
-  &.groupTitle{
+
+  &.groupTitle {
     color: $container_dark;
     font-size: 40px;
     line-height: 60px;
   }
+
   &.buttonContainer {
     padding-left: 6px;
     padding-right: 6px;
-    padding-top: 12px; 
+    padding-top: 12px;
     padding-bottom: 12px;
     margin-left: 15px;
-    margin-right: 15px; 
+    margin-right: 15px;
     align-items: center;
   }
-  &.recipeTitle{
+
+  &.recipeTitle {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     color: $container_dark;
     text-align: left;
     font-size: 25px;
-    margin-top:0px;
-    margin-bottom:12px;
+    margin-top: 0px;
+    margin-bottom: 12px;
   }
-  &.recipeDescription, 
-  &.recipeTags, 
-  &.recipeTime{
-    color: $container_dark; 
+
+  &.recipeDescription,
+  &.recipeTags,
+  &.recipeTime {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: $container_dark;
     font-size: 16px;
     text-align: left;
     font-weight: 400px;
   }
-  &.recipesButtonContainer{
-    padding: 60px 0px 60px 0px; 
+
+  &.recipesButtonContainer {
+    padding: 60px 0px 60px 0px;
   }
 
 }

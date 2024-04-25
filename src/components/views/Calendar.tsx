@@ -8,7 +8,7 @@ import User from "models/User";
 import Recipe from "models/Recipe"
 import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
-import Header_new from "components/views/Header_new";
+import Header_new from "components/ui/Header_new";
 import BaseContainer from "../ui/BaseContainer_new";
 
 // @ts-ignore
@@ -292,7 +292,7 @@ const Calendar = () =>{
               <Button
                 className="calendar searchButton"
                 style={{
-                  backgroundSize: "100% 100%",
+                  backgroundSize: "80% 80%",
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
                   backgroundImage: `url(${search})`,

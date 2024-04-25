@@ -2,7 +2,7 @@ import "styles/views/Home.scss";
 import Dashboard from "components/ui/Dashboard";
 import PropTypes from "prop-types";
 import Footer from "components/ui/footer";
-import Header_new from "components/views/Header_new";
+import Header_new from "components/ui/Header_new";
 import React, { useEffect, useState } from "react";
 import { api, handleError } from "helpers/api";
 import { useNavigate } from "react-router-dom";

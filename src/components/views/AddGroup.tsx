@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import BaseContainer from "components/ui/BaseContainer_new";
-import Header_new from "components/views/Header_new";
+import Header_new from "components/ui/Header_new";
 import Group from "models/Group";
 // @ts-ignore
 import select_image from "../../assets/select_image.png";
@@ -40,7 +40,6 @@ const MembersField = (props) => {
       <Button
         className="group plus"
         onClick={props.onRemove}
-        disabled={props.value === props.currentUserEmail}
       >
         Remove
       </Button>
@@ -98,8 +97,6 @@ const AddGroup = () => {
 
   const getEmail = async () => {
     try {
-      //get current user 
-      setUserID(parseInt(localStorage.getItem("userID")));
       const response = await api.get(`/users/${userID}`);
       const email = response.data.email;
       console.log(email);
@@ -110,15 +107,17 @@ const AddGroup = () => {
   };
 
   useEffect(() => {
+    setUserID(parseInt(localStorage.getItem("userID")));
     getEmail();
     set_selectedImage(select_image);
-  }, []);
+  }, [userID]);
 
   const saveChanges = async () => {
+    const updatedMembersNames = membersNames.filter(email => email !== user_email);
     try {
       const requestBody = JSON.stringify({
         name: name,
-        membersNames: membersNames,
+        membersNames: updatedMembersNames,
         image: selectedImage,
         creator: userID,
       });
@@ -158,7 +157,7 @@ const AddGroup = () => {
           <div className="groups addButtonContainer">
             <Button
               className="group add"
-              disabled={name.trim() === "" || membersNames.length === 0}
+              disabled={name.trim() === ""}
               onClick={() => saveChanges()}>
               Add Group
             </Button>

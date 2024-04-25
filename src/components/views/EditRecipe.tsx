@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import BaseContainer from "components/ui/BaseContainer_new";
-import Header_new from "components/views/Header_new";
+import Header_new from "components/ui/Header_new";
 import Recipe from "models/Recipe";
 import {Spinner} from "components/ui/Spinner";
 // @ts-ignore

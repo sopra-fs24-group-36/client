@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
-import "styles/views/GroupCookbooks.scss";
+import "styles/views/Cookbooks.scss";
 import User from "models/User";
 import Recipe from "models/Recipe";
 import Dashboard from "components/ui/Dashboard";
 import { api, handleError } from "helpers/api";
 import Footer from "components/ui/footer";
-import Header_new from "components/views/Header_new";
+import Header_new from "components/ui/Header_new";
 import BaseContainer from "components/ui/BaseContainer_new";
 
 
@@ -138,7 +138,7 @@ const GroupCookbook = () => {
   const removeRecipe = async () => {
     if (selectedRecipeList.length === 0) {
       alert("Please select at least one recipe to delete!");
-      
+
       return;
     }
     for (const recipeid of selectedRecipeList) {
@@ -168,31 +168,36 @@ const GroupCookbook = () => {
   const Recipe = ({ id, title, description, time, tag, imageUrl, autherID ,onClick }: any) => {
     const isSelected = selectedRecipeList.includes(id);
     const [userImgUrl,setUserImgUrl] = useState("");
+    const [userImgLoaded, setUserImgLoaded] = useState(false);
 
-    const fetchUserImg = async (autherID: string) => {
-      try {
-        const response = await api.get(`/users/${autherID}`);
-        setUserImgUrl(response.data.profilePicture);
-      } catch (error) {
-        console.error(
-          `Something went wrong while fetching the user image: \n${handleError(
-            error,
-          )}`,
-        );
-        console.error("Details:", error);
-        alert(
-          "Something went wrong while fetching the user image! See the console for details.",
-        );
-      }
+    useEffect(() => {
+      const fetchUserImg = async (autherID: string) => {
+        try {
+          const response = await api.get(`/users/${autherID}`);
+          setUserImgUrl(response.data.profilePicture);
+          setUserImgLoaded(true);
+        } catch (error) {
+          console.error(
+            `Something went wrong while fetching the user image: \n${handleError(
+              error,
+            )}`,
+          );
+          console.error("Details:", error);
+          alert(
+            "Something went wrong while fetching the user image! See the console for details.",
+          );
+        }
+      };
+      fetchUserImg(autherID);
+    }, [autherID]);
 
-    }
-    fetchUserImg(autherID);
-    
     return (
       <div className="cookbook recipeContainer">
-        <button className={`cookbook recipeButton ${isSelected ? "selected" : ""}`}
-          onClick={onClick}
+        <button className={`cookbook recipeButton ${isSelected ? "selected" : ""}`} onClick={onClick}
         >
+          <div className="cookbook recipeUserImgContainer">
+            <img className="cookbook recipeUserImg" src={userImgUrl} alt="User Image" />
+          </div>
           <div className="cookbook recipeImgContainer">
             <img className="cookbook recipeImg" src={imageUrl} alt="Recipe Image" />
           </div>
@@ -201,9 +206,6 @@ const GroupCookbook = () => {
             <p className="cookbook recipeDescription">Description:{description}</p>
             <p className="cookbook recipeTime">Total Time:{time}</p>
             <p className="cookbook recipeTags">Tags:{tag.join(",")}</p>
-          </div>
-          <div className="cookbook recipeUserImgContainer">
-            <img className="cookbook recipeUserImg" src={userImgUrl} alt="User Image" />
           </div>
         </button>
       </div>

@@ -38,8 +38,8 @@ const Footer = () => {
 
   const [searchQuery, set_search_query] = useState<string>("");
   const [searchResults, setSearchResults] = useState<object[]>([]);
-  const appID = "20ac2f64";
-  const appKEY = "34f7dbdac195f356f05ce6f1658c76fc" ;
+  const appID = process.env.REACT_APP_API_ID;
+  const appKEY = process.env.REACT_APP_API_KEY;
 
   const addRecipe = async(title, cookingTime, link, image) =>{
     try{

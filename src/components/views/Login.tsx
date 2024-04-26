@@ -61,6 +61,7 @@ const Login = () => {
       localStorage.setItem("token", user.token);
       //store ID in the local storage 
       localStorage.setItem("userID", user.id);
+      localStorage.setItem("userEmail", user.email);
 
       // Login successfully worked --> navigate to the route /home
       navigate("/home");

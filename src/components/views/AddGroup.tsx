@@ -95,25 +95,14 @@ const AddGroup = () => {
   };
 
 
-  const getEmail = async () => {
-    try {
-      const response = await api.get(`/users/${userID}`);
-      const email = response.data.email;
-      console.log(email);
-      setEmail(email);//getting the username so we can show in the header
-    } catch (error) {
-      console.error(`Error getting username: ${handleError(error)}`);
-    }
-  };
-
   useEffect(() => {
-    setUserID(parseInt(localStorage.getItem("userID")));
-    getEmail();
     set_selectedImage(select_image);
-  }, [userID]);
+  }, []);
 
   const saveChanges = async () => {
-    const updatedMembersNames = membersNames.filter(email => email !== user_email);
+    const userEmail = localStorage.getItem("userEmail");
+    const userID = localStorage.getItem("userID");
+    const updatedMembersNames = membersNames.filter(email => email !== userEmail);
     try {
       const requestBody = JSON.stringify({
         name: name,

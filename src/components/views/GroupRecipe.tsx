@@ -100,6 +100,8 @@ const GroupRecipe = () => {
         <Header_new></Header_new>
         <Dashboard
           showButtons={{
+            home: true, 
+            cookbook: true, 
             recipe: true,
             group: true,
             calendar: true,

@@ -23,6 +23,14 @@ const Dashboard = ({ showButtons, activePage }) => {
     }
   }, [userID, navigate]);
 
+  const doHome = async () => {
+    navigate("/home");
+  };
+
+  const doPersonalCookbook = async () => {
+    navigate(`/users/${userID}/cookbooks`);
+  };
+
   const doRecipe = async () => {
     navigate("/recipes");
   };
@@ -69,6 +77,26 @@ const Dashboard = ({ showButtons, activePage }) => {
       <div className="dashboard header">
         <h2 className="dashboard title">Dashboard</h2>
       </div>
+      {showButtons.home && (
+        <div className="dashboard button-container">
+          <Button
+            className={`db${activePage === "home" ? " highlight" : ""}`}
+            onClick={() => doHome()}
+          >
+            Home
+          </Button>
+        </div>
+      )}
+      {showButtons.cookbook && (
+        <div className="dashboard button-container">
+          <Button
+            className={`db${activePage === "personalCookbook" ? " highlight" : ""}`}
+            onClick={() => doPersonalCookbook()}
+          >
+            Personal cookbook
+          </Button>
+        </div>
+      )}
       {showButtons.recipe && (
         <div className="dashboard button-container">
           <Button

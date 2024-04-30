@@ -59,6 +59,8 @@ const Invitations = () => {
       <Header_new></Header_new>
       <Dashboard
         showButtons={{
+          home: true, 
+          cookbook: true, 
           recipe: true,
           group: true,
           calendar: true,
@@ -72,7 +74,7 @@ const Invitations = () => {
           <div className="invitations backButtonContainer">
             <Button
               className="backButton"
-              onClick={() => navigate("/home")}
+              onClick={() => navigate(-1)}
             >Back</Button>
           </div>
           <h2 className="invitations title">Invitations</h2>

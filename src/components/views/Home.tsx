@@ -109,7 +109,6 @@ const Home = () => {
     async function fetchData() {
       try {
         const response = await api.get(`/users/${userID}/groups`);
-        await new Promise((resolve) => setTimeout(resolve, 500));
         setGroupList(response.data);
       } catch (error) {
         console.error(`Something went wrong while fetching the groups: \n${handleError(error)}`);
@@ -173,13 +172,15 @@ const Home = () => {
         <Header_new></Header_new>
         <Dashboard
           showButtons={{
+            home: true, 
+            cookbook: true,
             recipe: true,
             group: true,
             calendar: true,
             shoppinglist: true,
             invitations: true,
           }}
-          activePage=""
+          activePage="home"
         />
         <div className="Home containerLeft">
           <div className="Home header">

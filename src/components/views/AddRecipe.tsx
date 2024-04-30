@@ -251,6 +251,8 @@ const addRecipe = () => {
         <Header_new></Header_new>
         <Dashboard
           showButtons={{
+            home: true, 
+            cookbook: true, 
             recipe: true,
             group: true,
             calendar: true,
@@ -264,7 +266,7 @@ const addRecipe = () => {
             <div className="recipes backButtonContainer">
               <Button
                 className="backButton"
-                onClick={() => navigate("/home")}
+                onClick={() => navigate(-1)}
               >Back</Button>
             </div>
             <div className="recipes titleContainer">

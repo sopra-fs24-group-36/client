@@ -160,6 +160,7 @@
     font-size: 25px;
     margin-top: 0px;
     margin-bottom: 12px;
+    white-space: normal; //so any text overflow uses the next line
   }
 
   &.recipeDescription,
@@ -172,6 +173,7 @@
     font-size: 16px;
     text-align: left;
     font-weight: 400px;
+    white-space:normal; 
   }
 
   &.recipesButtonContainer {

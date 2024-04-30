@@ -157,12 +157,16 @@ const editRecipe = () => {
   }
 
   const addField = () =>{ /*to add a field for adding ingredients and their amount*/
-    handleIngredientChange([...currentRecipe.ingredients, ""]);
-    handleAmountChange([...currentRecipe.amounts, ""]);
+    if (currentRecipe.ingredients.length === 0 || currentRecipe.ingredients[currentRecipe.ingredients.length - 1].trim() !== "") {
+      handleIngredientChange([...currentRecipe.ingredients, ""]);
+      handleAmountChange([...currentRecipe.amounts, ""]);
+    }
   }
 
   const addStep = () =>{/*to add a field for adding steps to complete recipe*/
-    handleStepsChange([...currentRecipe.instructions, ""]);
+    if(currentRecipe.instructions.length === 0 || currentRecipe.instructions[currentRecipe.instructions.length - 1].trim() !== "") {
+      handleStepsChange([...currentRecipe.instructions, ""]);
+    }
   }
 
   const addRecipeTag = (tag) =>{ /*to add a tag to a recipe*/
@@ -274,21 +278,15 @@ const editRecipe = () => {
     image = currentRecipe.image;
 
     try{
-      if(link){ /*if we have a link, we save the following information*/
-        const requestBody1=JSON.stringify({title, shortDescription, cookingTime, image, link, tags, groups});
-        const response1 = await api.put(`/users/${currentUserID}/cookbooks/${recipeID}`, requestBody1);
-        const recipe = new Recipe(response1.data); 
-        localStorage.setItem("recipeID", recipe.id); //not 100% sure if we need this, need to check with getting a recipe
-        navigate(-1);
-      }
-      else{
-        const requestBody2=JSON.stringify({/*if we have no link, we have steps and ingredients and save the following information*/
-          title, shortDescription, cookingTime, image, amounts, ingredients, instructions, tags, groups});
-        const response2 = await api.put(`/users/${currentUserID}/cookbooks/${recipeID}`, requestBody2);
-        const recipe = new Recipe(response2.data); 
-        localStorage.setItem("recipeID", recipe.id); //not 100% sure if we need this, need to check with getting a recipe
-        navigate(-1);
-      }
+      const filteredInstructions = instructions.filter(step => step.trim() !== "");
+      const filteredAmounts = amounts.filter(amount => amount.trim() !== "");
+      const filteredIngredients = ingredients.filter(amount => amount.trim() !== "");
+      const requestBody2=JSON.stringify({/*if we have no link, we have steps and ingredients and save the following information*/
+        title, shortDescription, cookingTime, image, link, amounts:filteredAmounts, ingredients:filteredIngredients, instructions:filteredInstructions, tags, groups});
+      const response2 = await api.put(`/users/${currentUserID}/cookbooks/${recipeID}`, requestBody2);
+      const recipe = new Recipe(response2.data); 
+      localStorage.setItem("recipeID", recipe.id); //not 100% sure if we need this, need to check with getting a recipe
+      navigate(-1);
     }
     catch(error){
       alert(
@@ -315,6 +313,8 @@ const editRecipe = () => {
       <Header_new></Header_new>
       <Dashboard
         showButtons={{
+          home:true, 
+          cookbook: true,
           recipe: true,
           group: true,
           calendar: true,
@@ -328,7 +328,7 @@ const editRecipe = () => {
           <div className="recipes backButtonContainer">
             <Button
               className="backButton"
-              onClick={() => navigate("/home")}
+              onClick={() => navigate(-1)}
             >Back</Button>
           </div>
           <div className = "recipes titleContainer">

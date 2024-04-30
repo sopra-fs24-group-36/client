@@ -92,11 +92,19 @@ const addRecipe = () => {
 
 
   const addField = () => { /*to add a field for adding ingredients and their amount*/
+    if (ingredients.some(ingredient => ingredient.trim() === "")){
+
+      return; 
+    }
     set_recipe_ing([...ingredients, ""]);
     set_recipe_amount([...amounts, ""]);
   };
 
   const addStep = () => {/*to add a field for adding steps to complete recipe*/
+    if (instructions.some(step => step.trim() === "")) { // user will only be able to add new field after the previous one has had details entered
+      // If any step field is empty, don't add a new field
+      return;
+    }
     set_recipe_steps([...instructions, ""]);
   };
 
@@ -189,23 +197,17 @@ const addRecipe = () => {
 
   const saveChanges = async () => {
     try {
-      if (link) { /*if we have a link, we save the following information*/
-        const requestBody1 = JSON.stringify({ title, shortDescription, cookingTime, image, link, tags, groups });
-        const response1 = await api.post(`/users/${currentUserID}/cookbooks`, requestBody1);
-        const recipe = new Recipe(response1.data);
-        localStorage.setItem("recipeID", recipe.id); //not 100% sure if we need this, need to check with getting a recipe
-        const recipeID = localStorage.getItem("recipeID");
-        navigate(`/users/${currentUserID}/cookbooks/${recipeID}`);
-      } else {
-        const requestBody2 = JSON.stringify({/*if we have no link, we have steps and ingredients and save the following information*/
-          title, shortDescription, cookingTime, image, amounts, ingredients, instructions, tags, groups,
-        });
-        const response2 = await api.post(`/users/${currentUserID}/cookbooks`, requestBody2);
-        const recipe = new Recipe(response2.data);
-        localStorage.setItem("recipeID", recipe.id); //not 100% sure if we need this, need to check with getting a recipe
-        const recipeID = localStorage.getItem("recipeID");
-        navigate(`/users/${currentUserID}/cookbooks/${recipeID}`);
-      }
+      const filteredInstructions = instructions.filter(step => step.trim() !== "");
+      const filteredAmounts = amounts.filter(amount => amount.trim() !== "");
+      const filteredIngredients = ingredients.filter(amount => amount.trim() !== "");
+      const requestBody2 = JSON.stringify({/*if we have no link, we have steps and ingredients and save the following information*/
+        title, shortDescription, cookingTime, image, link, amounts:filteredAmounts, ingredients:filteredIngredients, instructions:filteredInstructions, tags, groups,
+      });
+      const response2 = await api.post(`/users/${currentUserID}/cookbooks`, requestBody2);
+      const recipe = new Recipe(response2.data);
+      localStorage.setItem("recipeID", recipe.id); //not 100% sure if we need this, need to check with getting a recipe
+      const recipeID = localStorage.getItem("recipeID");
+      navigate(`/users/${currentUserID}/cookbooks/${recipeID}`);
     } catch (error) {
       alert(
         `Something went wrong when saving the recipe: \n${handleError(error)}`,

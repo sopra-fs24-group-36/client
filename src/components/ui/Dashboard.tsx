@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/ui/Dashboard.scss";
-import { api, handleError } from "helpers/api";
+import { api } from "helpers/api";
 import { Button } from "components/ui/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import PropTypes from "prop-types";

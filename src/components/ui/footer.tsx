@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import "../../styles/ui/Footer.scss";
 import { useNavigate } from "react-router-dom";
 import { api, handleError } from "helpers/api";
 import { Button } from "components/ui/Button";
 import Recipe from "models/Recipe";
-// @ts-ignore
-import rightBrok from "../../assets/rightBrok.png"
 
 /**
  * @FunctionalComponent
@@ -40,10 +38,16 @@ const Footer = () => {
   const [searchResults, setSearchResults] = useState<object[]>([]);
   const appID = process.env.REACT_APP_API_ID;
   const appKEY = process.env.REACT_APP_API_KEY;
+  
+  const toString = async(ingredients) =>{
+    return ingredients.map(item => item.replace(/\\/g, ""));
 
-  const addRecipe = async(title, cookingTime, link, image) =>{
+  }
+  const addRecipe = async(title, cookingTime, link, image, ings) =>{
     try{
-      const requestBody = JSON.stringify({title, cookingTime, link, image})
+      const ingredients = await toString(ings);
+      const amounts = Array.from({ length: ingredients.length }, () => "-");
+      const requestBody = JSON.stringify({title, cookingTime, link, image, amounts, ingredients})
       const response = await api.post(`/users/${currentUserID}/cookbooks`, requestBody);
       const recipe = new Recipe(response.data);
       localStorage.setItem("recipeID", recipe.id); //not 100% sure if we need this, need to check with getting a recipe
@@ -59,10 +63,9 @@ const Footer = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await fetch(`https://api.edamam.com/search?q=${searchQuery}&app_id=${appID}&app_key=${appKEY}`);
+      const response = await fetch(`https://api.edamam.com/search?q=${searchQuery}&app_id=${appID}&app_key=${appKEY}&from=0&to=24`);
       const data = await response.json(); 
       setSearchResults(data.hits); 
-      console.log(data.hits)
     }catch (error){
       alert(
         `Something went wrong when saving the recipe: \n${handleError(error)}`,
@@ -104,7 +107,7 @@ const Footer = () => {
             </div>
             <div className = "footer recipeButton">
               <Button className = "footer-footerButton"
-                onClick = {() => addRecipe(recipe.recipe.label, String(recipe.recipe.totalTime), recipe.recipe.url, recipe.recipe.image)}>
+                onClick = {() => addRecipe(recipe.recipe.label, String(recipe.recipe.totalTime), recipe.recipe.url, recipe.recipe.image, recipe.recipe.ingredientLines)}>
                 Add recipe
               </Button>
             </div>

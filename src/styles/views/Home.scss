@@ -114,7 +114,8 @@
   }
 
   &.recipeImage {
-    width: 40%;
+    width: 150px;
+    height: 150px;
     border-radius: $borderRadius;
     max-width: 300px; /*so everything does not go huge on a larger screen*/
   }
@@ -127,8 +128,8 @@
   }
 
   &.groupImage {
-    width: 23%;
-    max-width: 80px; /*to keep the group images inside the buttons*/
+    width: 60px;
+    height: 60px; 
     padding-left: 15px;
     border-radius: 50%;
     margin-right: 15px;
@@ -159,6 +160,7 @@
     font-size: 25px;
     margin-top: 0px;
     margin-bottom: 12px;
+    white-space: normal; //so any text overflow uses the next line
   }
 
   &.recipeDescription,
@@ -171,10 +173,11 @@
     font-size: 16px;
     text-align: left;
     font-weight: 400px;
+    white-space:normal; 
   }
 
   &.recipesButtonContainer {
-    padding: 60px 0px 60px 0px;
+    padding: 30px 0px 30px 0px;
   }
 
 }

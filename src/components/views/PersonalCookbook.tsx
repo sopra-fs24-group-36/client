@@ -130,7 +130,6 @@ const PersonalCookbook = () => {
       try {
         const requestBody = JSON.stringify(recipeid);
         const response = await api.delete(`/users/${userID}/cookbooks/${recipeid}`, requestBody);
-        await new Promise((resolve) => setTimeout(resolve, 500));
         if (!response) {
           alert("Something went wrong while deleting the recipes!");
         }
@@ -163,9 +162,9 @@ const PersonalCookbook = () => {
           </div>
           <div className="cookbook recipeContent">
             <h2 className="cookbook recipeTitle">{title}</h2>
-            <p className="cookbook recipeDescription">Description:{description}</p>
-            <p className="cookbook recipeTime">Total Time:{time}</p>
-            <p className="cookbook recipeTags">Tags:{tag.join(",")}</p>
+            <p className="cookbook recipeDescription">Description: {description}</p>
+            <p className="cookbook recipeTime">Total Time: {time}</p>
+            <p className="cookbook recipeTags">Tags: {tag.join(",")}</p>
           </div>
         </button>
       </div>
@@ -194,20 +193,22 @@ const PersonalCookbook = () => {
       <Header_new></Header_new>
       <Dashboard
         showButtons={{
+          home: true, 
+          cookbook: true, 
           recipe: true,
           group: true,
           calendar: true,
           shoppinglist: true,
           invitations: true,
         }}
-        activePage=""
+        activePage="personalCookbook"
       />
       <BaseContainer>
 
         {/*head field*/}
         <div className="cookbook headerContainer">
           <div className="cookbook backButtonContainer">
-            <Button className="backButton" onClick={() => navigate("/home")}>
+            <Button className="backButton" onClick={() => navigate(-1)}>
               Back
             </Button>
           </div>

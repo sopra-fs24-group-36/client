@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
 import "styles/views/Cookbooks.scss";
-import User from "models/User";
 import Recipe from "models/Recipe";
 import Dashboard from "components/ui/Dashboard";
 import { api, handleError } from "helpers/api";
@@ -235,6 +234,8 @@ const GroupCookbook = () => {
       <Header_new />
       <Dashboard
         showButtons={{
+          home: true, 
+          cookbook: true, 
           recipe: true,
           groupCalendar: true,
           groupShoppinglist: true,
@@ -247,7 +248,7 @@ const GroupCookbook = () => {
         {/*head field*/}
         <div className="cookbook headerContainer">
           <div className="cookbook backButtonContainer">
-            <Button className="cookbook backButton" onClick={() => navigate("/home")}>
+            <Button className="cookbook backButton" onClick={() => navigate(-1)}>
               Back
             </Button>
           </div>

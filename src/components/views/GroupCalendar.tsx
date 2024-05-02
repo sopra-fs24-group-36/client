@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Form, useNavigate, useParams } from "react-router-dom";
-import { api, handleError } from "helpers/api";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
 import "styles/views/Calendar.scss"
-import User from "models/User";
 import Recipe from "models/Recipe"
 import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
@@ -281,6 +279,8 @@ const GroupCalendar=()=>{
       <Header_new></Header_new>
       <Dashboard
         showButtons={{
+          home: true, 
+          cookbook: true, 
           recipe: true,
           groupCalendar: true,
           groupShoppinglist: true,
@@ -343,7 +343,7 @@ recipes.map...*/}
         <BaseContainer className="calendar baseContainerRight">
           <div className="calendar headContainer2">
             <div className="calendar backButtonContainer">
-              <Button className="backButton" onClick={() => navigate("/home")}>
+              <Button className="backButton" onClick={() => navigate(-1)}>
                 Back
               </Button>
             </div>

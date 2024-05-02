@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/ui/Dashboard.scss";
-import { api, handleError } from "helpers/api";
+import { api } from "helpers/api";
 import { Button } from "components/ui/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -22,6 +22,14 @@ const Dashboard = ({ showButtons, activePage }) => {
       navigate("/users/login");
     }
   }, [userID, navigate]);
+
+  const doHome = async () => {
+    navigate("/home");
+  };
+
+  const doPersonalCookbook = async () => {
+    navigate(`/users/${userID}/cookbooks`);
+  };
 
   const doRecipe = async () => {
     navigate("/recipes");
@@ -69,6 +77,26 @@ const Dashboard = ({ showButtons, activePage }) => {
       <div className="dashboard header">
         <h2 className="dashboard title">Dashboard</h2>
       </div>
+      {showButtons.home && (
+        <div className="dashboard button-container">
+          <Button
+            className={`db${activePage === "home" ? " highlight" : ""}`}
+            onClick={() => doHome()}
+          >
+            Home
+          </Button>
+        </div>
+      )}
+      {showButtons.cookbook && (
+        <div className="dashboard button-container">
+          <Button
+            className={`db${activePage === "personalCookbook" ? " highlight" : ""}`}
+            onClick={() => doPersonalCookbook()}
+          >
+            Personal cookbook
+          </Button>
+        </div>
+      )}
       {showButtons.recipe && (
         <div className="dashboard button-container">
           <Button

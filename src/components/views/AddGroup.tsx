@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { api, handleError } from "helpers/api";
-import User from "models/User";
-import { Form, useNavigate } from "react-router-dom";
+import { api } from "helpers/api";
+import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import "styles/views/AddGroup.scss";
 import PropTypes from "prop-types";
@@ -124,6 +123,8 @@ const AddGroup = () => {
       <Header_new></Header_new>
       <Dashboard
         showButtons={{
+          home: true, 
+          cookbook: true, 
           recipe: true,
           group: true,
           calendar: true,
@@ -137,7 +138,7 @@ const AddGroup = () => {
           <div className="groups backButtonContainer">
             <Button
               className="backButton"
-              onClick={() => navigate("/home")}
+              onClick={() => navigate(-1)}
             >Back</Button>
           </div>
           <div className="groups titleContainer">

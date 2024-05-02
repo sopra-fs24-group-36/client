@@ -124,6 +124,8 @@ const GroupShoppinglist = () => {
       <Header_new></Header_new>
       <Dashboard
         showButtons={{
+          home: true, 
+          cookbook: true, 
           recipe: true,
           groupCalendar: true,
           groupShoppinglist: true,
@@ -138,7 +140,7 @@ const GroupShoppinglist = () => {
           <div className="shoppinglist backButtonContainer">
             <Button
               className="backButton"
-              onClick={() => navigate("/home")}
+              onClick={() => navigate(-1)}
             >Back</Button>
           </div>
           <h2 className="shoppinglist title">{groupInfo.name} - Shopping List</h2>

@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Form, useNavigate, useParams } from "react-router-dom";
+import ReactDOM from "react-dom";
+import { useNavigate } from "react-router-dom";
 import { api, handleError } from "helpers/api";
 import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
 import "styles/views/Cookbooks.scss";
-import User from "models/User";
+import "styles/views/Modal.scss";
 import Recipe from "models/Recipe";
 import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import Header_new from "components/ui/Header_new";
 import BaseContainer from "components/ui/BaseContainer_new";
+import { Spinner } from "../ui/Spinner";
 
 
 const FormField = (props) => {
@@ -40,26 +42,25 @@ const PersonalCookbook = () => {
   const [originalRecipeList, setOriginalRecipeList] = useState<object[]>([]);
   const [deleteState, setDeleteState] = useState(false);
   const [selectedRecipeList, setSelectedRecipeList] = useState<object[]>([]);
+  const [isConsentModalOpen, setIsConsentModalOpen] = useState(false);
 
   const fetchData = async () => {
     try {
       const response = await api.get(`/users/${userID}/cookbooks`);
       await new Promise((resolve) => setTimeout(resolve, 500));
       setRecipeState(true);
-      if (!response || response.length === 0) {
-        return doNoRecipe();
-      } else {
-        const formattedRecipes = response.data.map((recipe: any) => ({
-          id: recipe.id,
-          title: recipe.title,
-          shortDescription: recipe.shortDescription,
-          cookingTime: recipe.cookingTime,
-          tags: recipe.tags,
-          image: recipe.image,
-        }));
-        setRecipeList(formattedRecipes);
-        setOriginalRecipeList(formattedRecipes);
-      }
+
+      const formattedRecipes = response.data.map((recipe: any) => ({
+        id: recipe.id,
+        title: recipe.title,
+        shortDescription: recipe.shortDescription,
+        cookingTime: recipe.cookingTime,
+        tags: recipe.tags,
+        image: recipe.image,
+      }));
+      setRecipeList(formattedRecipes);
+      setOriginalRecipeList(formattedRecipes);
+      setRecipeState(true);
     } catch (error) {
       console.error(
         `Something went wrong while fetching the recipes: \n${handleError(
@@ -77,10 +78,6 @@ const PersonalCookbook = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
-  const doNoRecipe = () => {
-    return <p className="cookbook noRecipeText">no recipes saved yet</p>;
-  };
 
   const handleClickRecipe = (recipeId: string) => {
     if (!deleteState) {
@@ -105,57 +102,18 @@ const PersonalCookbook = () => {
     const filteredRecipes = originalRecipeList.filter(recipe => {
       const lowerCaseTitle = recipe.title.toLowerCase();
       const lowerCaseTags = recipe.tags.map(tag => tag.toLowerCase());
-      
+
       return lowerCaseTitle.includes(lowerCaseFilterKeyword) || lowerCaseTags.some(tag => tag.includes(lowerCaseFilterKeyword));
     });
     setRecipeList(filteredRecipes);
     setFilterKeyword("");
   };
 
-
-  const handelSelectRecipe = (recipe: Recipe) => {
-    setDeleteState(!deleteState);
-    if (deleteState === true) {
-      deleteRecipe();
-    }
-  };
-
-  const deleteRecipe = async () => {
-    if (selectedRecipeList.length === 0) {
-      alert("Please select at least one recipe to delete!");
-      
-      return;
-    }
-    for (const recipeid of selectedRecipeList) {
-      try {
-        const requestBody = JSON.stringify(recipeid);
-        const response = await api.delete(`/users/${userID}/cookbooks/${recipeid}`, requestBody);
-        if (!response) {
-          alert("Something went wrong while deleting the recipes!");
-        }
-      } catch (error) {
-        console.error(
-          `Something went wrong while deleting the recipes: \n${handleError(
-            error,
-          )}`,
-        );
-        console.error("Details:", error);
-        alert(
-          "Something went wrong while deleting the recipe! See the console for details.",
-        );
-      }
-    }
-    fetchData();
-  };
-
-
   const Recipe = ({ id, title, description, time, tag, imageUrl, onClick }: any) => {
     const isSelected = selectedRecipeList.includes(id);
-
     return (
       <div className="cookbook recipeContainer">
-        <button className={`cookbook recipeButton ${isSelected ? "selected" : ""}`}
-          onClick={onClick}
+        <button className={`cookbook recipeButton ${isSelected ? "selected" : ""}`} onClick={onClick}
         >
           <div className="cookbook recipeImgContainer">
             <img className="cookbook recipeImg" src={imageUrl} alt="Recipe Image" />
@@ -188,21 +146,89 @@ const PersonalCookbook = () => {
     </div>
   );
 
-  return (
-    <div>
-      <Header_new></Header_new>
-      <Dashboard
-        showButtons={{
-          home: true, 
-          cookbook: true, 
-          recipe: true,
-          group: true,
-          calendar: true,
-          shoppinglist: true,
-          invitations: true,
-        }}
-        activePage="personalCookbook"
-      />
+  const handelSelectRecipe = () => {
+    setDeleteState(!deleteState);
+    if (deleteState === true && selectedRecipeList.length > 0) {
+      setIsConsentModalOpen(true);
+    }
+  };
+
+  const ConsentModal = ({ open, onClose }) => {
+    if (!open) return null;
+
+    const deleteRecipe = async () => {
+      if (selectedRecipeList.length === 0) {
+        alert("Please select at least one recipe to delete!");
+
+        return;
+      }
+      for (const recipeid of selectedRecipeList) {
+        try {
+          const requestBody = JSON.stringify(recipeid);
+          const response = await api.delete(`/users/${userID}/cookbooks/${recipeid}`, requestBody);
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          if (!response) {
+            alert("Something went wrong while deleting the recipes!");
+          }
+        } catch (error) {
+          console.error(
+            `Something went wrong while deleting the recipes: \n${handleError(
+              error,
+            )}`,
+          );
+          console.error("Details:", error);
+          alert(
+            "Something went wrong while deleting the recipe! See the console for details.",
+          );
+        }
+      }
+      fetchData();
+      onClose();
+    };
+
+    const handleCancel = () => {
+      setSelectedRecipeList([]);
+      onClose();
+    };
+
+    return ReactDOM.createPortal(
+      <>
+        <div className="modal backdrop"></div>
+        ;
+        <div className="modal conatiner">
+          <div className="modal title">Warnning</div>
+          <div className="modal text">
+            All the recipes you selected will be deleted from your personal cookbook and all the associated group
+            cookbooks
+          </div>
+          <div className="modal text">
+            Are you sure?
+          </div>
+          <div className="modal button-container">
+            <Button className="modal button" onClick={handleCancel}>
+              Cancel
+            </Button>
+            <Button className="modal highlight" onClick={deleteRecipe}>
+              Yes
+            </Button>
+          </div>
+        </div>
+      </>,
+      document.getElementById("portal-invite-user"),
+    );
+  };
+
+  ConsentModal.propTypes = {
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+  };
+
+
+  let content;
+  if (!recipeState) {
+    content = <Spinner />;
+  } else {
+    content = (
       <BaseContainer>
 
         {/*head field*/}
@@ -222,6 +248,10 @@ const PersonalCookbook = () => {
               onClick={handelSelectRecipe}>
               Delete Recipes
             </Button>
+            <ConsentModal
+              open={isConsentModalOpen}
+              onClose={() => setIsConsentModalOpen(false)}>
+            </ConsentModal>
           </div>
         </div>
 
@@ -234,8 +264,33 @@ const PersonalCookbook = () => {
             onChange={handleFilterChange}>
           </FormField>
         </div>
-        <RecipeList recipes={recipeList} onClickRecipe={handleClickRecipe} />
+        <div>
+          {recipeList.length === 0 ? (
+            <p className="cookbook noRecipeText">no recipes saved yet</p>
+          ) : (
+            <RecipeList recipes={recipeList} onClickRecipe={handleClickRecipe} />
+          )}
+        </div>
       </BaseContainer>
+    );
+  }
+
+  return (
+    <div>
+      <Header_new></Header_new>
+      <Dashboard
+        showButtons={{
+          home: true,
+          cookbook: true,
+          recipe: true,
+          group: true,
+          calendar: true,
+          shoppinglist: true,
+          invitations: true,
+        }}
+        activePage="personalCookbook"
+      />
+      {content}
       <Footer>
       </Footer>
     </div>

@@ -21,6 +21,9 @@ const Header_new = () => {
   const doProfile = () => {
     navigate(`/users/${userID}`);
   };
+  const doHome = async () => {
+    navigate("/home");
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,14 +39,26 @@ const Header_new = () => {
     fetchData();
   }, [userID]);
 
-  return (
-    <div className="header_new container">
-      {user && (
+  let content;
+  if (!user) {
+    content = <div className="header_new container">Loading...</div>;
+  } else {
+    content = (
+      <div >
         <Button className="header_new userProfile" onClick={doProfile}>
           <img src={user.profilePicture} alt="Profile Picture" className="header_new profileImage" />
           <h2 className="header_new title">{user.username}</h2>
         </Button>
-      )}
+        {/*<Button className="header_new button-container" onClick={doHome}>*/}
+        {/*  Home*/}
+        {/*</Button>*/}
+      </div>
+    );
+  }
+
+  return (
+    <div className="header_new container">
+      {content}
     </div>
   );
 };

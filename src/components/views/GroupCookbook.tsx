@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import ReactDOM from "react-dom";
 import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
 import "styles/views/Cookbooks.scss";
+import "styles/views/Modal.scss";
 import Recipe from "models/Recipe";
 import Dashboard from "components/ui/Dashboard";
 import { api, handleError } from "helpers/api";
 import Footer from "components/ui/footer";
 import Header_new from "components/ui/Header_new";
 import BaseContainer from "components/ui/BaseContainer_new";
+import { Spinner } from "../ui/Spinner";
 
 
 const FormField = (props) => {
@@ -25,7 +28,6 @@ const FormField = (props) => {
 };
 FormField.propTypes = {
   value: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 
@@ -38,8 +40,9 @@ const GroupCookbook = () => {
   const [recipeState, setRecipeState] = useState(false);
   const [recipeList, setRecipeList] = useState<any[]>([]);
   const [originalRecipeList, setOriginalRecipeList] = useState<object[]>([]);
-  const [deleteState, setDeleteState] = useState(false);
+  const [removeState, setRemoveState] = useState(false);
   const [selectedRecipeList, setSelectedRecipeList] = useState<object[]>([]);
+  const [isConsentModalOpen, setIsConsentModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,21 +62,19 @@ const GroupCookbook = () => {
       const response = await api.get(`/groups/${groupID}/cookbooks`);
       await new Promise((resolve) => setTimeout(resolve, 500));
       setRecipeState(true);
-      if (!response || response.length === 0) {
-        return doNoRecipe();
-      } else {
-        const formattedRecipes = response.data.map((recipe: any) => ({
-          id: recipe.id,
-          title: recipe.title,
-          shortDescription: recipe.shortDescription,
-          cookingTime: recipe.cookingTime,
-          tags: recipe.tags,
-          image: recipe.image,
-          autherID: recipe.authorID,
-        }));
-        setRecipeList(formattedRecipes);
-        setOriginalRecipeList(formattedRecipes);
-      }
+
+      const formattedRecipes = response.data.map((recipe: any) => ({
+        id: recipe.id,
+        title: recipe.title,
+        shortDescription: recipe.shortDescription,
+        cookingTime: recipe.cookingTime,
+        tags: recipe.tags,
+        image: recipe.image,
+        autherID: recipe.authorID,
+      }));
+      setRecipeState(true);
+      setRecipeList(formattedRecipes);
+      setOriginalRecipeList(formattedRecipes);
     } catch (error) {
       console.error(
         `Something went wrong while fetching the groups: \n${handleError(
@@ -90,14 +91,11 @@ const GroupCookbook = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [groupID]);
 
-  const doNoRecipe = () => {
-    return <p className="cookbook noRecipeText">no recipes saved yet</p>;
-  };
 
   const handleClickRecipe = (recipeId: string) => {
-    if (!deleteState) {
+    if (!removeState) {
       navigate(`/groups/${groupID}/cookbooks/${recipeId}`);
     } else {
       if (selectedRecipeList.includes(recipeId)) {
@@ -128,77 +126,130 @@ const GroupCookbook = () => {
 
 
   const handelSelectRecipe = (recipe: Recipe) => {
-    setDeleteState(!deleteState);
-    if (deleteState === true) {
-      removeRecipe();
+    setRemoveState(!removeState);
+    if (removeState === true && selectedRecipeList.length > 0) {
+      setIsConsentModalOpen(true);
     }
   };
 
-  const removeRecipe = async () => {
-    if (selectedRecipeList.length === 0) {
-      alert("Please select at least one recipe to delete!");
+  const ConsentModal = ({ open, onClose }) => {
+    if (!open) return null;
 
-      return;
-    }
-    for (const recipeid of selectedRecipeList) {
-      try {
-        const requestBody = JSON.stringify(recipeid);
-        const response = await api.put(`/groups/${groupID}/cookbooks/${recipeid}`, requestBody);
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        if (!response) {
-          alert("Something went wrong while removing the recipes!");
-        }
-      } catch (error) {
-        console.error(
-          `Something went wrong while removing the recipes: \n${handleError(
-            error,
-          )}`,
-        );
-        console.error("Details:", error);
-        alert(
-          "Something went wrong while removing the recipe! See the console for details.",
-        );
+    const removeRecipe = async () => {
+      if (selectedRecipeList.length === 0) {
+        alert("Please select at least one recipe to delete!");
+
+        return;
       }
-    }
-    fetchData();
-  };
-
-
-  const Recipe = ({ id, title, description, time, tag, imageUrl, autherID ,onClick }: any) => {
-    const isSelected = selectedRecipeList.includes(id);
-    const [userImgUrl,setUserImgUrl] = useState("");
-    const [userImgLoaded, setUserImgLoaded] = useState(false);
-
-    useEffect(() => {
-      const fetchUserImg = async (autherID: string) => {
+      for (const recipeid of selectedRecipeList) {
         try {
-          const response = await api.get(`/users/${autherID}`);
-          setUserImgUrl(response.data.profilePicture);
-          setUserImgLoaded(true);
+          const requestBody = JSON.stringify(recipeid);
+          const response = await api.put(`/groups/${groupID}/cookbooks/${recipeid}`, requestBody);
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          if (!response) {
+            alert("Something went wrong while removing the recipes!");
+          }
         } catch (error) {
           console.error(
-            `Something went wrong while fetching the user image: \n${handleError(
+            `Something went wrong while removing the recipes: \n${handleError(
               error,
             )}`,
           );
           console.error("Details:", error);
           alert(
-            "Something went wrong while fetching the user image! See the console for details.",
+            "Something went wrong while removing the recipe! See the console for details.",
+          );
+        }
+      }
+      fetchData();
+      onClose();
+    };
+
+    const handleCancel = () => {
+      setSelectedRecipeList([]);
+      onClose();
+    };
+
+    return ReactDOM.createPortal(
+      <>
+        <div className="modal backdrop"></div>
+        ;
+        <div className="modal conatiner">
+          <div className="modal title">Warnning</div>
+          <div className="modal text">
+            All the recipes you selected will be removed from this group cookbook
+          </div>
+          <div className="modal text">
+            But the recipes will still be available in the creator`s personal cookbook
+          </div>
+          <div className="modal text">
+            Are you sure?
+          </div>
+          <div className="modal button-container">
+            <Button className="modal button" onClick={handleCancel}>
+              Cancel
+            </Button>
+            <Button className="modal highlight" onClick={removeRecipe}>
+              Yes
+            </Button>
+          </div>
+        </div>
+      </>,
+      document.getElementById("portal-invite-user"),
+    );
+  };
+
+  ConsentModal.propTypes = {
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+  };
+
+
+  const Recipe = ({ id, title, description, time, tag, imageUrl, autherID, onClick }: any) => {
+    const isSelected = selectedRecipeList.includes(id);
+    const [user, setUser] = useState<any>({});
+
+    useEffect(() => {
+      const fetchUserData = async () => {
+        try {
+          const response = await api.get(`/users/${autherID}`);
+          setUser(response.data);
+        } catch (error) {
+          console.error(
+            `Something went wrong while fetching the user data: \n${handleError(
+              error
+            )}`
+          );
+          console.error("Details:", error);
+          alert(
+            "Something went wrong while fetching the user data! See the console for details."
           );
         }
       };
-      fetchUserImg(autherID);
-    }, [autherID]);
+      fetchUserData();
+    }, [autherID, id]);
+
+    const userImgUrl = useMemo(() => user.profilePicture || "", [user.profilePicture]);
 
     return (
       <div className="cookbook recipeContainer">
-        <button className={`cookbook recipeButton ${isSelected ? "selected" : ""}`} onClick={onClick}
+        <button
+          className={`cookbook recipeButton ${isSelected ? "selected" : ""}`}
+          onClick={onClick}
         >
           <div className="cookbook recipeUserImgContainer">
-            <img className="cookbook recipeUserImg" src={userImgUrl} alt="User Image" />
+            <img
+              className="cookbook recipeUserImg"
+              src={userImgUrl}
+              alt="User Image"
+            />
           </div>
           <div className="cookbook recipeImgContainer">
-            <img className="cookbook recipeImg" src={imageUrl} alt="Recipe Image" />
+            <img
+              className="cookbook recipeImg"
+              src={imageUrl}
+              alt="Recipe Image"
+            />
           </div>
           <div className="cookbook recipeContent">
             <h2 className="cookbook recipeTitle">{title}</h2>
@@ -229,21 +280,11 @@ const GroupCookbook = () => {
     </div>
   );
 
-  return (
-    <div>
-      <Header_new />
-      <Dashboard
-        showButtons={{
-          home: true, 
-          cookbook: true, 
-          recipe: true,
-          groupCalendar: true,
-          groupShoppinglist: true,
-          inviteUser: true,
-          leaveGroup: true,
-        }}
-        activePage="leaveGroup"
-      />
+  let content;
+  if (!recipeState) {
+    content = <Spinner />;
+  } else {
+    content = (
       <BaseContainer>
         {/*head field*/}
         <div className="cookbook headerContainer">
@@ -257,10 +298,14 @@ const GroupCookbook = () => {
           </div>
           <div className="cookbook backButtonContainer">
             <Button
-              className={`${deleteState ? "hightlightButton" : "backButton"}`}
+              className={`${removeState ? "hightlightButton" : "backButton"}`}
               onClick={handelSelectRecipe}>
               Remove Recipes
             </Button>
+            <ConsentModal
+              open={isConsentModalOpen}
+              onClose={() => setIsConsentModalOpen(false)}>
+            </ConsentModal>
           </div>
         </div>
         <div className="cookbook filterContainer">
@@ -275,6 +320,25 @@ const GroupCookbook = () => {
         </div>
         <RecipeList recipes={recipeList} onClickRecipe={handleClickRecipe} />
       </BaseContainer>
+    );
+  }
+
+  return (
+    <div>
+      <Header_new />
+      <Dashboard
+        showButtons={{
+          home: true,
+          cookbook: true,
+          recipe: true,
+          groupCalendar: true,
+          groupShoppinglist: true,
+          inviteUser: true,
+          leaveGroup: true,
+        }}
+        activePage="leaveGroup"
+      />
+      {content}
       <Footer>
       </Footer>
     </div>

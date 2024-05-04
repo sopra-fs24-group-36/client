@@ -3,15 +3,15 @@ import { api } from "helpers/api";
 import PropTypes from "prop-types";
 import { Button } from "components/ui/Button";
 import ReactDOM from "react-dom";
-import "styles/views/InviteUserModal.scss";
+import "styles/views/Modal.scss";
 import { useParams } from "react-router-dom";
 
 const FormField = (props) => {
   return (
-    <div className="invite field">
-      <div className="invite input-container">
+    <div className="modal field">
+      <div className="modal input-container">
         <input
-          className="invite input"
+          className="modal input"
           value={props.value}
           onChange={(e) => props.onChange(e.target.value)}
         />
@@ -56,18 +56,18 @@ const InviteUserModal = ({ open, onClose }) => {
 
   return ReactDOM.createPortal(
     <>
-      <div className="invite backdrop"></div>
+      <div className="modal backdrop"></div>
       ;
-      <div className="invite conatiner">
-        <div className="invite title">Invite a User</div>
+      <div className="modal conatiner">
+        <div className="modal title">Invite a User</div>
         <FormField
           value={email}
           onChange={setEmail} />
-        <div className="invite button-container">
-          <Button className="invite button" onClick={onClose}>
+        <div className="modal button-container">
+          <Button className="modal button" onClick={onClose}>
             Cancel
           </Button>
-          <Button className="invite highlight" onClick={handleInvite}>
+          <Button className="modal highlight" onClick={handleInvite}>
             Send
           </Button>
         </div>

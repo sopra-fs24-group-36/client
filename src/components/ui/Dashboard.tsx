@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import ReactDOM from "react-dom";
 import "../../styles/ui/Dashboard.scss";
 import { api } from "helpers/api";
 import { Button } from "components/ui/Button";
@@ -15,6 +16,7 @@ const Dashboard = ({ showButtons, activePage }) => {
 
   const userID = parseInt(localStorage.getItem("userID"));
   const [isInviteUserModalOpen, setIsInviteUserModalOpen] = useState(false);
+  const [isConsentModalOpen, setIsConsentModalOpen] = useState(false);
 
   useEffect(() => {
     if (!userID) {
@@ -52,15 +54,6 @@ const Dashboard = ({ showButtons, activePage }) => {
   const doInvitations = async () => {
     navigate(`/users/${userID}/invitations`);
   };
-  const doLeaveGroup = async () => {
-    try {
-      const requestBody = JSON.stringify(userID);
-      const response = await api.delete(`/groups/${groupID}/${userID}`, requestBody);
-    } catch (error) {
-      alert("An error occurred while leaving the group");
-    }
-    navigate("/home");
-  };
   const doLogout = async () => {
     try {
       const requestBody = JSON.stringify(userID);
@@ -71,6 +64,60 @@ const Dashboard = ({ showButtons, activePage }) => {
     localStorage.clear();
     navigate("/users/login");
   };
+
+
+  const doLeaveGroup = () => {
+    setIsConsentModalOpen(true);
+  };
+
+  const ConsentModal = ({ open, onClose }) => {
+    if (!open) return null;
+
+    const leaveGroup = async () => {
+      try {
+        const requestBody = JSON.stringify(userID);
+        const response = await api.delete(`/groups/${groupID}/${userID}`, requestBody);
+      } catch (error) {
+        alert("An error occurred while leaving the group");
+      }
+      navigate("/home");
+    };
+
+    const handleCancel = () => {
+      onClose();
+    };
+
+    return ReactDOM.createPortal(
+      <>
+        <div className="modal backdrop"></div>
+        ;
+        <div className="modal conatiner">
+          <div className="modal title">Warnning</div>
+          <div className="modal text">
+            You will leave this group
+          </div>
+          <div className="modal text">
+            Are you sure?
+          </div>
+          <div className="modal button-container">
+            <Button className="modal button" onClick={handleCancel}>
+              Cancel
+            </Button>
+            <Button className="modal highlight" onClick={leaveGroup}>
+              Yes
+            </Button>
+          </div>
+        </div>
+      </>,
+      document.getElementById("portal-invite-user"),
+    );
+  };
+
+  ConsentModal.propTypes = {
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+  };
+
 
   return (
     <div className="dashboard container">
@@ -184,10 +231,13 @@ const Dashboard = ({ showButtons, activePage }) => {
         <div className="dashboard button-container">
           <Button
             className={`db${activePage === "leaveGroup" ? " highlight" : ""}`}
-            onClick={() => doLeaveGroup()}
-          >
+            onClick={doLeaveGroup}>
             Leave the group
           </Button>
+          <ConsentModal
+            open={isConsentModalOpen}
+            onClose={() => setIsConsentModalOpen(false)}>
+          </ConsentModal>
         </div>
       )}
       <div className="dashboard logout-container">

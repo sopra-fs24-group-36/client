@@ -159,6 +159,7 @@ const Home = () => {
         </div>
       ));
     } else {
+
       return doNoGroup();
     }
   };

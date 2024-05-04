@@ -82,9 +82,9 @@ const Shoppinglist = () => {
       }
     }
     fetchData();
-    const intervalId = setInterval(fetchData, 1000); // Polling every 1 seconds
-
-    return () => clearInterval(intervalId);
+    // const intervalId = setInterval(fetchData, 1000); // Polling every 1 seconds
+    //
+    // return () => clearInterval(intervalId);
   }, [userID]);
 
   const addItem = async () => {

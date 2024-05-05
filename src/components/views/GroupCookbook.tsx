@@ -216,46 +216,31 @@ const GroupCookbook = () => {
           setUser(response.data);
         } catch (error) {
           console.error(
-            `Something went wrong while fetching the user data: \n${handleError(
-              error
-            )}`
+            `Something went wrong while fetching the user data: \n${handleError(error)}`,
           );
           console.error("Details:", error);
-          alert(
-            "Something went wrong while fetching the user data! See the console for details."
-          );
+          alert("Something went wrong while fetching the user data! See the console for details.");
         }
       };
       fetchUserData();
-    }, [autherID, id]);
+    }, [autherID]);
 
     const userImgUrl = useMemo(() => user.profilePicture || "", [user.profilePicture]);
 
     return (
       <div className="cookbook recipeContainer">
-        <button
-          className={`cookbook recipeButton ${isSelected ? "selected" : ""}`}
-          onClick={onClick}
-        >
+        <button className={`cookbook recipeButton ${isSelected ? "selected" : ""}`} onClick={onClick}>
           <div className="cookbook recipeUserImgContainer">
-            <img
-              className="cookbook recipeUserImg"
-              src={userImgUrl}
-              alt="User Image"
-            />
+            <img className="cookbook recipeUserImg" src={userImgUrl} alt="User Image" />
           </div>
           <div className="cookbook recipeImgContainer">
-            <img
-              className="cookbook recipeImg"
-              src={imageUrl}
-              alt="Recipe Image"
-            />
+            <img className="cookbook recipeImg" src={imageUrl} alt="Recipe Image" />
           </div>
           <div className="cookbook recipeContent">
             <h2 className="cookbook recipeTitle">{title}</h2>
-            <p className="cookbook recipeDescription">Description:{description}</p>
-            <p className="cookbook recipeTime">Total Time:{time}</p>
-            <p className="cookbook recipeTags">Tags:{tag.join(",")}</p>
+            <p className="cookbook recipeDescription">Description: {description}</p>
+            <p className="cookbook recipeTime">Total Time: {time}</p>
+            <p className="cookbook recipeTags">Tags: {tag.join(",")}</p>
           </div>
         </button>
       </div>
@@ -285,62 +270,64 @@ const GroupCookbook = () => {
     content = <Spinner />;
   } else {
     content = (
-      <BaseContainer>
-        {/*head field*/}
-        <div className="cookbook headerContainer">
-          <div className="cookbook backButtonContainer">
-            <Button className="cookbook backButton" onClick={() => navigate(-1)}>
-              Back
-            </Button>
+      <div>
+        <Header_new />
+        <Dashboard
+          showButtons={{
+            home: true,
+            cookbook: true,
+            recipe: true,
+            groupCalendar: true,
+            groupShoppinglist: true,
+            inviteUser: true,
+            leaveGroup: true,
+          }}
+          activePage="leaveGroup"
+        />
+        <BaseContainer>
+          {/*head field*/}
+          <div className="cookbook headerContainer">
+            <div className="cookbook backButtonContainer">
+              <Button className="cookbook backButton" onClick={() => navigate(-1)}>
+                Back
+              </Button>
+            </div>
+            <div className="cookbook titleContainer">
+              <h2 className="cookbook title">{groupInfo.name} - Cookbook</h2>
+            </div>
+            <div className="cookbook backButtonContainer">
+              <Button
+                className={`${removeState ? "hightlightButton" : "backButton"}`}
+                onClick={handelSelectRecipe}>
+                Remove Recipes
+              </Button>
+              <ConsentModal
+                open={isConsentModalOpen}
+                onClose={() => setIsConsentModalOpen(false)}>
+              </ConsentModal>
+            </div>
           </div>
-          <div className="cookbook titleContainer">
-            <h2 className="cookbook title">{groupInfo.name} - Cookbook</h2>
+          <div className="cookbook filterContainer">
+            <div className="cookbook filterButtonContainer">
+              <Button className="cookbook filterButton" onClick={filterRecipe}>filter</Button>
+            </div>
+            <FormField
+              className="cookbook input"
+              value={filterKeyword}
+              onChange={handleFilterChange}>
+            </FormField>
           </div>
-          <div className="cookbook backButtonContainer">
-            <Button
-              className={`${removeState ? "hightlightButton" : "backButton"}`}
-              onClick={handelSelectRecipe}>
-              Remove Recipes
-            </Button>
-            <ConsentModal
-              open={isConsentModalOpen}
-              onClose={() => setIsConsentModalOpen(false)}>
-            </ConsentModal>
-          </div>
-        </div>
-        <div className="cookbook filterContainer">
-          <div className="cookbook filterButtonContainer">
-            <Button className="cookbook filterButton" onClick={filterRecipe}>filter</Button>
-          </div>
-          <FormField
-            className="cookbook input"
-            value={filterKeyword}
-            onChange={handleFilterChange}>
-          </FormField>
-        </div>
-        <RecipeList recipes={recipeList} onClickRecipe={handleClickRecipe} />
-      </BaseContainer>
+          <RecipeList recipes={recipeList} onClickRecipe={handleClickRecipe} />
+        </BaseContainer>
+        <Footer>
+        </Footer>
+      </div>
     );
   }
 
   return (
     <div>
-      <Header_new />
-      <Dashboard
-        showButtons={{
-          home: true,
-          cookbook: true,
-          recipe: true,
-          groupCalendar: true,
-          groupShoppinglist: true,
-          inviteUser: true,
-          leaveGroup: true,
-        }}
-        activePage="leaveGroup"
-      />
       {content}
-      <Footer>
-      </Footer>
     </div>
   );
 };

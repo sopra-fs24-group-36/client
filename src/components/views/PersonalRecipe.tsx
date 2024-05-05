@@ -30,22 +30,21 @@ FormField.propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 
-const GroupRecipe = () => {
+const PersonalRecipe = () => {
   const navigate = useNavigate();
-  const { groupID, recipeID } = useParams(); //User ID of recipe's author and recipeID
-  const [recipe, setRecipe] = useState(null); //getting the recipe we are currently viewing
+  const { authorID, recipeID } = useParams(); //User ID of recipe's author and recipeID
+  const [recipe, setRecipe] = useState(null); //getting the recipe we are currently viewing 
   const userID = localStorage.getItem("userID");
   const [comments, setComments] = useState<object[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [authorID, setAuthorID] = useState(null);
 
   useEffect(() => { //retrieve the recipe based on the ID from the URL
+
     async function fetchData() {
       try {
-        const response = await api.get(`/groups/${groupID}/cookbooks/${recipeID}`);
+        const response = await api.get(`/users/${authorID}/cookbooks/${recipeID}`);
         await new Promise((resolve) => setTimeout(resolve, 500));
         setRecipe(response.data);
-        setAuthorID(response.data.authorID);
       } catch (error) {
         console.error(
           `Something went wrong while fetching the recipe: \n${handleError(error)}`,
@@ -76,6 +75,7 @@ const GroupRecipe = () => {
 
     fetchData();
     fetchComment();
+
 
     const intervalId = setInterval(fetchComment, 500); // Polling every 1 seconds
 
@@ -109,6 +109,7 @@ const GroupRecipe = () => {
     const recipeIngredients = recipe.ingredients;
     const recipeAmounts = recipe.amounts;
     if (recipeIngredients.length === 0) {
+
       return <p>This recipe has no ingredients</p>;
     }
     // Map each ingredient to a JSX <li> element
@@ -162,14 +163,14 @@ const GroupRecipe = () => {
   };
 
 
-  let content;
+  let content: any;
   if (!recipe) {
     content = <Spinner />; //had to use the spinner because it takes a while to render the content
   } else if (recipe.link) {
     window.open(recipe.link);
-    navigate("/home"); //potentially needs taking out when we connect to cookbooks
+    navigate("/home"); //potentially needs taking out when we connect to cookbooks 
   } else {
-    const canEdit = parseInt(userID) === parseInt(authorID);
+    const canEdit = userID === authorID;
     content = (
       <div>
         <Header_new></Header_new>
@@ -178,10 +179,10 @@ const GroupRecipe = () => {
             home: true,
             cookbook: true,
             recipe: true,
-            groupCalendar: true,
-            groupShoppinglist: true,
-            inviteUser: true,
-            leaveGroup: true,
+            group: true,
+            calendar: true,
+            shoppinglist: true,
+            invitations: true,
           }}
           activePage=""
         />
@@ -195,14 +196,13 @@ const GroupRecipe = () => {
             <div className="recipe titleContainer">
               <h2 className="recipe title">{recipe.title}</h2>
             </div>
-            <div className="recipe editButtonContainer">
+            {canEdit && (<div className="recipe editButtonContainer">
               <Button
                 className="recipe edit"
-                onClick={() => editRecipe()}
-                disabled={!canEdit}>
+                onClick={() => editRecipe()}>
                 Edit Recipe
               </Button>
-            </div>
+            </div>)}
           </div>
 
           <div className="recipe container">
@@ -306,7 +306,7 @@ const Comment = ({ key, comment, handleDeleteComment }) => {
       {!(isHovered && commentUserName === currentUserName) && (
         <div>
           <li>{comment.text}</li>
-          <div className="comment author"> - {comment.username}</div>
+          <div className="comment author">- {comment.username}</div>
         </div>
       )}
     </div>
@@ -425,7 +425,6 @@ const EditCommentModal = ({ open, onClose, comment }) => {
       return;
     }
     try {
-      setCommentText(commentText)
       const requestBody = JSON.stringify({
         text: commentText,
       });
@@ -467,4 +466,4 @@ EditCommentModal.propTypes = {
   comment: PropTypes.object.isRequired,
 };
 
-export default GroupRecipe;
+export default PersonalRecipe;

@@ -12,13 +12,6 @@ import { Spinner } from "components/ui/Spinner";
 import rightBrok from "../../assets/rightBrok.png";
 // @ts-ignore
 import leftBrok from "../../assets/leftBrok.png";
-// @ts-ignore
-import wildGarlic from "../../assets/defaultRecipe1.png";
-// @ts-ignore
-import potatoes from "../../assets/defaultRecipe3.png";
-// @ts-ignore
-import Group from "../../assets/defaultUser.png";
-import { isFormElement } from "react-router-dom/dist/dom";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -151,8 +144,7 @@ const Home = () => {
     if (validGroups.length > 0) {
       return validGroups.map((group, index) => (
         <div key={index} className="Home buttonContainer">
-          <Button className="Home group"
-            onClick={() => navigate(`/groups/${group.groupID}/cookbooks/`)}>
+          <Button className="Home group" onClick={() => navigate(`/groups/${group.groupID}/cookbooks/`)}>
             <img src={group.groupImage} alt="Group" className="Home groupImage" />
             {group.groupName}
           </Button>
@@ -173,7 +165,7 @@ const Home = () => {
         <Header_new></Header_new>
         <Dashboard
           showButtons={{
-            home: true, 
+            home: true,
             cookbook: true,
             recipe: true,
             group: true,

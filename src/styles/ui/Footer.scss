@@ -2,7 +2,7 @@
 
 .footer {
   position: absolute;
-  width: 100%;
+  width: calc(100% - 20px);
   &.content{
     width: 100%;
     bottom: 0;
@@ -94,7 +94,8 @@
     font-style: italic;
     font-size: 1.2em; 
     color: $container_dark;
-    padding-bottom: 30px; 
+    padding-bottom: 30px;
+    width: calc(100% - 20px);
   }
 }
 

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { api, handleError } from "helpers/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
@@ -11,14 +12,7 @@ import BaseContainer from "../ui/BaseContainer_new";
 
 // @ts-ignore
 import search from "../../assets/search.png";
-// @ts-ignore
-import defaultRecipe1 from "../../assets/defaultRecipe1.png";
-// @ts-ignore
-import defaultRecipe2 from "../../assets/defaultRecipe2.png";
-// @ts-ignore
-import defaultRecipe3 from "../../assets/defaultRecipe3.png";
-// @ts-ignore
-import defaultRecipe4 from "../../assets/defaultRecipe4.png";
+
 
 const FormField=(props)=>{
   return(
@@ -37,82 +31,56 @@ FormField.propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 
-const defaultRecipes=[
-  {
-    title: "Breakfast burritos",
-    image:defaultRecipe1,
-    id:1,
-  },
-  {
-    title:"Quick fried rice",
-    image:defaultRecipe2,
-    id:2,
-  },
-  {
-    title:"Spring onion soup",
-    image:defaultRecipe3,
-    id:3,
-  },
-  {
-    title:"Pork medallions",
-    image:defaultRecipe4,
-    id:4,
-  }
-]
+interface TooltipProps {
+  children: React.ReactNode;
+  text: string;
+}
+const Tooltip: React.FC<TooltipProps> = ({ children, text })=>{
+  const [visible,setVisible]=useState(false);
+  const textRef=useRef(null);
+  const [isOverflowing,setIsOverflowing]=useState(false);
 
-const defaultCalendar=[
-  {
-    id: 1,
-    recipeId:1,
-    title: "Breakfast burritos",
-    date: "2024-4-29",
-    image: "defaultRecipe1",
-    timeSlot: "Morning",
-    creator: "User1"
-  },
-  {
-    id: 2,
-    recipeId:2,
-    title: "Quick fried rice",
-    date: "2024-4-21",
-    image: "defaultRecipe2",
-    timeSlot: "Morning",
-    creator: "User2"
-  },
-  {
-    id: 3,
-    recipeId:3,
-    title: "Spring onion soup",
-    date: "2024-4-22",
-    image: "defaultRecipe2",
-    timeSlot: "Afternoon",
-    creator: "User2"
-  },
-  {
-    id: 4,
-    recipeId:4,
-    title: "Pork medallions",
-    date: "2024-4-23",
-    image: "3",
-    timeSlot: "Evening",
-    creator: "User3"
-  },
-]
+  const checkOverflow = () => {
+    const current = textRef.current;
+    if (current) {
+      setIsOverflowing(current.scrollWidth > current.clientWidth);
+    }
+  };
+  useEffect(() => {
+    checkOverflow();
+    window.addEventListener('resize', checkOverflow);
+    return () => window.removeEventListener('resize', checkOverflow);
+  }, []);
+
+  return(
+    <div
+      ref={textRef}
+      onMouseEnter={() => isOverflowing && setVisible(true)}
+      onMouseLeave={() => setVisible(false)}
+      className="calendar tooltipFather"
+    >
+      {children}
+      {visible&&(
+        <div className="calendar tooltipChildren">
+          {text}
+        </div>
+      )}
+    </div>
+  )
+}
+
 const Calendar = () =>{
   const navigate = useNavigate();
-  const {userId} = useParams();
+  const userID = localStorage.getItem("userID"); /*getting the ID of the currently logged in user*/
   const [filterKeyword, setFilterKeyword]=useState<string>(null)
-  //TODO:replace defaultCalendar with null when connecting with backend
-  const [calendar,setCalendar]=useState(defaultCalendar);
-  const[allRecipes,setAllRecipes]=useState<Recipe[]>(defaultRecipes);
-  const [searchedRecipes,setSearchedRecipes]=useState<Recipe[]>(defaultRecipes);
+  const [calendar,setCalendar]=useState(null);
+  const[allRecipes,setAllRecipes]=useState<Recipe[]>(null);
+  const [searchedRecipes,setSearchedRecipes]=useState<Recipe[]>(null);
 
 
   const [currentWeek,setCurrentWeek]=useState((new Date()));
-  const [shouldFetchCalendar, setShouldFetchCalendar] = useState(false);
+  const [shouldFetchCalendar, setShouldFetchCalendar] = useState(true);
 
-  //for testing
-  const [draggedRecipe, setDraggedRecipe] = useState(null);
 
   const searchRecipe=()=>{
     if(!searchedRecipes){
@@ -170,84 +138,59 @@ const Calendar = () =>{
     return `${year}-${month}-${day}`;
   }
 
-  //TODO: handleDragStart+handleDrop
-  /*const handleDragStart=(e,recipe)=>{
+  const handleDragStart=(e,recipe)=>{
     e.dataTransfer.setData('text/plain',JSON.stringify(recipe));
   }
-  const handleDrop=async (e,date,timeSlot)=>{
+  const handleDrop=async (e,date,status)=>{
     const recipeString = e.dataTransfer.getData('text/plain');
     const recipe = JSON.parse(recipeString);
     e.preventDefault();
 
     const requestBody={
-      recipeId:recipe.recipeId,
       date:date,
-      timeSlot:timeSlot,
+      recipeID:recipe.id,
+      status:status,
     }
-
-    await api.post(`/users/${userId}/calendars/${recipe.id}`, requestBody)
+    await api.post(`/users/${userID}/calendars`, requestBody)
       .then(()=>{
         setShouldFetchCalendar(true);
       })
-        /!*setCalendar(preCalendar=>{
-          const updatedCalendar=[...preCalendar];
-          updatedCalendar.push({id:recipe.id,title:recipe.title,image:recipe.image,creator:recipe.creator,date,timeSlot});
-          return updatedCalendar;
-        })
-      )*!/
       .catch(err => console.error(err));
   }
-  */
-  const handleDragStart = (e, recipe) => {
-    setDraggedRecipe(recipe);
-  };
-  const handleDrop = (e, date, timeSlot) => {
-    e.preventDefault();
 
-    if (draggedRecipe) {
-      const newEvent = {
-        id: calendar.length + 1,
-        recipeId:draggedRecipe.id,
-        title: draggedRecipe.title,
-        date,
-        image: draggedRecipe.image,
-        timeSlot,
-        creator: draggedRecipe.creator,
-      };
-      setCalendar(prevCalendar => {
-        return [...prevCalendar, newEvent];
-      });
-      setDraggedRecipe(null);
-    }
-  };
 
-  const handleRemove= async (eventId)=>{
+  const handleRemove= async (eventId,date,status)=>{
     try{
-      //TODO:add the following line
-      /*await api.delete(`users/${userId}/calendars/${eventId}`)
-      setShouldFetchCalendar(true);*/
-      const updatedCalendar=calendar.filter(event=>!(event.id===eventId))
+      const requestBody = JSON.stringify(eventId);
+      const response = await api.delete(`/users/${userID}/calendars/${eventId}`,requestBody);
+      setShouldFetchCalendar(true);
+      const updatedCalendar=calendar.filter(event=>!(event.date === date && event.status === status))
       setCalendar(updatedCalendar);
-    }catch (error){}
-    console.error("Error removing event:", Error);
+    }catch (error){
+      console.error(
+        `Something went wrong while removing the recipe: \n${handleError(
+          error,
+        )}`,
+      );
+      console.error("Details:", error);
+      alert(
+        "Something went wrong while removing the recipe! See the console for details.",
+      );    }
   };
-  const getEventsOfTimeSlot=(calendar,date,timeSlot)=>{
-
-    return calendar.filter(event => formatDateToYYYYMMDD(event.date) === formatDateToYYYYMMDD(date) && event.timeSlot === timeSlot);
+  const getEventsOfStatus=(calendar,date,status)=>{
+    return calendar.filter(event => formatDateToYYYYMMDD(event.date) === formatDateToYYYYMMDD(date) && event.status === status);
   }
 
 
   useEffect(()=>{
     async function fetchData(){
       try{
-        //TODO:add the fetchData func when connecting with backend
-        /*const responseRecipe=await api.get(`/users/${userId}/cookbooks`);
+        const responseRecipe=await api.get(`/users/${userID}/cookbooks`);
+        await new Promise((resolve) => setTimeout(resolve, 500));
         setAllRecipes(responseRecipe.data);
         setSearchedRecipes(responseRecipe.data);
-        const responseCalendar=await api.get(`/users${userId}/calendars`);
-        setCalendar(responseCalendar.data)*/
-        setAllRecipes(defaultRecipes);
-        setSearchedRecipes(defaultRecipes);
+        const responseCalendar=await api.get(`/users/${userID}/calendars`);
+        setCalendar(responseCalendar.data)
       }catch(error){
         console.error("Details:", error);
         alert(
@@ -276,7 +219,7 @@ const Calendar = () =>{
         }}
         activePage="calendar"
       />
-      <div className="calendar container" >
+      <div className="calendar container">
         {/*your recipes field*/}
         <BaseContainer className="calendar baseContainerLeft">
           <div className="calendar headContainer1">
@@ -300,9 +243,7 @@ const Calendar = () =>{
             </div>
           </div>
           <div className="calendar recipeListContainer">
-            {/*TODO: display the recipes in database
-recipes.map...*/}
-            {searchedRecipes && searchedRecipes.length > 0 ?(searchedRecipes.map((recipe) => (
+            {searchedRecipes && searchedRecipes.length > 0 ? (searchedRecipes.map((recipe) => (
               <div
                 className="calendar recipeContainer"
                 key={recipe.id}
@@ -316,8 +257,8 @@ recipes.map...*/}
                   <h2 className="calendar recipeTitle">{recipe.title}</h2>
                 </button>
               </div>
-            ))):(
-              <div>No recipes found.</div>
+            ))) : (
+              <div className="calendar noRecipeText">no recipes saved yet</div>
             )}
           </div>
         </BaseContainer>
@@ -348,31 +289,40 @@ recipes.map...*/}
                   {`${getDayOfWeek(date)}.${formatDate(date)}`}
                 </div>
               ))}
-              {["Morning","Afternoon","Evening"].map((timeSlot,index)=>(
-                getDatesOfWeek(currentWeek).map(date=>(
+              {["BREAKFAST", "LUNCH", "DINNER"].map((status, index) => (
+                getDatesOfWeek(currentWeek).map(date => (
                   <div
                     key={date}
-                    onDragOver={(e)=>e.preventDefault()}
-                    onDrop={(e)=>handleDrop(e,date,timeSlot)}
-                    className={`calendar timeSlot ${timeSlot.toLowerCase()}`}
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={(e) => handleDrop(e, date, status)}
+                    className={`calendar status ${status.toLowerCase()}`}
                   >
-                    {getEventsOfTimeSlot(calendar, date, timeSlot).map(event => (
-                      <div className="calendar eventContainer"
-                        key={event.id}>
-                        <h3 className="calendar eventTitle">{event.title}</h3>
-                        <Button
-                          className="calendar removeButton1"
-                          onClick={() => handleRemove(event.id)}>Remove</Button>
-                        {/*TODO:ADD THE FOLLOWING
-                          onClick={() => handleRemove(event.id,date,timeSlot)}>Remove</Button>*/}
-                      </div>
-                    ))}
+                    {
+                      calendar?.length > 0 && (
+                        getEventsOfStatus(calendar, date, status).map(event => (
+                          <div className="calendar eventContainer" key={event.id}>
+                            <Button
+                              className="calendar recipeButtonInCalendar"
+                              onClick={() => navigate(`/users/${userID}/cookbooks/${event.recipeID}`)}>
+                              <Tooltip text={event.recipeTitle}>
+                                <div className="calendar eventTitle">{event.recipeTitle}</div>
+                              </Tooltip>
+                            </Button>
+                            <Button className="calendar removeButton"
+                                    onClick={() => handleRemove(event.eventId, date, status)}>
+                              Remove
+                            </Button>
+                          </div>
+                        ))
+                      )
+                    }
                   </div>
                 ))
               ))}
             </div>
           </div>
         </BaseContainer>
+
         <Footer></Footer>
       </div>
     </div>

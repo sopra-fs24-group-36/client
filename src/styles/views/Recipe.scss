@@ -3,38 +3,47 @@
 .recipe {
   &.container {
     min-height: 300px;
-    margin-left: 30px; 
+    margin-left: 30px;
     border-radius: $borderRadius;
     margin-bottom: 15px;
     overflow: hidden;
   }
-  &.headerContainer{
+
+  &.headerContainer {
     justify-content: center;
     display: flex;
     align-items: center;
   }
-  &.title{
+
+  &.title {
     color: $textColor;
     font-size: 40px;
-    padding: 0px 60px 0px 30px; 
+    padding: 0px 60px 0px 30px;
+    overflow-wrap: break-word;
   }
-  &.titleContainer{
+
+  &.titleContainer {
     text-align: center;
     margin: 0 auto;
     max-width: 50%;
   }
-  &.editButtonContainer{
-    margin-right: 30px; 
+
+  &.editButtonContainer {
+    margin-right: 30px;
   }
-  &.backButtonContainer{
-    margin: 0px auto 0px 60px; 
+
+  &.backButtonContainer {
+    margin: 0px auto 0px 60px;
   }
-  &.p{
+
+  &.p {
     color: $container_dark;
     font-weight: 600;
     font-size: 1.5em;
-    margin: 16px 0px 16px 0px; 
+    margin: 16px 0px 16px 0px;
+    overflow-wrap: break-word;
   }
+
   &.left {
     background-color: $light_green;
     vertical-align: top;
@@ -44,16 +53,24 @@
     width: calc(40% - 45px);
     border-radius: $borderRadius;
     padding: 30px;
-    height:auto;
+    height: auto;
     min-height: 800px;
   }
-  &.imageContainer{
+
+  &.imageContainer {
     flex-shrink: 0;
     align-items: center;
   }
-  &.image{
+
+  &.image {
     width: 100%;
   }
+
+  &.cutline {
+    height: 2px;
+    background-color: $container_dark;
+  }
+
   &.right {
     background-color: $light_green;
     vertical-align: top;
@@ -63,24 +80,95 @@
     width: calc(60% - 45px);
     border-radius: $borderRadius;
     padding: 10px 30px 30px 30px;
-    height:auto; /*height fits to size of information contained*/
+    height: auto; /*height fits to size of information contained*/
     min-height: 800px; /*minimum height is always length of page itself*/
   }
-  
+
   &.button-container {
     display: flex;
     justify-content: center;
-    margin-top: 2em;
   }
+
   &.list,
-  &.description, 
+  &.description,
   &.time,
-  &.tags{
+  &.tags {
     line-height: 1.4;
     color: $container_dark;
     font-weight: 300;
+    overflow-wrap: break-word;
   }
-  &.description{
+
+  &.description {
     font-style: italic;
   }
+
+  &.commentContainer {
+    flex-direction: column;
+  }
+}
+
+.comment {
+  &.container {
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 30px;
+    margin-top: 5px;
+  }
+
+  &.button {
+    width: 100%;
+    background-color: transparent;
+    justify-content: space-between;
+    border: none;
+  }
+
+  &.comment {
+    flex: 1;
+    text-align: left;
+  }
+
+  &.author {
+    flex: 1;
+    text-align: right;
+    font-style: italic;
+  }
+
+  &.button-container {
+    width: 100%;
+    height: 30px;
+    background-color: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .editButton{
+    background-color: $light_pink;
+    border: none;
+    color: $container_dark;
+    max-width: 60px;
+    height: 25px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: 10px;
+  }
+
+  .deleteButton {
+    background-color: $light_pink;
+    border: none;
+    color: $container_dark;
+    max-width: 60px;
+    height: 25px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
 }

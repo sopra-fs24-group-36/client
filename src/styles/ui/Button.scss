@@ -190,6 +190,15 @@
     display: flex;
     font-size: 20px;
   }
+  &.commentButton{
+    height: 30px;
+    color: $container_dark;
+    background-color: $dark_pink;
+    padding: 15px 40px;
+    align-items: center;
+    display: flex;
+    font-size: 15px;
+  }
 }
 
 .group {

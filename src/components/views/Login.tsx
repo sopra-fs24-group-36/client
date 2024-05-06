@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState } from "react";
 import { api, handleError } from "helpers/api";
 import User from "models/User";
 import { useNavigate } from "react-router-dom";
@@ -45,9 +45,24 @@ const Login = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState<string>(null);
   const [password, setPassword] = useState<string>(null);
+  const [cookingFact,setCookingFact]=useState<string>(null);
   const handleRegisterClick = () => {
     navigate("/users");
   };
+
+  useEffect(() => {
+    const fetchCookingFact=async ()=>{
+      try{
+        const responseCookingFact=await api.get("/randomCookingFact");
+        setCookingFact(responseCookingFact.data);
+        console.log(responseCookingFact.data);
+        console.log(cookingFact);
+      }catch(error){
+        console.error(`Failed to fetch cooking fact: ${error}`);
+      }
+    };
+    fetchCookingFact();
+  }, []);
 
   const doLogin = async () => {
     try {
@@ -59,7 +74,7 @@ const Login = () => {
 
       // Store the token into the local storage.
       localStorage.setItem("token", user.token);
-      //store ID in the local storage 
+      //store ID in the local storage
       localStorage.setItem("userID", user.id);
       localStorage.setItem("userEmail", user.email);
 
@@ -85,13 +100,13 @@ const Login = () => {
             label="Please enter your username:"
             value={username}
             onChange={(un: string) => setUsername(un)}
-            type="text" 
+            type="text"
           />
           <FormField
             label="Password:"
             value={password}
             onChange={(n) => setPassword(n)}
-            type="password" 
+            type="password"
           />
           <div className="login button-container">
             <Button
@@ -113,8 +128,14 @@ const Login = () => {
             </p>
           </div>
         </div>
+        <div className="login cookingFactContainer">
+          <div className="login cookingFactTitle">Did you know:</div>
+          <div className="login cookingFactContent">{cookingFact}</div>
+        </div>
       </div>
+
     </BaseContainer>
+
   );
 };
 

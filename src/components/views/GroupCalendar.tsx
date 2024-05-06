@@ -225,7 +225,7 @@ const GroupCalendar=()=>{
                 </button>
               </div>
             ))):(
-              <div>No recipes found.</div>
+              <div className="calendar noRecipeText">no recipes saved yet</div>
             )}
           </div>
         </BaseContainer>

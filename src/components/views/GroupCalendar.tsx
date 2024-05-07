@@ -102,10 +102,10 @@ const GroupCalendar=()=>{
   }
 
   const handleDragStart=(e,recipe)=>{
-    e.dataTransfer.setData('text/plain',JSON.stringify(recipe));
+    e.dataTransfer.setData("text/plain",JSON.stringify(recipe));
   }
   const handleDrop=async (e,date,status)=>{
-    const recipeString = e.dataTransfer.getData('text/plain');
+    const recipeString = e.dataTransfer.getData("text/plain");
     const recipe = JSON.parse(recipeString);
     e.preventDefault();
 
@@ -273,9 +273,7 @@ const GroupCalendar=()=>{
                               onClick={() => navigate(`/users/${groupID}/cookbooks/${event.recipeID}`)}>
                               <h3 className="calendar eventTitle">{event.recipeTitle}</h3>
                             </Button>
-                            <Button className="calendar removeButton"
-                                    onClick={() => handleRemove(event.eventId)}>
-                              Remove
+                            <Button className="calendar removeButton" onClick={() => handleRemove(event.eventId)}>Remove
                             </Button>
                           </div>
                         ))

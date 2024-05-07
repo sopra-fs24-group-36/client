@@ -48,8 +48,9 @@ const Tooltip: React.FC<TooltipProps> = ({ children, text })=>{
   };
   useEffect(() => {
     checkOverflow();
-    window.addEventListener('resize', checkOverflow);
-    return () => window.removeEventListener('resize', checkOverflow);
+    window.addEventListener("resize", checkOverflow);
+
+    return () => window.removeEventListener("resize", checkOverflow);
   }, []);
 
   return(
@@ -139,10 +140,10 @@ const Calendar = () =>{
   }
 
   const handleDragStart=(e,recipe)=>{
-    e.dataTransfer.setData('text/plain',JSON.stringify(recipe));
+    e.dataTransfer.setData("text/plain",JSON.stringify(recipe));
   }
   const handleDrop=async (e,date,status)=>{
-    const recipeString = e.dataTransfer.getData('text/plain');
+    const recipeString = e.dataTransfer.getData("text/plain");
     const recipe = JSON.parse(recipeString);
     e.preventDefault();
 
@@ -308,9 +309,7 @@ const Calendar = () =>{
                                 <div className="calendar eventTitle">{event.recipeTitle}</div>
                               </Tooltip>
                             </Button>
-                            <Button className="calendar removeButton"
-                                    onClick={() => handleRemove(event.eventId, date, status)}>
-                              Remove
+                            <Button className="calendar removeButton" onClick={() => handleRemove(event.eventId, date, status)}>Remove
                             </Button>
                           </div>
                         ))

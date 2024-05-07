@@ -110,6 +110,7 @@ const PersonalCookbook = () => {
 
   const Recipe = ({ id, title, description, time, tag, imageUrl, onClick }: any) => {
     const isSelected = selectedRecipeList.includes(id);
+    
     return (
       <div className="cookbook recipeContainer">
         <button className={`cookbook recipeButton ${isSelected ? "selected" : ""}`} onClick={onClick}

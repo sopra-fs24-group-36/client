@@ -173,8 +173,8 @@ const PersonalRecipe = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     return (
-      <div className="comment container" onMouseEnter={() => setIsHovered(true)}
-           onMouseLeave={() => setIsHovered(false)}
+      <div className="comment container" onMouseEnter={() => setIsHovered(true)} 
+        onMouseLeave={() => setIsHovered(false)}
       >
         {isHovered && commentUserName === currentUserName && (
           <div className="comment button-container">

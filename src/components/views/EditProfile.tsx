@@ -91,7 +91,7 @@ const EditProfile = () => {
         "email": email,
         "profilePicture": profilepicture,
       });
-      const response = await api.put(`/users/${userID}`, requestBody);
+      await api.put(`/users/${userID}`, requestBody);
       navigate(`/users/${userID}`);
     } catch (error) {
       console.error("An error occurred while saving changes:", error);

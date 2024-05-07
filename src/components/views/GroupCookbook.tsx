@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ReactDOM from "react-dom";
 import { Button } from "components/ui/Button";
@@ -19,7 +19,7 @@ const FormField = (props) => {
     <div className="cookbook field">
       <input
         className="cookbook input"
-        placeholder="Search for your recipes by name or tag"
+        placeholder="Search for group recipes by name or tag"
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
       />
@@ -34,7 +34,6 @@ FormField.propTypes = {
 const GroupCookbook = () => {
   const navigate = useNavigate();
   const [filterKeyword, setFilterKeyword] = useState<string>("");
-  const userID = localStorage.getItem("userID"); /*getting the ID of the currently logged in user*/
   const { groupID } = useParams();
   const [groupInfo, setGroupInfo] = useState<any[]>([]);
   const [recipeState, setRecipeState] = useState(false);
@@ -142,7 +141,7 @@ const GroupCookbook = () => {
   };
 
 
-  const handelSelectRecipe = (recipe: Recipe) => {
+  const handelSelectRecipe = () => {
     setRemoveState(!removeState);
     if (removeState === true && selectedRecipeList.length > 0) {
       setIsConsentModalOpen(true);

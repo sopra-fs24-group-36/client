@@ -1,6 +1,5 @@
 import "styles/views/Home.scss";
 import Dashboard from "components/ui/Dashboard";
-import PropTypes from "prop-types";
 import Footer from "components/ui/footer";
 import Header_new from "components/ui/Header_new";
 import React, { useEffect, useState } from "react";
@@ -139,8 +138,7 @@ const Home = () => {
   };
 
   const doGroup = () => {
-    const groups = groupList;
-    const validGroups = groups.filter(group => group);
+    const validGroups = groupList.filter(group => group);
     if (validGroups.length > 0) {
       return validGroups.map((group, index) => (
         <div key={index} className="Home buttonContainer">

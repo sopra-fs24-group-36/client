@@ -27,7 +27,6 @@ const FormField = (props) => {
 };
 FormField.propTypes = {
   value: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 

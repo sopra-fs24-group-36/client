@@ -26,7 +26,6 @@ const FormField=(props)=>{
 }
 FormField.propTypes = {
   value: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 
@@ -34,7 +33,6 @@ FormField.propTypes = {
 const GroupCalendar=()=>{
   const navigate = useNavigate();
   const { groupID } = useParams();
-  const { groupId } = useParams();
   const [filterKeyword, setFilterKeyword]=useState<string>(null)
   const [calendar,setCalendar]=useState(null);
   const[allRecipes,setAllRecipes]=useState<Recipe[]>(null);
@@ -256,7 +254,7 @@ const GroupCalendar=()=>{
                   {`${getDayOfWeek(date)}.${formatDate(date)}`}
                 </div>
               ))}
-              {["BREAKFAST","LUNCH","DINNER"].map((status,index)=>(
+              {["BREAKFAST","LUNCH","DINNER"].map((status)=>(
                 getDatesOfWeek(currentWeek).map(date=>(
                   <div
                     key={date}

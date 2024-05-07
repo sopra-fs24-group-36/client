@@ -46,7 +46,7 @@ const InviteUserModal = ({ open, onClose }) => {
       const requestBody = JSON.stringify({
         email: email,
       });
-      const response = await api.post(`/groups/${groupID}/invitations`, requestBody);
+      await api.post(`/groups/${groupID}/invitations`, requestBody);
     } catch (error) {
       console.error("An error occurred while inviting a user:", error);
       alert("Inviting a user failed.");

@@ -163,7 +163,7 @@ const Calendar = () =>{
   const handleRemove= async (eventId,date,status)=>{
     try{
       const requestBody = JSON.stringify(eventId);
-      const response = await api.delete(`/users/${userID}/calendars/${eventId}`,requestBody);
+      await api.delete(`/users/${userID}/calendars/${eventId}`,requestBody);
       setShouldFetchCalendar(true);
       const updatedCalendar=calendar.filter(event=>!(event.date === date && event.status === status))
       setCalendar(updatedCalendar);
@@ -290,7 +290,7 @@ const Calendar = () =>{
                   {`${getDayOfWeek(date)}.${formatDate(date)}`}
                 </div>
               ))}
-              {["BREAKFAST", "LUNCH", "DINNER"].map((status, index) => (
+              {["BREAKFAST", "LUNCH", "DINNER"].map((status) => (
                 getDatesOfWeek(currentWeek).map(date => (
                   <div
                     key={date}

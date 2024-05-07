@@ -57,7 +57,7 @@ const Dashboard = ({ showButtons, activePage }) => {
   const doLogout = async () => {
     try {
       const requestBody = JSON.stringify(userID);
-      const response = await api.post(`/users/logout/${userID}`, requestBody);
+      await api.post(`/users/logout/${userID}`, requestBody);
     } catch (error) {
       alert("An error occurred while logging out");
     }
@@ -76,7 +76,7 @@ const Dashboard = ({ showButtons, activePage }) => {
     const leaveGroup = async () => {
       try {
         const requestBody = JSON.stringify(userID);
-        const response = await api.delete(`/groups/${groupID}/${userID}`, requestBody);
+        await api.delete(`/groups/${groupID}/${userID}`, requestBody);
       } catch (error) {
         alert("An error occurred while leaving the group");
       }

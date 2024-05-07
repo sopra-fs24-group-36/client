@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { api, handleError } from "helpers/api";
-import User from "models/User";
-import { Form, useNavigate, useParams } from "react-router-dom";
+import { api } from "helpers/api";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import "styles/views/Shoppinglist.scss";
 import PropTypes from "prop-types";
@@ -41,14 +40,14 @@ const ItemField = (props) => {
     set_isChecked(!isChecked);
     try {
       const requestBody = JSON.stringify({
-        "item": props.value
+        "item": props.value,
       });
-      const response = await api.put(`/users/${userID}/shoppinglists`, requestBody);
+      await api.put(`/users/${userID}/shoppinglists`, requestBody);
     } catch (error) {
       alert("An error occurred while remove items");
     }
   };
-  
+
   return (
     <div className="shoppinglist itemsField">
       <input className="shoppinglist itemsInput" value={props.value} readOnly />
@@ -81,10 +80,9 @@ const Shoppinglist = () => {
         alert("Something went wrong while fetching the items!");
       }
     }
+
     fetchData();
-    // const intervalId = setInterval(fetchData, 1000); // Polling every 1 seconds
-    //
-    // return () => clearInterval(intervalId);
+
   }, [userID]);
 
   const addItem = async () => {
@@ -93,9 +91,9 @@ const Shoppinglist = () => {
       set_new_item("");
       try {
         const requestBody = JSON.stringify({
-          "item":new_item
+          "item": new_item,
         });
-        const response = await api.post(`/users/${userID}/shoppinglists`, requestBody);
+        await api.post(`/users/${userID}/shoppinglists`, requestBody);
       } catch (error) {
         alert("An error occurred while adding items");
       }
@@ -105,7 +103,7 @@ const Shoppinglist = () => {
   const clearAll = async () => {
     set_items([]);
     try {
-      const response = await api.delete(`/users/${userID}/shoppinglists`);
+      await api.delete(`/users/${userID}/shoppinglists`);
     } catch (error) {
       alert("An error occurred while clear all items");
     }
@@ -116,8 +114,8 @@ const Shoppinglist = () => {
       <Header_new></Header_new>
       <Dashboard
         showButtons={{
-          home: true, 
-          cookbook: true, 
+          home: true,
+          cookbook: true,
           recipe: true,
           group: true,
           calendar: true,

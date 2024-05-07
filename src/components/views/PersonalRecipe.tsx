@@ -33,53 +33,52 @@ FormField.propTypes = {
 const PersonalRecipe = () => {
   const navigate = useNavigate();
   const { authorID, recipeID } = useParams(); //User ID of recipe's author and recipeID
-  const [recipe, setRecipe] = useState(null); //getting the recipe we are currently viewing 
-  const userID = localStorage.getItem("userID");
+  const [recipe, setRecipe] = useState(null); //getting the recipe we are currently viewing
   const [comments, setComments] = useState<object[]>([]);
+  const [rating, setRating] = useState(0.0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => { //retrieve the recipe based on the ID from the URL
-
-    async function fetchData() {
-      try {
-        const response = await api.get(`/users/${authorID}/cookbooks/${recipeID}`);
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        setRecipe(response.data);
-      } catch (error) {
-        console.error(
-          `Something went wrong while fetching the recipe: \n${handleError(error)}`,
-        );
-        console.error("Details:", error);
-        alert("Something went wrong while fetching the recipe! See the console for details.");
-      }
+  async function fetchData() {
+    try {
+      const response = await api.get(`/users/${authorID}/cookbooks/${recipeID}`);
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      await fetchComment();
+      setRecipe(response.data);
+    } catch (error) {
+      console.error(
+        `Something went wrong while fetching the recipe: \n${handleError(error)}`,
+      );
+      console.error("Details:", error);
+      alert("Something went wrong while fetching the recipe! See the console for details.");
     }
+  }
 
-    async function fetchComment() {
-      try {
-        const response = await api.get(`/comments/recipes/${recipeID}`);
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        const commentsList = response.data.map(comment => ({
-          id: comment.id,
-          text: comment.text,
-          username: comment.username,
-        }));
-        setComments(commentsList);
-      } catch (error) {
-        console.error(
-          `Something went wrong while fetching the comments: \n${handleError(error)}`,
-        );
-        console.error("Details:", error);
-        alert("Something went wrong while fetching the comments! See the console for details.");
-      }
+  async function fetchComment() {
+    try {
+      const response = await api.get(`/comments/recipes/${recipeID}`);
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      const commentsList = response.data.map(comment => ({
+        id: comment.id,
+        text: comment.text,
+        username: comment.username,
+      }));
+      setComments(commentsList);
+
+      const responseRate = await api.get(`/votes/recipes/${recipeID}`);
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      const rating = responseRate.data.vote;
+      setRating(rating);
+    } catch (error) {
+      console.error(
+        `Something went wrong while fetching the comments: \n${handleError(error)}`,
+      );
+      console.error("Details:", error);
+      alert("Something went wrong while fetching the comments! See the console for details.");
     }
+  }
 
+  useEffect(() => {
     fetchData();
-    fetchComment();
-
-
-    const intervalId = setInterval(fetchComment, 500); // Polling every 1 seconds
-
-    return () => clearInterval(intervalId);
   }, [recipeID]);
 
 
@@ -146,20 +145,239 @@ const PersonalRecipe = () => {
   const doComments = () => {
     if (comments.length === 0) {
 
-      return <p>This recipe has no comment.</p>;
+      return (
+        <div className="comment noCommentText">
+          <p>This recipe has no comment yet.</p>
+          <p>Be the first one!</p>
+        </div>
+      );
+    } else {
+
+      return (
+        <div>
+          {comments.map((comment: any) => (
+            // eslint-disable-next-line react/jsx-key
+            <Comment
+              comment={comment}
+            />
+          ))}
+        </div>
+      );
     }
+  };
+
+  const Comment = ({ comment }) => {
+    const [isHovered, setIsHovered] = useState(false);
+    const currentUserName = localStorage.getItem("userName");
+    const commentUserName = comment.username;
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     return (
-      <div>
-        {comments.map((comment: any) => (
-          <Comment
-            key={comment.id}
-            handleDeleteComment={handelDeleteComment}
-            comment={comment}
-          />
-        ))}
+      <div className="comment container" onMouseEnter={() => setIsHovered(true)}
+           onMouseLeave={() => setIsHovered(false)}
+      >
+        {isHovered && commentUserName === currentUserName && (
+          <div className="comment button-container">
+            <Button
+              className="comment editButton"
+              onClick={() => setIsEditModalOpen(true)}>
+              Edit
+            </Button>
+            <EditCommentModal
+              open={isEditModalOpen}
+              onClose={() => setIsEditModalOpen(false)}
+              comment={comment}
+            >
+            </EditCommentModal>
+            <Button
+              className="comment deleteButton"
+              onClick={() => handelDeleteComment(comment.id)}>
+              Delete
+            </Button>
+          </div>
+        )}
+        {!(isHovered && commentUserName === currentUserName) && (
+          <div>
+            <li>{comment.text}</li>
+            <div className="comment author">- {comment.username}</div>
+          </div>
+        )}
       </div>
     );
+
+  };
+
+  Comment.propTypes = {
+    comment: PropTypes.object.isRequired,
+  };
+
+  const StarRating = ({ rating }) => {
+    const rate = parseFloat(rating);
+    const integerPart = Math.floor(rate);
+    let decimalPart = false;
+    if (rate - integerPart !== 0) {
+      decimalPart = true;
+    }
+
+    if (rating < 0.9) {
+      return (
+        <div className="comment noCommentText">
+          <p>This recipe has no rating yet.</p>
+          <p>Be the first one!</p>
+        </div>
+      );
+    } else {
+
+      return (
+        <div className="star-rating">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <span key={star}>
+              {star <= integerPart ? (
+                <span className="star-rating star-filled">&#9733;</span>
+              ) : star === integerPart + 1 && decimalPart ? (
+                <span className="star-rating star-half-filled">&#9734;</span>
+              ) : (
+                <span className="star-rating star-empty">&#9733;</span>
+              )}
+            </span>
+          ))}
+        </div>
+      );
+    }
+  };
+
+  StarRating.propTypes = {
+    rating: PropTypes.number.isRequired,
+  };
+
+  const CommentModal = ({ open, onClose }) => {
+    const userID = localStorage.getItem("userID");
+    const { recipeID } = useParams();
+    const [comment, setComment] = useState("");
+    const [rating, setRating] = useState(0);
+
+    const handleStarClick = (star: number) => {
+      setRating(star);
+    };
+
+    if (!open) return null;
+    const leaveComment = async () => {
+      if (comment === "") {
+        alert("Please enter a comment.");
+
+        return;
+      }
+      try {
+        const requestBody = JSON.stringify({
+          text: comment,
+          userID: parseInt(userID),
+        });
+        await api.post(`/comments/recipes/${recipeID}`, requestBody);
+
+        const starRating = JSON.stringify({
+          vote: rating,
+        });
+        await api.post(`/votes/recipes/${recipeID}`, starRating);
+
+      } catch (error) {
+        console.error("An error occurred while leaving a comment:", error);
+        alert("Leaving a comment failed.");
+      }
+      await fetchComment();
+      onClose();
+    };
+
+    return ReactDOM.createPortal(
+      <>
+        <div className="modal backdrop"></div>
+        ;
+        <div className="modal conatiner">
+          <div className="modal title">Leave a Comment</div>
+          <div className="star-rating">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <span
+                key={star}
+                onClick={() => handleStarClick(star)}
+                style={{ cursor: "pointer", color: star <= rating ? "gold" : "gray" }}
+              >
+              &#9733;
+              </span>
+            ))}
+          </div>
+          <FormField
+            value={comment}
+            onChange={setComment} />
+          <div className="modal button-container">
+            <Button className="modal button" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button className="modal highlight" onClick={leaveComment}>
+              Send
+            </Button>
+          </div>
+        </div>
+      </>,
+      document.getElementById("portal-invite-user"),
+    );
+  };
+
+  CommentModal.propTypes = {
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+  };
+
+
+  const EditCommentModal = ({ open, onClose, comment }) => {
+    const [commentText, setCommentText] = useState(comment.text);
+
+    if (!open) return null;
+    const editComment = async () => {
+      if (commentText === "") {
+        alert("Please enter a comment.");
+
+        return;
+      }
+      try {
+        const requestBody = JSON.stringify({
+          text: commentText,
+        });
+        await api.put(`/comments/${comment.id}`, requestBody);
+
+      } catch (error) {
+        console.error("An error occurred while editing a comment:", error);
+        alert("Editing a comment failed.");
+      }
+      fetchComment();
+      onClose();
+    };
+
+    return ReactDOM.createPortal(
+      <>
+        <div className="modal backdrop"></div>
+        ;
+        <div className="modal conatiner">
+          <div className="modal title">Edit your Comment</div>
+          <FormField
+            value={commentText}
+            onChange={setCommentText} />
+          <div className="modal button-container">
+            <Button className="modal button" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button className="modal highlight" onClick={editComment}>
+              Send
+            </Button>
+          </div>
+        </div>
+      </>,
+      document.getElementById("portal-invite-user"),
+    );
+  };
+
+  EditCommentModal.propTypes = {
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    comment: PropTypes.object.isRequired,
   };
 
 
@@ -170,6 +388,7 @@ const PersonalRecipe = () => {
     window.open(recipe.link);
     navigate("/home"); //potentially needs taking out when we connect to cookbooks 
   } else {
+    const userID = localStorage.getItem("userID");
     const canEdit = userID === authorID;
     content = (
       <div>
@@ -184,7 +403,7 @@ const PersonalRecipe = () => {
             shoppinglist: true,
             invitations: true,
           }}
-          activePage=""
+          activePage="personalCookbook"
         />
         <BaseContainer>
           <div className="recipe headerContainer">
@@ -223,7 +442,7 @@ const PersonalRecipe = () => {
                 <p><strong>Tags:</strong> {doTags()}</p>
               </div>
               <div className="recipe cutline"></div>
-              <StarRating rating={4} />
+              <StarRating rating={rating} />
               <div className="recipe commentContainer">
                 <p><strong>Comments:</strong>{doComments()}</p>
               </div>
@@ -270,200 +489,6 @@ const PersonalRecipe = () => {
       {content}
     </div>
   );
-};
-
-
-const Comment = ({ key, comment, handleDeleteComment }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const currentUserName = localStorage.getItem("userName");
-  const commentUserName = comment.username;
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
-  return (
-    <div className="comment container" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}
-    >
-      {isHovered && commentUserName === currentUserName && (
-        // {isHovered &&  && (
-        <div className="comment button-container">
-          <Button
-            className="comment editButton"
-            onClick={() => setIsEditModalOpen(true)}>
-            Edit
-          </Button>
-          <EditCommentModal
-            open={isEditModalOpen}
-            onClose={() => setIsEditModalOpen(false)}
-            comment={comment}
-          >
-          </EditCommentModal>
-          <Button
-            className="comment deleteButton"
-            onClick={() => handleDeleteComment(comment.id)}>
-            Delete
-          </Button>
-        </div>
-      )}
-      {!(isHovered && commentUserName === currentUserName) && (
-        <div>
-          <li>{comment.text}</li>
-          <div className="comment author">- {comment.username}</div>
-        </div>
-      )}
-    </div>
-  );
-
-};
-
-Comment.propTypes = {
-  key: PropTypes.string.isRequired,
-  comment: PropTypes.object.isRequired,
-  handleDeleteComment: PropTypes.func.isRequired,
-};
-
-const StarRating = ({ rating }) => {
-  return (
-    <div className="star-rating">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <span
-          key={star}
-          style={{ cursor: "pointer", color: star <= rating ? "gold" : "gray" }}>
-          &#9733;
-        </span>
-      ))}
-    </div>
-  );
-};
-
-StarRating.propTypes = {
-  rating: PropTypes.number.isRequired,
-};
-
-const CommentModal = ({ open, onClose }) => {
-  const userID = localStorage.getItem("userID");
-  const { recipeID } = useParams();
-  const [comment, setComment] = useState("");
-  const [rating, setRating] = useState(0);
-
-  const handleStarClick = (star) => {
-    setRating(star);
-  };
-
-  if (!open) return null;
-  const leaveComment = async () => {
-    if (comment === "") {
-      alert("Please enter a comment.");
-
-      return;
-    }
-    try {
-      const requestBody = JSON.stringify({
-        text: comment,
-        userID: parseInt(userID),
-      });
-      await api.post(`/comments/recipes/${recipeID}`, requestBody);
-
-      // const starRating = JSON.stringify({
-      //   vote: rating,
-      // });
-      // await api.put(`/recipes/${recipeID}`, starRating);
-
-    } catch (error) {
-      console.error("An error occurred while leaving a comment:", error);
-      alert("Leaving a comment failed.");
-    }
-    onClose();
-  };
-
-  return ReactDOM.createPortal(
-    <>
-      <div className="modal backdrop"></div>
-      ;
-      <div className="modal conatiner">
-        <div className="modal title">Leave a Comment</div>
-        <div className="star-rating">
-          {[1, 2, 3, 4, 5].map((star) => (
-            <span
-              key={star}
-              onClick={() => handleStarClick(star)}
-              style={{ cursor: "pointer", color: star <= rating ? "gold" : "gray" }}
-            >
-              &#9733;
-            </span>
-          ))}
-        </div>
-        <FormField
-          value={comment}
-          onChange={setComment} />
-        <div className="modal button-container">
-          <Button className="modal button" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button className="modal highlight" onClick={leaveComment}>
-            Send
-          </Button>
-        </div>
-      </div>
-    </>,
-    document.getElementById("portal-invite-user"),
-  );
-};
-
-CommentModal.propTypes = {
-  open: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-};
-
-
-const EditCommentModal = ({ open, onClose, comment }) => {
-  const [commentText, setCommentText] = useState(comment.text);
-
-  if (!open) return null;
-  const editComment = async () => {
-    if (commentText === "") {
-      alert("Please enter a comment.");
-
-      return;
-    }
-    try {
-      const requestBody = JSON.stringify({
-        text: commentText,
-      });
-      await api.put(`/comments/${comment.id}`, requestBody);
-
-    } catch (error) {
-      console.error("An error occurred while editing a comment:", error);
-      alert("Editing a comment failed.");
-    }
-    onClose();
-  };
-
-  return ReactDOM.createPortal(
-    <>
-      <div className="modal backdrop"></div>
-      ;
-      <div className="modal conatiner">
-        <div className="modal title">Edit your Comment</div>
-        <FormField
-          value={commentText}
-          onChange={setCommentText} />
-        <div className="modal button-container">
-          <Button className="modal button" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button className="modal highlight" onClick={editComment}>
-            Send
-          </Button>
-        </div>
-      </div>
-    </>,
-    document.getElementById("portal-invite-user"),
-  );
-};
-
-EditCommentModal.propTypes = {
-  open: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  comment: PropTypes.object.isRequired,
 };
 
 export default PersonalRecipe;

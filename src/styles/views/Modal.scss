@@ -115,24 +115,3 @@
     color: $container_dark;
   }
 }
-
-.star-rating {
-  font-size: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &.rate {
-    cursor: pointer;
-    color: gray;
-  }
-
-  &.star-filled {
-    color: gold;
-  }
-
-  &.star-empty {
-    color: grey;
-  }
-
-}

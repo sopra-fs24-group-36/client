@@ -61,7 +61,6 @@ const GroupCookbook = () => {
     try {
       const response = await api.get(`/groups/${groupID}/cookbooks`);
       await new Promise((resolve) => setTimeout(resolve, 500));
-      setRecipeState(true);
 
       const formattedRecipes = response.data.map((recipe: any) => ({
         id: recipe.id,
@@ -70,11 +69,9 @@ const GroupCookbook = () => {
         cookingTime: recipe.cookingTime,
         tags: recipe.tags,
         image: recipe.image,
-        autherID: recipe.authorID,
+        authorID: recipe.authorID,
       }));
-      setRecipeState(true);
-      setRecipeList(formattedRecipes);
-      setOriginalRecipeList(formattedRecipes);
+      await fetchUserImages(formattedRecipes);
     } catch (error) {
       console.error(
         `Something went wrong while fetching the groups: \n${handleError(
@@ -86,11 +83,31 @@ const GroupCookbook = () => {
         "Something went wrong while fetching the recipes! See the console for details.",
       );
     }
-    setSelectedRecipeList([]);
+  };
+
+  const fetchUserImages = async (recipes: any[]) => {
+    const updatedRecipeList = await Promise.all(
+      recipes.map(async (recipe) => {
+        try {
+          const response = await api.get(`/users/${recipe.authorID}`);
+          const profilePicture = response.data.profilePicture;
+
+          return { ...recipe, authorImg: profilePicture };
+        } catch (error) {
+          console.error("Error fetching user image:", error);
+
+          return recipe;
+        }
+      }),
+    );
+    setRecipeList(updatedRecipeList);
+    setOriginalRecipeList(updatedRecipeList);
+    setRecipeState(true);
   };
 
   useEffect(() => {
     fetchData();
+    setSelectedRecipeList([]);
   }, [groupID]);
 
 
@@ -205,33 +222,14 @@ const GroupCookbook = () => {
   };
 
 
-  const Recipe = ({ id, title, description, time, tag, imageUrl, autherID, onClick }: any) => {
+  const Recipe = ({ id, title, description, time, tag, imageUrl, authorImg, onClick }: any) => {
     const isSelected = selectedRecipeList.includes(id);
-    const [user, setUser] = useState<any>({});
-
-    useEffect(() => {
-      const fetchUserData = async () => {
-        try {
-          const response = await api.get(`/users/${autherID}`);
-          setUser(response.data);
-        } catch (error) {
-          console.error(
-            `Something went wrong while fetching the user data: \n${handleError(error)}`,
-          );
-          console.error("Details:", error);
-          alert("Something went wrong while fetching the user data! See the console for details.");
-        }
-      };
-      fetchUserData();
-    }, [autherID]);
-
-    const userImgUrl = useMemo(() => user.profilePicture || "", [user.profilePicture]);
 
     return (
       <div className="cookbook recipeContainer">
         <button className={`cookbook recipeButton ${isSelected ? "selected" : ""}`} onClick={onClick}>
           <div className="cookbook recipeUserImgContainer">
-            <img className="cookbook recipeUserImg" src={userImgUrl} alt="User Image" />
+            <img className="cookbook recipeUserImg" src={authorImg} alt="Author Image" />
           </div>
           <div className="cookbook recipeImgContainer">
             <img className="cookbook recipeImg" src={imageUrl} alt="Recipe Image" />
@@ -259,7 +257,7 @@ const GroupCookbook = () => {
           time={recipe.cookingTime}
           tag={recipe.tags}
           imageUrl={recipe.image}
-          autherID={recipe.autherID}
+          authorImg={recipe.authorImg}
         />
       ))}
     </div>

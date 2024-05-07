@@ -129,6 +129,11 @@
     text-align: left;
   }
 
+  &.noCommentText {
+    font-style: italic;
+    color: grey;
+  }
+
   &.author {
     flex: 1;
     text-align: right;
@@ -145,7 +150,7 @@
     justify-content: center;
   }
 
-  .editButton{
+  .editButton {
     background-color: $light_pink;
     border: none;
     color: $container_dark;
@@ -171,4 +176,25 @@
     justify-content: center;
   }
 
+}
+
+.star-rating {
+  font-size: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.rate {
+    cursor: pointer;
+    color: gray;
+  }
+
+  &.star-filled,
+  &.star-half-filled {
+    color: gold;
+  }
+
+  &.star-empty {
+    color: grey;
+  }
 }

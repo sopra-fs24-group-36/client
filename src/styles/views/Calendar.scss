@@ -13,7 +13,7 @@
     margin-right: 20px;
     justify-content: center;
     padding-bottom: 10px;
-    height: 68%;
+    height: 75%;
     margin-left: 17%;
   }
 
@@ -25,7 +25,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 68%;
+    height: 75%;
     padding-bottom: 20px;
   }
 
@@ -44,12 +44,12 @@
     align-items: center;
     height: 10%;
     width: 100%;
-    margin: 20px 0px 0px 0px;
+    margin-top:2%;
   }
 
   &.titleContainer {
     text-align: center;
-    margin-left: 35px;
+    margin-left: 15%;
   }
 
   &.title1 {
@@ -70,11 +70,11 @@
   }
 
   &.backButtonContainer {
-    margin-left: 20px;
+    margin-left: 5%;
   }
 
   &.arrowButtonContainer {
-    margin: 0px 20px 0px 520px;
+    margin: -1% 0 0 83%;
     display: flex;
     width: 12%;
     height: 10%;
@@ -83,15 +83,12 @@
 
   &.arrowButton {
     background-color: $light_green;
-    color: $container_dark;
-    font-size: 20px;
-    font-weight: 900;
     padding: 15px 15px;
     margin-right: 7px;
-    height: 1px;
+    height: 50%;
+    width: 40%;
     align-items: center;
     display: flex;
-    border-radius: $borderRadius;
   }
 
   //styles related to search recipes
@@ -175,11 +172,38 @@
     cursor: pointer;
     display: flex;
     align-items: center;
-    height: 100px;
+    min-height: 100px;
     width: 90%;
     border: none;
     border-radius: 0.75em;
     box-sizing: border-box;
+  }
+  &.dragPreview{
+    display: none;
+    position: absolute;
+    width:100px;
+    height: 110px;
+    z-index: -1;
+    align-items: center;
+    justify-content: center;
+    background:$light_green;
+    padding:5px;
+    border-radius: 5px;
+    border: 1px solid $container_dark;
+  }
+  &.dragPreviewImg{
+    width: 80px;
+    height: 80px;
+    display: block;
+    margin:auto;
+  }
+  &.dragPreviewTitle{
+    text-align: center;
+    margin:5px 0;
+    font-size:12px;
+    width: 100%;
+    overflow: hidden;
+    //color: $textColor;
   }
 
   &.recipeTitle {
@@ -217,7 +241,6 @@
   &.calendarContainer {
     background-color: $light_green;
     padding: 10px;
-    margin: 0px 0px -10px 0px;
     height: 78%;
     width: 95%;
     max-height: 700px;
@@ -241,13 +264,15 @@
     padding: 5px;
     font-weight: bold;
     display: flex;
-    place-items: center;
+    justify-content: center;
+    align-items: center;
   }
 
   &.status {
     min-height: 90px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
     padding-top:5px;
     border-width: 0px 2px 0px 0px;
@@ -277,89 +302,55 @@
 
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
 
 
     min-height: 80px;
-    height: auto;
-    width: 75%;
-    padding: 1px;
+    height: 85%;
+    width: 70%;
+    padding: 5px 3px 5px 3px;
     margin: 0px 3px 3px 3px;
   }
-  &.recipeButtonInCalendar {
+  &.recipeButtonrInCalendar {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
+    align-items: center;
+    color:$textColor;
     border-radius: 0.75em;
     width: 90%;
-    min-height: 30px;
+    min-height: 30%;
     height: auto;
-    margin-top: 2px;
-    overflow: visible;
+    margin:5% 0 20% 0;
     max-width: 100%;
     font-size: 12px;
     cursor: default;
   }
-  &.recipeButtonInCalendar:hover{
+  &.recipeButtonrInCalendar:hover{
     cursor: pointer;
   }
 
   &.eventTitle {
-    margin:0px 0px -5px 0px;
-    white-space: nowrap;
     width: 100%;
-    height: 100%;
+    height: 2.2em;
     word-wrap: break-word;
-    text-overflow: ellipsis;
     overflow: hidden;
+    display: block;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
   }
 
-  &.tooltipFather{
-    position: relative;
-    display: inline-block;
-    width: 100%;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    text-align: center;
-    overflow: hidden;
-    min-height: 20px;
-  }
-  &.tooltipChildren{
-    position: fixed;
-    width: auto;
-    max-width: 300px;
-    text-align: center;
-    background-color: $light_pink;
-    color:$textColor;
-    padding:8px;
-    border-radius: 0.75em;
-    border: 1px solid black;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    z-index: 9999;
-    left:50%;
-    transform: translate(-50%, -50%);
-    white-space: normal;
-    word-wrap: break-word;
-  }
-  &.calendar.tooltipFather:hover.tooltipChildren{
-    display: block;
-  }
   &.removeButton{
-    height:10px;
+    height:10%;
     width:100%;
     display: flex;
     justify-content: center;
-    margin-bottom: 15px;
     background-color: transparent;
 
     border: none;
     cursor: default;
-    color:white;
+    color:$light_green;
     font-size:13px;
   }
-  &removeButton1:hover {
+  &removeButton:hover {
     cursor: pointer;
   }
 
@@ -382,5 +373,24 @@
   &.creatorImg img {
     width: 100%;
     height: 100%;
+  }
+  &.modal-backdrop{
+    position: fixed;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &.modal-content{
+    background-color: $light_green;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.5s ease-out;
+    font-weight: bold;
   }
 }

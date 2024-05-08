@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { api, handleError } from "helpers/api";
 import { useNavigate, useParams } from "react-router-dom";
+import ReactDOM from 'react-dom';
 import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
 import "styles/views/Calendar.scss"
@@ -12,6 +13,11 @@ import BaseContainer from "../ui/BaseContainer_new";
 
 // @ts-ignore
 import search from "../../assets/search.png";
+// @ts-ignore
+import leftArrow from "../../assets/leftArrow.png"
+// @ts-ignore
+import rightArrow from "../../assets/rightArrow.png"
+
 const FormField=(props)=>{
   return(
     <div className="calendar input">
@@ -30,11 +36,38 @@ FormField.propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 
+const ReplaceModal = ({ show, message, onClose }) => {
+  const [isVisible,setIsVisible]=useState(show);
+  useEffect(()=>{
+    console.log('Modal visibility state changed: ', show);
+    if(show){
+      setIsVisible(true);
+      const timer=setTimeout(()=>{
+        setIsVisible(false);
+        setTimeout(onClose,500);
+      },1000);
 
+      return()=>clearTimeout(timer);
+    }
+  }, [show, onClose])
+
+  return isVisible?ReactDOM.createPortal(
+    <div className="calendar modal-backdrop">
+      <div className="calendar modal-content">
+        {message}
+      </div>
+    </div>,
+    document.body
+  ):null;
+}
+ReplaceModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  message: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
 const GroupCalendar=()=>{
   const navigate = useNavigate();
   const { groupID } = useParams();
-  const { groupId } = useParams();
   const [filterKeyword, setFilterKeyword]=useState<string>(null)
   const [calendar,setCalendar]=useState(null);
   const[allRecipes,setAllRecipes]=useState<Recipe[]>(null);
@@ -44,6 +77,7 @@ const GroupCalendar=()=>{
   const [currentWeek,setCurrentWeek]=useState((new Date()));
   const [shouldFetchCalendar, setShouldFetchCalendar] = useState(true);
 
+  const [showReplaceModal, setShowReplaceModal] = useState(false);
 
   const searchRecipe=()=>{
     if(!searchedRecipes){
@@ -103,19 +137,42 @@ const GroupCalendar=()=>{
 
   const handleDragStart=(e,recipe)=>{
     e.dataTransfer.setData('text/plain',JSON.stringify(recipe));
+    const preview=document.getElementById('drag-preview');
+    const image = document.getElementById('preview-image') as HTMLImageElement;
+    const title=document.getElementById('preview-title');
+
+    image.src=recipe.image;
+    title.textContent=recipe.title;
+
+    preview.style.display='block';
+    e.dataTransfer.setDragImage(preview,50,50);
+
+    setTimeout(()=>preview.style.display='none',0);
+
+  }
+  const hasRecipeInSlot=(date,status)=>{
+    const formattedDate=formatDateToYYYYMMDD(date)
+
+    return calendar.some(event=>formatDateToYYYYMMDD(new Date(event.date)) === formattedDate && event.status === status);
   }
   const handleDrop=async (e,date,status)=>{
     const recipeString = e.dataTransfer.getData('text/plain');
     const recipe = JSON.parse(recipeString);
     e.preventDefault();
 
-    const requestBody={
+    if(hasRecipeInSlot(date,status)){
+      const existingEvent=getEventsOfStatus(calendar,date,status)[0];
+      const requestBody1 = JSON.stringify(existingEvent.eventId);
+      await api.delete(`/groups/${groupID}/calendars/${existingEvent.eventId}`,requestBody1);
+      setShowReplaceModal(true);
+    }
+    const requestBody2={
       date:date,
       recipeID:recipe.id,
       status:status,
     }
 
-    await api.post(`/groups/${groupID}/calendars`, requestBody)
+    await api.post(`/groups/${groupID}/calendars`, requestBody2)
       .then(()=>{
         setShouldFetchCalendar(true);
       })
@@ -153,8 +210,10 @@ const GroupCalendar=()=>{
         const responseRecipe=await api.get(`/groups/${groupID}/cookbooks`);
         setAllRecipes(responseRecipe.data);
         setSearchedRecipes(responseRecipe.data);
+
         const responseCalendar=await api.get(`/groups/${groupID}/calendars`);
         setCalendar(responseCalendar.data)
+
         const responseGroup=await api.get(`/groups/${groupID}`);
         setGroup(responseGroup.data)
       }catch(error){
@@ -187,7 +246,7 @@ const GroupCalendar=()=>{
         activePage="groupCalendar"
       />
       <div className="calendar container" >
-        {/*group recipes field*/}
+{/*group recipes field*/}
         <BaseContainer className="calendar baseContainerLeft">
           <div className="calendar headContainer1">
             <h2 className="calendar title1">{group.name} - Recipes</h2>
@@ -223,13 +282,17 @@ const GroupCalendar=()=>{
                   </div>
                   <h2 className="calendar recipeTitle">{recipe.title}</h2>
                 </button>
+                <div id="drag-preview" className="calendar dragPreview">
+                  <img id="preview-image" src="" alt="Recipe Preview" className="calendar dragPreviewImg" />
+                  <h3 id="preview-title" className="calendar dragPreviewTitle"></h3>
+                </div>
               </div>
-            ))):(
+            ))) : (
               <div className="calendar noRecipeText">no recipes saved yet</div>
             )}
           </div>
         </BaseContainer>
-        {/*calendar field*/}
+{/*calendar field*/}
         <BaseContainer className="calendar baseContainerRight">
           <div className="calendar headContainer2">
             <div className="calendar backButtonContainer">
@@ -242,11 +305,25 @@ const GroupCalendar=()=>{
             </div>
           </div>
           <div className="calendar arrowButtonContainer">
-            <Button className="calendar arrowButton" onClick={handlePrevWeek}>
-              ⬅
+            <Button
+              className="calendar arrowButton"
+              style={{
+                backgroundSize: "80% 80%",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                backgroundImage: `url(${rightArrow})`,
+              }}
+              onClick={handlePrevWeek}>
             </Button>
-            <Button className="calendar arrowButton" onClick={handleNextWeek}>
-              ➡
+            <Button
+              className="calendar arrowButton"
+              style={{
+                backgroundSize: "80% 80%",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                backgroundImage: `url(${leftArrow})`,
+              }}
+              onClick={handleNextWeek}>
             </Button>
           </div>
           <div className="calendar calendarContainer">
@@ -269,9 +346,9 @@ const GroupCalendar=()=>{
                         getEventsOfStatus(calendar, date, status).map(event => (
                           <div className="calendar eventContainer" key={event.id}>
                             <Button
-                              className="calendar recipeButtonInCalendar"
+                              className="calendar recipeButtonrInCalendar"
                               onClick={() => navigate(`/users/${groupID}/cookbooks/${event.recipeID}`)}>
-                              <h3 className="calendar eventTitle">{event.recipeTitle}</h3>
+                              <div className="calendar eventTitle">{event.recipeTitle}</div>
                             </Button>
                             <Button className="calendar removeButton"
                                     onClick={() => handleRemove(event.eventId)}>
@@ -285,6 +362,13 @@ const GroupCalendar=()=>{
                 ))
               ))}
             </div>
+            {showReplaceModal &&
+              <ReplaceModal
+                show={showReplaceModal}
+                message="New recipe set."
+                onClose={() => setShowReplaceModal(false)}
+              />
+            }
           </div>
         </BaseContainer>
         <Footer></Footer>

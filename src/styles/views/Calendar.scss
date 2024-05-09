@@ -151,20 +151,19 @@
   //styles related to recipe
   &.recipeListContainer {
     display: flex;
-    align-items: center;
     justify-content: center;
-    min-height: 60%;
+    min-height: 30%;
     flex-wrap: wrap; //to wrap to the next line if there isn't enough space horizontally
-    margin: 25px 10px 10px 0;
+    margin: 5% 0 5% 0;
 
   }
 
   &.recipeContainer {
     display: flex;
-    align-items: center;
     justify-content: center;
     width: 100%;
-    margin: 7px 5px 5px 5px;
+    min-height: 5%;
+    margin: 10px 5px 5px 5px;
   }
 
   &.recipeButton {
@@ -172,8 +171,8 @@
     cursor: pointer;
     display: flex;
     align-items: center;
-    min-height: 100px;
-    width: 90%;
+    height: 100%;
+    width: 93%;
     border: none;
     border-radius: 0.75em;
     box-sizing: border-box;
@@ -182,13 +181,13 @@
     display: none;
     position: absolute;
     width:100px;
-    height: 110px;
+    min-height: 110px;
     z-index: -1;
     align-items: center;
     justify-content: center;
     background:$light_green;
     padding:5px;
-    border-radius: 5px;
+    border-radius: 0.75em;
     border: 1px solid $container_dark;
   }
   &.dragPreviewImg{
@@ -210,7 +209,7 @@
     font-weight: bold;
     color: $container_dark;
     font-size: 20px;
-    max-width: 60%;
+    max-width: 68%;
     white-space: normal;
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -220,15 +219,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 15px;
+    margin-right: 5%;
   }
 
   &.recipeImg {
-    width: 90px;
-    height: 90px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 7em;
+    height: 7em;
     border-radius: 50%;
   }
 
@@ -306,8 +302,8 @@
 
 
     min-height: 80px;
-    height: 85%;
-    width: 70%;
+    height: 87%;
+    width: 75%;
     padding: 5px 3px 5px 3px;
     margin: 0px 3px 3px 3px;
   }
@@ -336,6 +332,7 @@
     display: block;
     display: -webkit-box;
     -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
 
   &.removeButton{

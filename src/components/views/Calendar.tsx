@@ -279,7 +279,7 @@ const Calendar = () =>{
                   <h2 className="calendar recipeTitle">{recipe.title}</h2>
                 </button>
                 <div id="drag-preview" className="calendar dragPreview">
-                  <img id="preview-image" src="" alt="Recipe Preview" className="calendar dragPreviewImg"/>
+                  <img id="preview-image" src="" alt="Recipe Preview" className="calendar dragPreviewImg" />
                   <h3 id="preview-title" className="calendar dragPreviewTitle"></h3>
                 </div>
               </div>
@@ -307,7 +307,7 @@ const Calendar = () =>{
                 backgroundSize: "80% 80%",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
-                backgroundImage: `url(${rightArrow})`,
+                backgroundImage: `url(${leftArrow})`,
               }}
               onClick={handlePrevWeek}>
             </Button>
@@ -317,7 +317,7 @@ const Calendar = () =>{
                 backgroundSize: "80% 80%",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
-                backgroundImage: `url(${leftArrow})`,
+                backgroundImage: `url(${rightArrow})`,
               }}
               onClick={handleNextWeek}>
             </Button>
@@ -361,7 +361,7 @@ const Calendar = () =>{
             {showReplaceModal &&
               <ReplaceModal
                 show={showReplaceModal}
-                message="New recipe set."
+                message="New recipe set"
                 onClose={() => setShowReplaceModal(false)}
               />
             }

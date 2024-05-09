@@ -136,6 +136,7 @@
     flex-grow: 1;
     text-align: left;
     position: relative;
+    max-width:50%;
   }
 
   &.recipeTitle {
@@ -143,13 +144,14 @@
     color: $container_dark;
     font-size: 20px;
     white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &.recipeDescription,
   &.recipeTotalTime,
   &.recipeTags {
     color: $container-dark;
-    white-space: normal;
   }
 
   &.noRecipeText {
@@ -161,4 +163,6 @@
     padding-top: 100px;
     padding-bottom: 60px;
   }
+  &.editButtonContainer{}
+  &.editRecipeButton{}
 }

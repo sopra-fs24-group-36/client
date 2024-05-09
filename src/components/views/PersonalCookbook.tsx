@@ -91,6 +91,11 @@ const PersonalCookbook = () => {
       }
     }
   };
+  const handleClickEdit=(event,recipeId:string)=>{
+    event.stopPropagation();
+    navigate(`/users/${userID}/cookbooks/${recipeId}/edit`);
+  }
+
 
   const handleFilterChange = (newValue) => {
     setFilterKeyword(newValue);
@@ -108,13 +113,12 @@ const PersonalCookbook = () => {
     setFilterKeyword("");
   };
 
-  const Recipe = ({ id, title, description, time, tag, imageUrl, onClick }: any) => {
+  const Recipe = ({ id, title, description, time, tag, imageUrl,onClick}: any) => {
     const isSelected = selectedRecipeList.includes(id);
 
     return (
       <div className="cookbook recipeContainer">
-        <button className={`cookbook recipeButton ${isSelected ? "selected" : ""}`} onClick={onClick}
-        >
+        <button className={`cookbook recipeButton ${isSelected ? "selected" : ""}`} onClick={onClick}>
           <div className="cookbook recipeImgContainer">
             <img className="cookbook recipeImg" src={imageUrl} alt="Recipe Image" />
           </div>
@@ -124,19 +128,22 @@ const PersonalCookbook = () => {
             <p className="cookbook recipeTime">Total Time: {time}</p>
             <p className="cookbook recipeTags">Tags: {tag.join(",")}</p>
           </div>
+          <div className="cookbook editButtonContainer">
+            <Button className="cookbook editRecipeButton" onClick={(event) => handleClickEdit(event, id)}>Edit Recipe</Button>
+          </div>
         </button>
       </div>
     );
   };
 
-  const RecipeList = ({ recipes, onClickRecipe }: any) => (
+  const RecipeList = ({ recipes,onClickRecipe  }: any) => (
     <div className="cookbook recipeListContainer">
       {recipes.map((recipe: any, index: number) => (
         <Recipe
           key={index}
-          onClick={() => onClickRecipe(recipe.id)}
           id={recipe.id}
           title={recipe.title}
+          onClick={() => onClickRecipe (recipe.id)}
           description={recipe.shortDescription}
           time={recipe.cookingTime}
           tag={recipe.tags}
@@ -245,7 +252,7 @@ const PersonalCookbook = () => {
         />
         <BaseContainer>
 
-          {/*head field*/}
+{/*head field*/}
           <div className="cookbook headerContainer">
             <div className="cookbook backButtonContainer">
               <Button className="backButton" onClick={() => navigate(-1)}>

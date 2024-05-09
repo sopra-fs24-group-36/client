@@ -347,7 +347,7 @@ const GroupCalendar=()=>{
                           <div className="calendar eventContainer" key={event.id}>
                             <Button
                               className="calendar recipeButtonrInCalendar"
-                              onClick={() => navigate(`/users/${groupID}/cookbooks/${event.recipeID}`)}>
+                              onClick={() => navigate(`/groups/${groupID}/cookbooks/${event.recipeID}`)}>
                               <div className="calendar eventTitle">{event.recipeTitle}</div>
                             </Button>
                             <Button className="calendar removeButton"

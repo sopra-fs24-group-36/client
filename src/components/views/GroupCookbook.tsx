@@ -108,6 +108,10 @@ const GroupCookbook = () => {
     }
   };
 
+  const handleClickEdit=(event,recipeId:string,autherID)=>{
+    event.stopPropagation();
+    navigate(`/users/${autherID}/cookbooks/${recipeId}/edit`);
+  }
   const handleFilterChange = (newValue) => {
     setFilterKeyword(newValue);
   };
@@ -241,6 +245,10 @@ const GroupCookbook = () => {
             <p className="cookbook recipeDescription">Description: {description}</p>
             <p className="cookbook recipeTime">Total Time: {time}</p>
             <p className="cookbook recipeTags">Tags: {tag.join(",")}</p>
+          </div>
+          <div className="cookbook editButtonContainer">
+            <Button className="cookbook editRecipeButton" onClick={(event) => handleClickEdit(event, id,autherID)}>Edit
+              Recipe</Button>
           </div>
         </button>
       </div>

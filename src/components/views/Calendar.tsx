@@ -365,7 +365,7 @@ const Calendar = () =>{
               {showReplaceModal &&
                 <ReplaceModal
                   show={showReplaceModal}
-                  message="New recipe set"
+                  message="New recipe set."
                   onClose={() => setShowReplaceModal(false)}
                 />
               }

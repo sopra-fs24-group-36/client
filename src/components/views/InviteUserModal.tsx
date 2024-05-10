@@ -14,6 +14,7 @@ const FormField = (props) => {
           className="modal input"
           value={props.value}
           onChange={(e) => props.onChange(e.target.value)}
+          placeholder="Enter an email address"
         />
       </div>
     </div>
@@ -60,6 +61,9 @@ const InviteUserModal = ({ open, onClose }) => {
       ;
       <div className="modal conatiner">
         <div className="modal title">Invite a User</div>
+        <div className="modal text">
+          Enter the email address of the user you want to invite below
+        </div>
         <FormField
           value={email}
           onChange={setEmail} />

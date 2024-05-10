@@ -5,7 +5,6 @@ import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
 import "styles/views/Cookbooks.scss";
 import "styles/views/Modal.scss";
-import Recipe from "models/Recipe";
 import Dashboard from "components/ui/Dashboard";
 import { api, handleError } from "helpers/api";
 import Footer from "components/ui/footer";

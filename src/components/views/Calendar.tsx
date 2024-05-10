@@ -10,6 +10,7 @@ import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import Header_new from "components/ui/Header_new";
 import BaseContainer from "../ui/BaseContainer_new";
+import { Spinner } from "../ui/Spinner";
 
 // @ts-ignore
 import search from "../../assets/search.png";
@@ -79,6 +80,7 @@ const Calendar = () =>{
   const [shouldFetchCalendar, setShouldFetchCalendar] = useState(true);
 
   const [showReplaceModal, setShowReplaceModal] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const searchRecipe=()=>{
     if(!searchedRecipes){
@@ -213,7 +215,8 @@ const Calendar = () =>{
         setSearchedRecipes(responseRecipe.data);
 
         const responseCalendar=await api.get(`/users/${userID}/calendars`);
-        setCalendar(responseCalendar.data)
+        setCalendar(responseCalendar.data);
+        setLoading(false);
       }catch(error){
         console.error("Details:", error);
         alert(
@@ -226,149 +229,153 @@ const Calendar = () =>{
       fetchData();
     }
   },[shouldFetchCalendar]);
+  if (loading) {
 
-  return(
-    <div>
-      <Header_new></Header_new>
-      <Dashboard
-        showButtons={{
-          home: true, 
-          cookbook: true, 
-          recipe: true,
-          group: true,
-          calendar: true,
-          shoppinglist: true,
-          invitations: true,
-        }}
-        activePage="calendar"
-      />
-      <div className="calendar container">
-{/*your recipes field*/}
-        <BaseContainer className="calendar baseContainerLeft">
-          <div className="calendar headContainer1">
-            <h2 className="calendar title1">Your Recipes</h2>
-          </div>
-          <div className="calendar searchContainer">
-            <FormField
-              value={filterKeyword}
-              onChange={(newValue) => setFilterKeyword(newValue)}>
-            </FormField>
-            <div className="calendar searchButtonContainer">
+    return <Spinner />;
+  }else{
+    return(
+      <div>
+        <Header_new></Header_new>
+        <Dashboard
+          showButtons={{
+            home: true,
+            cookbook: true,
+            recipe: true,
+            group: true,
+            calendar: true,
+            shoppinglist: true,
+            invitations: true,
+          }}
+          activePage="calendar"
+        />
+        <div className="calendar container">
+          {/*your recipes field*/}
+          <BaseContainer className="calendar baseContainerLeft">
+            <div className="calendar headContainer1">
+              <h2 className="calendar title1">Your Recipes</h2>
+            </div>
+            <div className="calendar searchContainer">
+              <FormField
+                value={filterKeyword}
+                onChange={(newValue) => setFilterKeyword(newValue)}>
+              </FormField>
+              <div className="calendar searchButtonContainer">
+                <Button
+                  className="calendar searchButton"
+                  style={{
+                    backgroundSize: "80% 80%",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    backgroundImage: `url(${search})`,
+                  }}
+                  onClick={searchRecipe}></Button>
+              </div>
+            </div>
+            <div className="calendar recipeListContainer">
+              {searchedRecipes && searchedRecipes.length > 0 ? (searchedRecipes.map((recipe) => (
+                <div className="calendar recipeContainer" key={recipe.id}>
+                  <button
+                    className="calendar recipeButton"
+                    draggable="true"
+                    onDragStart={e => handleDragStart(e, recipe)}
+                  >
+                    <div className="calendar recipeImgContainer">
+                      <img className="calendar recipeImg" src={recipe.image} alt="Recipe Image" />
+                    </div>
+                    <h2 className="calendar recipeTitle">{recipe.title}</h2>
+                  </button>
+                  <div id="drag-preview" className="calendar dragPreview">
+                    <img id="preview-image" src="" alt="Recipe Preview" className="calendar dragPreviewImg" />
+                    <h3 id="preview-title" className="calendar dragPreviewTitle"></h3>
+                  </div>
+                </div>
+              ))) : (
+                <div className="calendar noRecipeText">no recipes saved yet</div>
+              )}
+            </div>
+          </BaseContainer>
+          {/*calendar field*/}
+          <BaseContainer className="calendar baseContainerRight">
+            <div className="calendar headContainer2">
+              <div className="calendar backButtonContainer">
+                <Button className="backButton" onClick={() => navigate(-1)}>
+                  Back
+                </Button>
+              </div>
+              <div className="calendar titleContainer">
+                <h2 className="calendar title2">Your Calendar</h2>
+              </div>
+            </div>
+            <div className="calendar arrowButtonContainer">
               <Button
-                className="calendar searchButton"
+                className="calendar arrowButton"
                 style={{
                   backgroundSize: "80% 80%",
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
-                  backgroundImage: `url(${search})`,
+                  backgroundImage: `url(${leftArrow})`,
                 }}
-                onClick={searchRecipe}></Button>
-            </div>
-          </div>
-          <div className="calendar recipeListContainer">
-            {searchedRecipes && searchedRecipes.length > 0 ? (searchedRecipes.map((recipe) => (
-              <div className="calendar recipeContainer" key={recipe.id}>
-                <button
-                  className="calendar recipeButton"
-                  draggable="true"
-                  onDragStart={e => handleDragStart(e, recipe)}
-                >
-                  <div className="calendar recipeImgContainer">
-                    <img className="calendar recipeImg" src={recipe.image} alt="Recipe Image" />
-                  </div>
-                  <h2 className="calendar recipeTitle">{recipe.title}</h2>
-                </button>
-                <div id="drag-preview" className="calendar dragPreview">
-                  <img id="preview-image" src="" alt="Recipe Preview" className="calendar dragPreviewImg" />
-                  <h3 id="preview-title" className="calendar dragPreviewTitle"></h3>
-                </div>
-              </div>
-            ))) : (
-              <div className="calendar noRecipeText">no recipes saved yet</div>
-            )}
-          </div>
-        </BaseContainer>
-{/*calendar field*/}
-        <BaseContainer className="calendar baseContainerRight">
-          <div className="calendar headContainer2">
-            <div className="calendar backButtonContainer">
-              <Button className="backButton" onClick={() => navigate(-1)}>
-                Back
+                onClick={handlePrevWeek}>
+              </Button>
+              <Button
+                className="calendar arrowButton"
+                style={{
+                  backgroundSize: "80% 80%",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                  backgroundImage: `url(${rightArrow})`,
+                }}
+                onClick={handleNextWeek}>
               </Button>
             </div>
-            <div className="calendar titleContainer">
-              <h2 className="calendar title2">Your Calendar</h2>
-            </div>
-          </div>
-          <div className="calendar arrowButtonContainer">
-            <Button
-              className="calendar arrowButton"
-              style={{
-                backgroundSize: "80% 80%",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                backgroundImage: `url(${leftArrow})`,
-              }}
-              onClick={handlePrevWeek}>
-            </Button>
-            <Button
-              className="calendar arrowButton"
-              style={{
-                backgroundSize: "80% 80%",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                backgroundImage: `url(${rightArrow})`,
-              }}
-              onClick={handleNextWeek}>
-            </Button>
-          </div>
-          <div className="calendar calendarContainer">
-            <div className="calendar calendarForm">
-              {getDatesOfWeek(currentWeek).map(date => (
-                <div key={date} className="calendar date">
-                  {`${getDayOfWeek(date)}.${formatDate(date)}`}
-                </div>
-              ))}
-              {["BREAKFAST", "LUNCH", "DINNER"].map((status) => (
-                getDatesOfWeek(currentWeek).map(date => (
-                  <div
-                    key={date}
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={(e) => handleDrop(e, date, status)}
-                    className={`calendar status ${status.toLowerCase()}`}
-                  >
-                    {
-                      calendar?.length > 0 && (
-                        getEventsOfStatus(calendar, date, status).map(event => (
-                          <div className="calendar eventContainer" key={event.id}>
-                            <Button
-                              className="calendar recipeButtonrInCalendar"
-                              onClick={() => navigate(`/users/${userID}/cookbooks/${event.recipeID}`)}>
-                              <div className="calendar eventTitle">{event.recipeTitle}</div>
-                            </Button>
-                            <Button className="calendar removeButton" onClick={() => handleRemove(event.eventId, date, status)}>Remove
-                            </Button>
-                          </div>
-                        ))
-                      )
-                    }
+            <div className="calendar calendarContainer">
+              <div className="calendar calendarForm">
+                {getDatesOfWeek(currentWeek).map(date => (
+                  <div key={date} className="calendar date">
+                    {`${getDayOfWeek(date)}.${formatDate(date)}`}
                   </div>
-                ))
-              ))}
+                ))}
+                {["BREAKFAST", "LUNCH", "DINNER"].map((status) => (
+                  getDatesOfWeek(currentWeek).map(date => (
+                    <div
+                      key={date}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={(e) => handleDrop(e, date, status)}
+                      className={`calendar status ${status.toLowerCase()}`}
+                    >
+                      {
+                        calendar?.length > 0 && (
+                          getEventsOfStatus(calendar, date, status).map(event => (
+                            <div className="calendar eventContainer" key={event.id}>
+                              <Button
+                                className="calendar recipeButtonrInCalendar"
+                                onClick={() => navigate(`/users/${userID}/cookbooks/${event.recipeID}`)}>
+                                <div className="calendar eventTitle">{event.recipeTitle}</div>
+                              </Button>
+                              <Button className="calendar removeButton" onClick={() => handleRemove(event.eventId, date, status)}>Remove
+                              </Button>
+                            </div>
+                          ))
+                        )
+                      }
+                    </div>
+                  ))
+                ))}
+              </div>
+              {showReplaceModal &&
+                <ReplaceModal
+                  show={showReplaceModal}
+                  message="New recipe set"
+                  onClose={() => setShowReplaceModal(false)}
+                />
+              }
             </div>
-            {showReplaceModal &&
-              <ReplaceModal
-                show={showReplaceModal}
-                message="New recipe set"
-                onClose={() => setShowReplaceModal(false)}
-              />
-            }
-          </div>
-        </BaseContainer>
-        <Footer></Footer>
+          </BaseContainer>
+          <Footer></Footer>
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 }
 
 export default Calendar;

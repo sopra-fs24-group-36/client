@@ -15,6 +15,7 @@ const Invitations = () => {
   const [refreshInvitation, setRefreshInvitation] = useState(false);
   const [invitations, setInvitations] = useState<[]>(null);
   useEffect(() => {
+    let intervalId;
     async function fetchInvitations() {
       try {
         const response = await api.get(`/users/${userID}/invitations`);
@@ -33,7 +34,12 @@ const Invitations = () => {
     }
 
     fetchInvitations();
-  }, [refreshInvitation]);
+    intervalId = setInterval(fetchInvitations, 1000); // 1000ms = 1s
+    return () => {
+      clearInterval(intervalId);
+    };
+
+  }, [userID,refreshInvitation]);
   const handleAccept = async (invitation) => {
     try {
       await api.post(`users/${userID}/accept/${invitation.groupID}`);

@@ -228,7 +228,7 @@ const GroupCookbook = () => {
   };
 
 
-  const Recipe = ({ id, title, description, time, tag, imageUrl, authorImg, onClick }: any) => {
+  const Recipe = ({ id, title, description, time, tag, imageUrl, authorImg, autherID,onClick }: any) => {
     const isSelected = selectedRecipeList.includes(id);
 
     return (
@@ -268,6 +268,7 @@ const GroupCookbook = () => {
           tag={recipe.tags}
           imageUrl={recipe.image}
           authorImg={recipe.authorImg}
+          authorID={recipe.authorID}
         />
       ))}
     </div>

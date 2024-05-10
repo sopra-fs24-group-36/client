@@ -35,6 +35,7 @@ const Invitations = () => {
 
     fetchInvitations();
     intervalId = setInterval(fetchInvitations, 1000); // 1000ms = 1s
+
     return () => {
       clearInterval(intervalId);
     };

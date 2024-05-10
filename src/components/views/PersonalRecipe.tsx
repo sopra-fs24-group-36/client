@@ -173,7 +173,7 @@ const PersonalRecipe = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     return (
-      <div className="comment container" onMouseEnter={() => setIsHovered(true)} 
+      <div className="comment container" onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         {isHovered && commentUserName === currentUserName && (
@@ -381,16 +381,17 @@ const PersonalRecipe = () => {
   };
 
 
-  let content: any;
   if (!recipe) {
-    content = <Spinner />; //had to use the spinner because it takes a while to render the content
+
+    return <Spinner />; //had to use the spinner because it takes a while to render the content
   } else if (recipe.link) {
     window.open(recipe.link);
     navigate("/home"); //potentially needs taking out when we connect to cookbooks 
   } else {
     const userID = localStorage.getItem("userID");
     const canEdit = userID === authorID;
-    content = (
+    
+    return (
       <div>
         <Header_new></Header_new>
         <Dashboard
@@ -484,11 +485,6 @@ const PersonalRecipe = () => {
     );
   }
 
-  return (
-    <div>
-      {content}
-    </div>
-  );
 };
 
 export default PersonalRecipe;

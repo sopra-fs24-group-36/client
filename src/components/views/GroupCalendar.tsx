@@ -179,7 +179,6 @@ const GroupCalendar=()=>{
           groupCalendar: true,
           groupShoppinglist: true,
           invitations: true,
-          inviteUser: true,
           leaveGroup: true,
         }}
         activePage="groupCalendar"

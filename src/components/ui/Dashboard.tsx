@@ -15,7 +15,6 @@ const Dashboard = ({ showButtons, activePage }) => {
   const { groupID } = useParams();
 
   const userID = parseInt(localStorage.getItem("userID"));
-  const [isInviteUserModalOpen, setIsInviteUserModalOpen] = useState(false);
   const [isConsentModalOpen, setIsConsentModalOpen] = useState(false);
 
   useEffect(() => {
@@ -202,19 +201,6 @@ const Dashboard = ({ showButtons, activePage }) => {
           >
             Group - Shopping list
           </Button>
-        </div>
-      )}
-      {showButtons.inviteUser && (
-        <div className="dashboard button-container">
-          <Button
-            className={`db${activePage === "inviteUser" ? " highlight" : ""}`}
-            onClick={() => setIsInviteUserModalOpen(true)}>
-            Invite a user
-          </Button>
-          <InviteUserModal
-            open={isInviteUserModalOpen}
-            onClose={() => setIsInviteUserModalOpen(false)}>
-          </InviteUserModal>
         </div>
       )}
       {showButtons.invitations && (

@@ -1,0 +1,132 @@
+@import "../theme";
+
+.groupmembers {
+  &.base {
+    margin-left: calc(15% + 80px);
+    border-radius: $borderRadius;
+    background-color: $true_green;
+    display: inline-block;
+    vertical-align: top;
+    width: calc(85% - 90px);
+    margin-top: 30px;
+    position: fixed;
+    height: calc(100% - 210px);
+    overflow: auto;
+    background-image: url('../../assets/leftBrok.png');
+    background-size: 10%;
+  }
+
+  &.headerContainer {
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  &.title {
+    color: $textColor;
+    font-size: 40px;
+    text-align: center;
+    flex: 1;
+  }
+
+  &.backButtonContainer {
+    margin-left: 60px;
+    margin-right: 60px;
+  }
+
+  &.container {
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    width: 60%;
+    margin: 0 auto;
+    background-color: $light_green;
+    border-radius: $borderRadius;
+    margin-bottom: 20px;
+  }
+
+  &.p {
+    height: 50px;
+    color: $container_dark;
+    font-weight: bold;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-top: 30px;
+  }
+
+
+  &.itemsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    overflow: auto;
+  }
+}
+
+.members {
+  &.titleField {
+    font-size: 22px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 40px;
+    width: 100%;
+    border-radius: $borderRadius;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: $container_dark;
+  }
+
+  &.itemsField {
+    font-size: 20px;
+    height: 40px;
+    width: 100%;
+    border-radius: $borderRadius;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: $true_green;
+    color: $textColor;
+    margin-bottom: 15px;
+  }
+
+  &.imgContainer {
+    width: 50px;
+  }
+
+  &.img {
+    width: 50px;
+    height: 50px;
+  }
+
+  &.id {
+    text-align: center;
+    width: 70px;
+  }
+
+  &.username {
+    text-align: center;
+    width: 115px;
+  }
+
+  &.name {
+    text-align: center;
+    width: 115px;
+  }
+
+  &.email {
+    text-align: center;
+    width: 200px;
+  }
+}

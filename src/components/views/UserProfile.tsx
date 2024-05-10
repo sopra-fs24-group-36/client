@@ -82,21 +82,30 @@ const UserProfile = () => {
                 </div>
               </div>
             </div>
-            <div className="userprofile button-container">
-              <Button
-                className="userprofile button-lightgreen"
-                width="50%"
-                onClick={() => navigate("/home")}>
-                Back
-              </Button>
-              <Button
-                className="userprofile button-darkpink"
-                disabled={user.id !== loggedInUser}
-                width="50%"
-                onClick={() => navigate(`/users/${userID}/edit`)}>
-                Edit
-              </Button>
-            </div>
+            {user.id === loggedInUser && (
+              <div className="userprofile button-container">
+                <Button
+                  className="userprofile button-lightgreen"
+                  onClick={() => navigate(-1)}>
+                  Back
+                </Button>
+                <Button
+                  className="userprofile button-darkpink"
+                  width="50%"
+                  onClick={() => navigate(`/users/${userID}/edit`)}>
+                  Edit
+                </Button>
+              </div>
+            )}
+            {user.id !== loggedInUser && (
+              <div className="userprofile button-container-1">
+                <Button
+                  className="userprofile button-lightgreen"
+                  onClick={() => navigate(-1)}>
+                  Back
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       )}

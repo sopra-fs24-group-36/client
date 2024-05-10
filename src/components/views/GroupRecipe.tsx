@@ -404,7 +404,6 @@ const GroupRecipe = () => {
             recipe: true,
             groupCalendar: true,
             groupShoppinglist: true,
-            inviteUser: true,
             leaveGroup: true,
           }}
           activePage=""

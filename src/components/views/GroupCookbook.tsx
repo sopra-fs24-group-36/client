@@ -147,6 +147,10 @@ const GroupCookbook = () => {
     }
   };
 
+  const handelMemberlist = () => {
+    navigate(`/groups/${groupID}/members`);
+  };
+
   const ConsentModal = ({ open, onClose }) => {
     if (!open) return null;
 
@@ -261,11 +265,12 @@ const GroupCookbook = () => {
     </div>
   );
 
-  let content;
   if (!recipeState) {
-    content = <Spinner />;
+
+    return <Spinner />;
   } else {
-    content = (
+
+    return (
       <div>
         <Header_new />
         <Dashboard
@@ -275,7 +280,6 @@ const GroupCookbook = () => {
             recipe: true,
             groupCalendar: true,
             groupShoppinglist: true,
-            inviteUser: true,
             leaveGroup: true,
           }}
           activePage="leaveGroup"
@@ -283,17 +287,18 @@ const GroupCookbook = () => {
         <BaseContainer>
           {/*head field*/}
           <div className="cookbook headerContainer">
-            <div className="cookbook backButtonContainer">
-              <Button className="cookbook backButton" onClick={() => navigate(-1)}>
-                Back
-              </Button>
-            </div>
+            <Button className="cookbook backButton" onClick={() => navigate(-1)}>
+              Back
+            </Button>
             <div className="cookbook titleContainer">
               <h2 className="cookbook title">{groupInfo.name} - Cookbook</h2>
             </div>
             <div className="cookbook backButtonContainer">
+              <Button className="cookbook groupButton" onClick={handelMemberlist}>
+                Members
+              </Button>
               <Button
-                className={`${removeState ? "hightlightButton" : "backButton"}`}
+                className={`${removeState ? "hightlightButton" : "groupButton"}`}
                 onClick={handelSelectRecipe}>
                 Remove Recipes
               </Button>
@@ -320,12 +325,6 @@ const GroupCookbook = () => {
       </div>
     );
   }
-
-  return (
-    <div>
-      {content}
-    </div>
-  );
 };
 
 export default GroupCookbook;

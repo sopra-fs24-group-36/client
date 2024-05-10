@@ -8,6 +8,7 @@ import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import BaseContainer from "components/ui/BaseContainer_new";
 import Header_new from "components/ui/Header_new";
+import { Spinner } from "../ui/Spinner";
 
 const FormField = (props) => {
   return (
@@ -70,12 +71,14 @@ const Shoppinglist = () => {
   const { userID } = useParams();
   const [items, set_items] = useState([]);
   const [new_item, set_new_item] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
       try {
         const response = await api.get(`/users/${userID}/shoppinglists`);
         set_items(response.data.items);
+        setLoading(false);
       } catch (error) {
         alert("Something went wrong while fetching the items!");
       }
@@ -109,65 +112,71 @@ const Shoppinglist = () => {
     }
   };
 
-  return (
-    <div>
-      <Header_new></Header_new>
-      <Dashboard
-        showButtons={{
-          home: true,
-          cookbook: true,
-          recipe: true,
-          group: true,
-          calendar: true,
-          shoppinglist: true,
-          invitations: true,
-        }}
-        activePage="shoppinglist"
-      />
-      <BaseContainer>
-        <div className="shoppinglist headerContainer">
-          <div className="shoppinglist backButtonContainer">
-            <Button
-              className="backButton"
-              onClick={() => navigate(-1)}
-            >Back</Button>
-          </div>
-          <h2 className="shoppinglist title">Shopping List</h2>
-        </div>
+  if (loading) {
 
-        <div className="shoppinglist container">
-          <p className="shoppinglist p">Select Items:</p>
-          <div className="shoppinglist itemsContainer">
-            {items.map((new_item) => (
-              <ItemField
-                key={new_item}
+    return <Spinner />;
+  } else {
+
+    return (
+      <div>
+        <Header_new></Header_new>
+        <Dashboard
+          showButtons={{
+            home: true,
+            cookbook: true,
+            recipe: true,
+            group: true,
+            calendar: true,
+            shoppinglist: true,
+            invitations: true,
+          }}
+          activePage="shoppinglist"
+        />
+        <BaseContainer>
+          <div className="shoppinglist headerContainer">
+            <div className="shoppinglist backButtonContainer">
+              <Button
+                className="backButton"
+                onClick={() => navigate(-1)}
+              >Back</Button>
+            </div>
+            <h2 className="shoppinglist title">Shopping List</h2>
+          </div>
+
+          <div className="shoppinglist container">
+            <p className="shoppinglist p">Select Items:</p>
+            <div className="shoppinglist itemsContainer">
+              {items.map((new_item) => (
+                <ItemField
+                  key={new_item}
+                  value={new_item}
+                />
+              ))}
+            </div>
+
+            <div className="shoppinglist addItemContainer">
+              <label className="shoppinglist label">
+                Add an item to your shopping list:
+              </label>
+              <FormField
                 value={new_item}
-              />
-            ))}
-          </div>
+                onChange={(rl: string) => set_new_item(rl)}
+                onClick={addItem}
+              ></FormField>
+            </div>
 
-          <div className="shoppinglist addItemContainer">
-            <label className="shoppinglist label">
-              Add an item to your shopping list:
-            </label>
-            <FormField
-              value={new_item}
-              onChange={(rl: string) => set_new_item(rl)}
-              onClick={addItem}
-            ></FormField>
+            <Button
+              className={"shoppinglist clearAll"}
+              onClick={clearAll}
+            >
+              Clear All
+            </Button>
           </div>
-
-          <Button
-            className={"shoppinglist clearAll"}
-            onClick={clearAll}
-          >
-            Clear All
-          </Button>
-        </div>
-      </BaseContainer>
-      <Footer></Footer>
-    </div>
-  );
+        </BaseContainer>
+        <Footer></Footer>
+      </div>
+    );
+  }
 };
 
 export default Shoppinglist;

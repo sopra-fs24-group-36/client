@@ -244,11 +244,12 @@ const addRecipe = () => {
   };
 
 
-  let content;
   if (!groupState) {
-    content = <Spinner />; //had to use the spinner because it takes a while to render the content
+
+    return <Spinner />; //had to use the spinner because it takes a while to render the content
   } else {
-    content = (
+
+    return (
       <div>
         <Header_new></Header_new>
         <Dashboard
@@ -440,11 +441,6 @@ const addRecipe = () => {
     );
   }
 
-  return (
-    <div>
-      {content}
-    </div>
-  );
 };
 
 export default addRecipe;

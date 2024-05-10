@@ -109,7 +109,7 @@ const PersonalCookbook = () => {
 
   const Recipe = ({ id, title, description, time, tag, imageUrl, onClick }: any) => {
     const isSelected = selectedRecipeList.includes(id);
-    
+
     return (
       <div className="cookbook recipeContainer">
         <button className={`cookbook recipeButton ${isSelected ? "selected" : ""}`} onClick={onClick}
@@ -223,11 +223,12 @@ const PersonalCookbook = () => {
   };
 
 
-  let content;
   if (!recipeState) {
-    content = <Spinner />;
+
+    return <Spinner />;
   } else {
-    content = (
+
+    return (
       <div>
         <Header_new></Header_new>
         <Dashboard
@@ -246,26 +247,19 @@ const PersonalCookbook = () => {
 
           {/*head field*/}
           <div className="cookbook headerContainer">
-            <div className="cookbook backButtonContainer">
-              <Button className="backButton" onClick={() => navigate(-1)}>
-                Back
-              </Button>
-            </div>
-            <div className="cookbook titleContainer">
-              <h2 className="cookbook title">Personal Cookbook</h2>
-            </div>
-
-            <div className="cookbook backButtonContainer">
-              <Button
-                className={`${deleteState ? "hightlightButton" : "backButton"}`}
-                onClick={handelSelectRecipe}>
-                Delete Recipes
-              </Button>
-              <ConsentModal
-                open={isConsentModalOpen}
-                onClose={() => setIsConsentModalOpen(false)}>
-              </ConsentModal>
-            </div>
+            <Button className="backButton" onClick={() => navigate(-1)}>
+              Back
+            </Button>
+            <h2 className="cookbook title">Personal Cookbook</h2>
+            <Button
+              className={`${deleteState ? "hightlightButton" : "backButton"}`}
+              onClick={handelSelectRecipe}>
+              Delete Recipes
+            </Button>
+            <ConsentModal
+              open={isConsentModalOpen}
+              onClose={() => setIsConsentModalOpen(false)}>
+            </ConsentModal>
           </div>
 
           <div className="cookbook filterContainer">
@@ -277,6 +271,7 @@ const PersonalCookbook = () => {
               onChange={handleFilterChange}>
             </FormField>
           </div>
+
           <div>
             {recipeList.length === 0 ? (
               <p className="cookbook noRecipeText">no recipes saved yet</p>
@@ -290,12 +285,6 @@ const PersonalCookbook = () => {
       </div>
     );
   }
-
-  return (
-    <div>
-      {content}
-    </div>
-  );
 };
 
 export default PersonalCookbook;

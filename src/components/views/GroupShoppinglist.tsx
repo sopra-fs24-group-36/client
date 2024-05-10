@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { api, handleError } from "helpers/api";
-import User from "models/User";
-import { Form, useNavigate, useParams } from "react-router-dom";
+import { api } from "helpers/api";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import "styles/views/Shoppinglist.scss";
 import PropTypes from "prop-types";
@@ -9,6 +8,7 @@ import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import BaseContainer from "components/ui/BaseContainer_new";
 import Header_new from "components/ui/Header_new";
+import { Spinner } from "../ui/Spinner";
 
 const FormField = (props) => {
   return (
@@ -43,7 +43,7 @@ const ItemField = (props) => {
       const requestBody = JSON.stringify({
         "item": props.value,
       });
-      const response = await api.put(`/groups/${groupID}/shoppinglists`, requestBody);
+      await api.put(`/groups/${groupID}/shoppinglists`, requestBody);
     } catch (error) {
       alert("An error occurred while remove items");
     }
@@ -72,6 +72,7 @@ const GroupShoppinglist = () => {
   const [groupInfo, setGroupInfo] = useState<any[]>([]);
   const [items, set_items] = useState([]);
   const [new_item, set_new_item] = useState("");
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchData() {
@@ -84,10 +85,12 @@ const GroupShoppinglist = () => {
       try {
         const response = await api.get(`/groups/${groupID}`);
         setGroupInfo(response.data);
+        setLoading(false);
       } catch (error) {
         alert("Something went wrong while fetching the group");
       }
     }
+
     fetchData();
     const intervalId = setInterval(fetchData, 1000); // Polling every 1 seconds
 
@@ -102,7 +105,7 @@ const GroupShoppinglist = () => {
         const requestBody = JSON.stringify({
           "item": new_item,
         });
-        const response = await api.post(`/groups/${groupID}/shoppinglists`, requestBody);
+        await api.post(`/groups/${groupID}/shoppinglists`, requestBody);
       } catch (error) {
         alert("An error occurred while adding items");
       }
@@ -112,73 +115,77 @@ const GroupShoppinglist = () => {
   const clearAll = async () => {
     set_items([]);
     try {
-      const response = await api.delete(`/groups/${groupID}/shoppinglists`);
+      await api.delete(`/groups/${groupID}/shoppinglists`);
     } catch (error) {
       alert("An error occurred while clear all items");
     }
   };
 
+  if (loading) {
 
-  return (
-    <div>
-      <Header_new></Header_new>
-      <Dashboard
-        showButtons={{
-          home: true, 
-          cookbook: true, 
-          recipe: true,
-          groupCalendar: true,
-          groupShoppinglist: true,
-          invitations: true,
-          inviteUser: true,
-          leaveGroup: true,
-        }}
-        activePage="groupShoppinglist"
-      />
-      <BaseContainer>
-        <div className="shoppinglist headerContainer">
-          <div className="shoppinglist backButtonContainer">
-            <Button
-              className="backButton"
-              onClick={() => navigate(-1)}
-            >Back</Button>
+    return <Spinner />;
+  } else {
+
+    return (
+      <div>
+        <Header_new></Header_new>
+        <Dashboard
+          showButtons={{
+            home: true,
+            cookbook: true,
+            recipe: true,
+            groupCalendar: true,
+            groupShoppinglist: true,
+            invitations: true,
+            leaveGroup: true,
+          }}
+          activePage="groupShoppinglist"
+        />
+        <BaseContainer>
+          <div className="shoppinglist headerContainer">
+            <div className="shoppinglist backButtonContainer">
+              <Button
+                className="backButton"
+                onClick={() => navigate(-1)}
+              >Back</Button>
+            </div>
+            <h2 className="shoppinglist title">{groupInfo.name} - Shopping List</h2>
           </div>
-          <h2 className="shoppinglist title">{groupInfo.name} - Shopping List</h2>
-        </div>
 
-        <div className="shoppinglist container">
-          <p className="shoppinglist p">Select Items:</p>
-          <div className="shoppinglist itemsContainer">
-            {items.map((new_item) => (
-              <ItemField
-                key={new_item}
+          <div className="shoppinglist container">
+            <p className="shoppinglist p">Select Items:</p>
+            <div className="shoppinglist itemsContainer">
+              {items.map((new_item) => (
+                <ItemField
+                  key={new_item}
+                  value={new_item}
+                />
+              ))}
+            </div>
+
+            <div className="shoppinglist addItemContainer">
+              <label className="shoppinglist label">
+                Add an item to your shopping list:
+              </label>
+              <FormField
                 value={new_item}
-              />
-            ))}
-          </div>
+                onChange={(rl: string) => set_new_item(rl)}
+                onClick={addItem}
+              ></FormField>
+            </div>
 
-          <div className="shoppinglist addItemContainer">
-            <label className="shoppinglist label">
-              Add an item to your shopping list:
-            </label>
-            <FormField
-              value={new_item}
-              onChange={(rl: string) => set_new_item(rl)}
-              onClick={addItem}
-            ></FormField>
+            <Button
+              className={"shoppinglist clearAll"}
+              onClick={clearAll}
+            >
+              Clear All
+            </Button>
           </div>
-
-          <Button
-            className={"shoppinglist clearAll"}
-            onClick={clearAll}
-          >
-            Clear All
-          </Button>
-        </div>
-      </BaseContainer>
-      <Footer></Footer>
-    </div>
-  );
+        </BaseContainer>
+        <Footer></Footer>
+      </div>
+    );
+  }
 };
 
 export default GroupShoppinglist;

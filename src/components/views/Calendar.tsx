@@ -160,7 +160,7 @@ const Calendar = () =>{
     return calendar.some(event=>formatDateToYYYYMMDD(new Date(event.date)) === formattedDate && event.status === status);
   }
   const handleDrop=async (e,date,status)=>{
-    const recipeString = e.dataTransfer.getData('text/plain');
+    const recipeString = e.dataTransfer.getData("text/plain");
     const recipe = JSON.parse(recipeString);
     e.preventDefault();
 
@@ -185,7 +185,7 @@ const Calendar = () =>{
   const handleRemove= async (eventId,date,status)=>{
     try{
       const requestBody = JSON.stringify(eventId);
-      const response = await api.delete(`/users/${userID}/calendars/${eventId}`,requestBody);
+      await api.delete(`/users/${userID}/calendars/${eventId}`,requestBody);
       setShouldFetchCalendar(true);
       const updatedCalendar=calendar.filter(event=>!(event.date === date && event.status === status))
       setCalendar(updatedCalendar);
@@ -329,7 +329,7 @@ const Calendar = () =>{
                   {`${getDayOfWeek(date)}.${formatDate(date)}`}
                 </div>
               ))}
-              {["BREAKFAST", "LUNCH", "DINNER"].map((status, index) => (
+              {["BREAKFAST", "LUNCH", "DINNER"].map((status) => (
                 getDatesOfWeek(currentWeek).map(date => (
                   <div
                     key={date}
@@ -346,9 +346,7 @@ const Calendar = () =>{
                               onClick={() => navigate(`/users/${userID}/cookbooks/${event.recipeID}`)}>
                               <div className="calendar eventTitle">{event.recipeTitle}</div>
                             </Button>
-                            <Button className="calendar removeButton"
-                                    onClick={() => handleRemove(event.eventId, date, status)}>
-                              Remove
+                            <Button className="calendar removeButton" onClick={() => handleRemove(event.eventId, date, status)}>Remove
                             </Button>
                           </div>
                         ))

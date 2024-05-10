@@ -56,22 +56,28 @@ body {
   &.button-container{
     display: flex;
     justify-content: space-between;
-    margin-top: 2em;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+  &.button-container-1{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
   }
   &.button-lightgreen {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 2em;
+    width: 150px;
     background-color: $light_green;
     color:$container_dark;
-    margin-right: 10px;
   }
   &.button-darkpink {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 2em;
+    width: 150px;
     background-color: $dark_pink;
     color:$textColor;
   }

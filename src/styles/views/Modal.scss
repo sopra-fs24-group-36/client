@@ -32,7 +32,7 @@
     justify-content: center;
     color: $textColor;
     width: 403px;
-    height: 40px;
+    height: 45px;
     border: 3px solid $container_dark;
     font-size: 25px;
     font-weight: bold;
@@ -79,7 +79,6 @@
   &.text {
     color: $textColor;
     font-size: 20px;
-    //margin-bottom: 10px;
     margin-top: 15px;
     width: 80%;
     text-align: center;
@@ -114,25 +113,4 @@
     background-color: $light_pink;
     color: $container_dark;
   }
-}
-
-.star-rating {
-  font-size: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &.rate {
-    cursor: pointer;
-    color: gray;
-  }
-
-  &.star-filled {
-    color: gold;
-  }
-
-  &.star-empty {
-    color: grey;
-  }
-
 }

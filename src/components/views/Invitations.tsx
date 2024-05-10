@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { api, handleError } from "helpers/api";
-import User from "models/User";
-import { Form, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import "styles/views/Invitations.scss";
-import PropTypes from "prop-types";
 import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import BaseContainer from "components/ui/BaseContainer_new";
@@ -16,7 +14,6 @@ const Invitations = () => {
   const { userID } = useParams();
   const [refreshInvitation, setRefreshInvitation] = useState(false);
   const [invitations, setInvitations] = useState<[]>(null);
-  //TODO:
   useEffect(() => {
     async function fetchInvitations() {
       try {
@@ -39,7 +36,7 @@ const Invitations = () => {
   }, [refreshInvitation]);
   const handleAccept = async (invitation) => {
     try {
-      const response = await api.post(`users/${userID}/accept/${invitation.groupID}`);
+      await api.post(`users/${userID}/accept/${invitation.groupID}`);
       setRefreshInvitation(prev => !prev);
     } catch (error) {
       alert("Accepting failed.");
@@ -47,7 +44,7 @@ const Invitations = () => {
   };
   const handleDecline = async (invitation) => {
     try {
-      const response = await api.post(`users/${userID}/deny/${invitation.groupID}`);
+      await api.post(`users/${userID}/deny/${invitation.groupID}`);
       setRefreshInvitation(prev => !prev);
     } catch (error) {
       alert("Declining failed.");
@@ -59,8 +56,8 @@ const Invitations = () => {
       <Header_new></Header_new>
       <Dashboard
         showButtons={{
-          home: true, 
-          cookbook: true, 
+          home: true,
+          cookbook: true,
           recipe: true,
           group: true,
           calendar: true,

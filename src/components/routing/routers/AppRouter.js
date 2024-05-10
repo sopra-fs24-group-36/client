@@ -16,12 +16,13 @@ import Shoppinglist from "../../views/Shoppinglist";
 import Invitations from "../../views/Invitations";
 import RecipeEdit from "../../views/EditRecipe";
 import Calendar from "../../views/Calendar";
-import GroupCalendar from "../../views/GroupCalendar"
+import GroupCalendar from "../../views/GroupCalendar";
 import GroupShoppinglist from "../../views/GroupShoppinglist";
 import { EditRecipeGuard } from "../routeProtectors/EditRecipeGuard";
 import { GroupGuard } from "../routeProtectors/GroupGuard";
 import { RecipeGuard } from "../routeProtectors/RecipeGuard";
 import { ProfileGuard } from "../routeProtectors/ProfileGuard";
+import GroupMembers from "../../views/GroupMembers";
 
 /**
  * Main router of your application.
@@ -38,67 +39,68 @@ const AppRouter = () => {
     <BrowserRouter>
       <Routes>
 
+        <Route path="*" element={<Navigate to="/home" replace />} />
+
         <Route path="/home" element={<Home />} />
 
         <Route path="/recipes" element={<AddRecipe />} />
 
-        <Route path = "/groups/:groupID/cookbooks/:recipeID" element = {<GroupGuard/>}>
+        <Route path="/groups/:groupID/cookbooks/:recipeID" element={<GroupGuard />}>
           <Route path="/groups/:groupID/cookbooks/:recipeID" element={<GroupRecipe />} />
         </Route>
 
-        <Route path = "/users/:authorID/cookbooks/:recipeID" element = {<RecipeGuard/>}>
+        <Route path="/users/:authorID/cookbooks/:recipeID" element={<RecipeGuard />}>
           <Route path="/users/:authorID/cookbooks/:recipeID" element={<PersonalRecipe />} />
         </Route>
 
-        <Route path="/users/:authorID/cookbooks/:recipeID/edit" element={<EditRecipeGuard/>}>
+        <Route path="/users/:authorID/cookbooks/:recipeID/edit" element={<EditRecipeGuard />}>
           <Route path="/users/:authorID/cookbooks/:recipeID/edit" element={<RecipeEdit />} />
         </Route>
 
         <Route path="/users" element={<Register />} />
 
         <Route path="/users/login" element={<Login />} />
-        {/*<Route path="/users/login" element={<LoginGuard />}>*/}
-        {/*  <Route path="/users/login" element={<Login/>} />*/}
-        {/*</Route>*/}
 
-        <Route path ="/users/:userID" element = {<ProfileGuard/>}>
-          <Route path="/users/:userID" element={<UserProfile />} />
-        </Route>
+        <Route path="/users/:userID" element={<UserProfile />} />
 
-        <Route path ="/users/:userID/edit" element = {<ProfileGuard/>}>
+        <Route path="/users/:userID/edit" element={<ProfileGuard />}>
           <Route path="/users/:userID/edit" element={<EditProfile />} />
         </Route>
 
-        <Route path ="/users/:userID/cookbooks" element = {<ProfileGuard/>}>
+        <Route path="/users/:userID/cookbooks" element={<ProfileGuard />}>
           <Route path="/users/:userID/cookbooks" element={<PersonalCookbook />} />
         </Route>
 
-        <Route path ="/users/:userID/calendars" element = {<ProfileGuard/>}>
+        <Route path="/users/:userID/calendars" element={<ProfileGuard />}>
           <Route path="/users/:userID/calendars" element={<Calendar />} />
         </Route>
 
-        <Route path ="/users/:userID/shoppinglists" element = {<ProfileGuard/>}>
+        <Route path="/users/:userID/shoppinglists" element={<ProfileGuard />}>
           <Route path="/users/:userID/shoppinglists" element={<Shoppinglist />} />
         </Route>
-  
-        <Route path ="/users/:userID/invitations" element = {<ProfileGuard/>}>
+
+        <Route path="/users/:userID/invitations" element={<ProfileGuard />}>
           <Route path="/users/:userID/invitations" element={<Invitations />} />
         </Route>
 
         <Route path="/groups" element={<AddGroup />} />
 
-        <Route path = "/groups/:groupID/cookbooks" element = {<GroupGuard/>}>
+        <Route path="/groups/:groupID/cookbooks" element={<GroupGuard />}>
           <Route path="/groups/:groupID/cookbooks" element={<GroupCookbook />} />
         </Route>
-        
-        <Route path = "/groups/:groupID/shoppinglists" element = {<GroupGuard/>}>
+
+        <Route path="/groups/:groupID/members" element={<GroupGuard />}>
+          <Route path="/groups/:groupID/members" element={<GroupMembers />} />
+        </Route>
+
+        <Route path="/groups/:groupID/shoppinglists" element={<GroupGuard />}>
           <Route path="/groups/:groupID/shoppinglists" element={<GroupShoppinglist />} />
         </Route>
-        
-        <Route path = "/groups/:groupID/calendars" element = {<GroupGuard/>}>
-          <Route path="/groups/:groupID/calendars" element={<GroupCalendar/>} />
+
+        <Route path="/groups/:groupID/calendars" element={<GroupGuard />}>
+          <Route path="/groups/:groupID/calendars" element={<GroupCalendar />} />
         </Route>
-      
+
         <Route path="/" element={
           <Navigate to="/users/login" replace />
         } />

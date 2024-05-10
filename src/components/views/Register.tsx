@@ -59,9 +59,6 @@ const Register = () => {
       });
       const response = await api.post("/users", requestBody);
 
-      if (!response.data) {
-        throw new Error();
-      }
       const user = new User(response.data);
       //store ID in the local storage
       localStorage.setItem("userID", user.id);

@@ -15,7 +15,6 @@ const Dashboard = ({ showButtons, activePage }) => {
   const { groupID } = useParams();
 
   const userID = parseInt(localStorage.getItem("userID"));
-  const [isInviteUserModalOpen, setIsInviteUserModalOpen] = useState(false);
   const [isConsentModalOpen, setIsConsentModalOpen] = useState(false);
 
   useEffect(() => {
@@ -57,7 +56,7 @@ const Dashboard = ({ showButtons, activePage }) => {
   const doLogout = async () => {
     try {
       const requestBody = JSON.stringify(userID);
-      const response = await api.post(`/users/logout/${userID}`, requestBody);
+      await api.post(`/users/logout/${userID}`, requestBody);
     } catch (error) {
       alert("An error occurred while logging out");
     }
@@ -76,7 +75,7 @@ const Dashboard = ({ showButtons, activePage }) => {
     const leaveGroup = async () => {
       try {
         const requestBody = JSON.stringify(userID);
-        const response = await api.delete(`/groups/${groupID}/${userID}`, requestBody);
+        await api.delete(`/groups/${groupID}/${userID}`, requestBody);
       } catch (error) {
         alert("An error occurred while leaving the group");
       }
@@ -202,19 +201,6 @@ const Dashboard = ({ showButtons, activePage }) => {
           >
             Group - Shopping list
           </Button>
-        </div>
-      )}
-      {showButtons.inviteUser && (
-        <div className="dashboard button-container">
-          <Button
-            className={`db${activePage === "inviteUser" ? " highlight" : ""}`}
-            onClick={() => setIsInviteUserModalOpen(true)}>
-            Invite a user
-          </Button>
-          <InviteUserModal
-            open={isInviteUserModalOpen}
-            onClose={() => setIsInviteUserModalOpen(false)}>
-          </InviteUserModal>
         </div>
       )}
       {showButtons.invitations && (

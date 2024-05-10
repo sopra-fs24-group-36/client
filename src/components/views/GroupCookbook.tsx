@@ -1,11 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ReactDOM from "react-dom";
 import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
 import "styles/views/Cookbooks.scss";
 import "styles/views/Modal.scss";
-import Recipe from "models/Recipe";
 import Dashboard from "components/ui/Dashboard";
 import { api, handleError } from "helpers/api";
 import Footer from "components/ui/footer";
@@ -19,7 +18,7 @@ const FormField = (props) => {
     <div className="cookbook field">
       <input
         className="cookbook input"
-        placeholder="Search for your recipes by name or tag"
+        placeholder="Search for group recipes by name or tag"
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
       />
@@ -34,7 +33,6 @@ FormField.propTypes = {
 const GroupCookbook = () => {
   const navigate = useNavigate();
   const [filterKeyword, setFilterKeyword] = useState<string>("");
-  const userID = localStorage.getItem("userID"); /*getting the ID of the currently logged in user*/
   const { groupID } = useParams();
   const [groupInfo, setGroupInfo] = useState<any[]>([]);
   const [recipeState, setRecipeState] = useState(false);
@@ -61,7 +59,6 @@ const GroupCookbook = () => {
     try {
       const response = await api.get(`/groups/${groupID}/cookbooks`);
       await new Promise((resolve) => setTimeout(resolve, 500));
-      setRecipeState(true);
 
       const formattedRecipes = response.data.map((recipe: any) => ({
         id: recipe.id,
@@ -70,11 +67,9 @@ const GroupCookbook = () => {
         cookingTime: recipe.cookingTime,
         tags: recipe.tags,
         image: recipe.image,
-        autherID: recipe.authorID,
+        authorID: recipe.authorID,
       }));
-      setRecipeState(true);
-      setRecipeList(formattedRecipes);
-      setOriginalRecipeList(formattedRecipes);
+      await fetchUserImages(formattedRecipes);
     } catch (error) {
       console.error(
         `Something went wrong while fetching the groups: \n${handleError(
@@ -86,11 +81,31 @@ const GroupCookbook = () => {
         "Something went wrong while fetching the recipes! See the console for details.",
       );
     }
-    setSelectedRecipeList([]);
+  };
+
+  const fetchUserImages = async (recipes: any[]) => {
+    const updatedRecipeList = await Promise.all(
+      recipes.map(async (recipe) => {
+        try {
+          const response = await api.get(`/users/${recipe.authorID}`);
+          const profilePicture = response.data.profilePicture;
+
+          return { ...recipe, authorImg: profilePicture };
+        } catch (error) {
+          console.error("Error fetching user image:", error);
+
+          return recipe;
+        }
+      }),
+    );
+    setRecipeList(updatedRecipeList);
+    setOriginalRecipeList(updatedRecipeList);
+    setRecipeState(true);
   };
 
   useEffect(() => {
     fetchData();
+    setSelectedRecipeList([]);
   }, [groupID]);
 
 
@@ -129,11 +144,15 @@ const GroupCookbook = () => {
   };
 
 
-  const handelSelectRecipe = (recipe: Recipe) => {
+  const handelSelectRecipe = () => {
     setRemoveState(!removeState);
     if (removeState === true && selectedRecipeList.length > 0) {
       setIsConsentModalOpen(true);
     }
+  };
+
+  const handelMemberlist = () => {
+    navigate(`/groups/${groupID}/members`);
   };
 
   const ConsentModal = ({ open, onClose }) => {
@@ -209,33 +228,14 @@ const GroupCookbook = () => {
   };
 
 
-  const Recipe = ({ id, title, description, time, tag, imageUrl, autherID, onClick }: any) => {
+  const Recipe = ({ id, title, description, time, tag, imageUrl, authorImg, onClick }: any) => {
     const isSelected = selectedRecipeList.includes(id);
-    const [user, setUser] = useState<any>({});
-
-    useEffect(() => {
-      const fetchUserData = async () => {
-        try {
-          const response = await api.get(`/users/${autherID}`);
-          setUser(response.data);
-        } catch (error) {
-          console.error(
-            `Something went wrong while fetching the user data: \n${handleError(error)}`,
-          );
-          console.error("Details:", error);
-          alert("Something went wrong while fetching the user data! See the console for details.");
-        }
-      };
-      fetchUserData();
-    }, [autherID]);
-
-    const userImgUrl = useMemo(() => user.profilePicture || "", [user.profilePicture]);
 
     return (
       <div className="cookbook recipeContainer">
         <button className={`cookbook recipeButton ${isSelected ? "selected" : ""}`} onClick={onClick}>
           <div className="cookbook recipeUserImgContainer">
-            <img className="cookbook recipeUserImg" src={userImgUrl} alt="User Image" />
+            <img className="cookbook recipeUserImg" src={authorImg} alt="Author Image" />
           </div>
           <div className="cookbook recipeImgContainer">
             <img className="cookbook recipeImg" src={imageUrl} alt="Recipe Image" />
@@ -267,17 +267,18 @@ const GroupCookbook = () => {
           time={recipe.cookingTime}
           tag={recipe.tags}
           imageUrl={recipe.image}
-          autherID={recipe.autherID}
+          authorImg={recipe.authorImg}
         />
       ))}
     </div>
   );
 
-  let content;
   if (!recipeState) {
-    content = <Spinner />;
+
+    return <Spinner />;
   } else {
-    content = (
+
+    return (
       <div>
         <Header_new />
         <Dashboard
@@ -287,7 +288,6 @@ const GroupCookbook = () => {
             recipe: true,
             groupCalendar: true,
             groupShoppinglist: true,
-            inviteUser: true,
             leaveGroup: true,
           }}
           activePage="leaveGroup"
@@ -295,17 +295,18 @@ const GroupCookbook = () => {
         <BaseContainer>
           {/*head field*/}
           <div className="cookbook headerContainer">
-            <div className="cookbook backButtonContainer">
-              <Button className="cookbook backButton" onClick={() => navigate(-1)}>
-                Back
-              </Button>
-            </div>
+            <Button className="cookbook backButton" onClick={() => navigate(-1)}>
+              Back
+            </Button>
             <div className="cookbook titleContainer">
               <h2 className="cookbook title">{groupInfo.name} - Cookbook</h2>
             </div>
             <div className="cookbook backButtonContainer">
+              <Button className="cookbook groupButton" onClick={handelMemberlist}>
+                Members
+              </Button>
               <Button
-                className={`${removeState ? "hightlightButton" : "backButton"}`}
+                className={`${removeState ? "hightlightButton" : "groupButton"}`}
                 onClick={handelSelectRecipe}>
                 Remove Recipes
               </Button>
@@ -332,12 +333,6 @@ const GroupCookbook = () => {
       </div>
     );
   }
-
-  return (
-    <div>
-      {content}
-    </div>
-  );
 };
 
 export default GroupCookbook;

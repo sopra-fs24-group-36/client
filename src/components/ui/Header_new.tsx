@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../../styles/ui/Header_new.scss";
 import { Button } from "components/ui/Button";
 import { useNavigate } from "react-router-dom";
-import { api, handleError } from "helpers/api";
+import { api } from "helpers/api";
 
 /**
  * This is an example of a Functional and stateless component (View) in React. Functional components are not classes and thus don't handle internal state changes.
@@ -20,9 +20,6 @@ const Header_new = () => {
 
   const doProfile = () => {
     navigate(`/users/${userID}`);
-  };
-  const doHome = async () => {
-    navigate("/home");
   };
 
   useEffect(() => {

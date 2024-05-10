@@ -14,6 +14,7 @@ const FormField = (props) => {
           className="modal input"
           value={props.value}
           onChange={(e) => props.onChange(e.target.value)}
+          placeholder="Enter an email address"
         />
       </div>
     </div>
@@ -46,7 +47,7 @@ const InviteUserModal = ({ open, onClose }) => {
       const requestBody = JSON.stringify({
         email: email,
       });
-      const response = await api.post(`/groups/${groupID}/invitations`, requestBody);
+      await api.post(`/groups/${groupID}/invitations`, requestBody);
     } catch (error) {
       console.error("An error occurred while inviting a user:", error);
       alert("Inviting a user failed.");
@@ -60,6 +61,9 @@ const InviteUserModal = ({ open, onClose }) => {
       ;
       <div className="modal conatiner">
         <div className="modal title">Invite a User</div>
+        <div className="modal text">
+          Enter the email address of the user you want to invite below
+        </div>
         <FormField
           value={email}
           onChange={setEmail} />

@@ -91,8 +91,8 @@ const EditProfile = () => {
         "email": email,
         "profilePicture": profilepicture,
       });
-      const response = await api.put(`/users/${userID}`, requestBody);
-      navigate(`/users/${userID}`);
+      await api.put(`/users/${userID}`, requestBody);
+      navigate("/home");
     } catch (error) {
       console.error("An error occurred while saving changes:", error);
       alert("An error occurred while saving changes. Please try again later.");
@@ -184,7 +184,7 @@ const EditProfile = () => {
               <Button
                 className="userprofile button-lightgreen"
                 width="50%"
-                onClick={() => navigate(`/users/${userID}`)}>
+                onClick={() => navigate("/home")}>
                 Back
               </Button>
               <Button

@@ -58,8 +58,7 @@ const AddGroup = () => {
   const [name, set_group_name] = useState("");
   const [membersNames, set_group_members] = useState([]);
   const [new_member, set_new_member] = useState("");
-  const [user_email, setEmail] = useState<string>(null);
-  const [userID, setUserID] = useState<string>(null);
+  const user_email = localStorage.getItem("userEmail");
   const [selectedImage, set_selectedImage] = useState(null);
 
   const addMember = () => {
@@ -110,7 +109,7 @@ const AddGroup = () => {
         creator: userID,
       });
       const response = await api.post("/groups", requestBody);
-      const group = new Group(response.data);
+      new Group(response.data);
     } catch (error) {
       console.error("An error occurred while creating groups:", error);
       alert("Creating a group failed because the details were incomplete.");

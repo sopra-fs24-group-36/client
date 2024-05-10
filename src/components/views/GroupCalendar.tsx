@@ -32,7 +32,6 @@ const FormField=(props)=>{
 }
 FormField.propTypes = {
   value: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 
@@ -240,7 +239,6 @@ const GroupCalendar=()=>{
           groupCalendar: true,
           groupShoppinglist: true,
           invitations: true,
-          inviteUser: true,
           leaveGroup: true,
         }}
         activePage="groupCalendar"
@@ -333,7 +331,7 @@ const GroupCalendar=()=>{
                   {`${getDayOfWeek(date)}.${formatDate(date)}`}
                 </div>
               ))}
-              {["BREAKFAST","LUNCH","DINNER"].map((status,index)=>(
+              {["BREAKFAST","LUNCH","DINNER"].map((status)=>(
                 getDatesOfWeek(currentWeek).map(date=>(
                   <div
                     key={date}
@@ -350,9 +348,7 @@ const GroupCalendar=()=>{
                               onClick={() => navigate(`/groups/${groupID}/cookbooks/${event.recipeID}`)}>
                               <div className="calendar eventTitle">{event.recipeTitle}</div>
                             </Button>
-                            <Button className="calendar removeButton"
-                                    onClick={() => handleRemove(event.eventId)}>
-                              Remove
+                            <Button className="calendar removeButton" onClick={() => handleRemove(event.eventId)}>Remove
                             </Button>
                           </div>
                         ))

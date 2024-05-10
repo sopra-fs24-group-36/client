@@ -252,7 +252,7 @@ const PersonalCookbook = () => {
         />
         <BaseContainer>
 
-{/*head field*/}
+          {/*head field*/}
           <div className="cookbook headerContainer">
             <Button className="backButton" onClick={() => navigate(-1)}>
               Back

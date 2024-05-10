@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { api, handleError } from "helpers/api";
 import { useNavigate, useParams } from "react-router-dom";
-import ReactDOM from 'react-dom';
+import ReactDOM from "react-dom";
 import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
 import "styles/views/Calendar.scss"
@@ -39,7 +39,7 @@ FormField.propTypes = {
 const ReplaceModal = ({ show, message, onClose }) => {
   const [isVisible,setIsVisible]=useState(show);
   useEffect(()=>{
-    console.log('Modal visibility state changed: ', show);
+    console.log( "Modal visibility state changed:", show);
     if(show){
       setIsVisible(true);
       const timer=setTimeout(()=>{
@@ -137,18 +137,18 @@ const GroupCalendar=()=>{
   }
 
   const handleDragStart=(e,recipe)=>{
-    e.dataTransfer.setData('text/plain',JSON.stringify(recipe));
-    const preview=document.getElementById('drag-preview');
-    const image = document.getElementById('preview-image') as HTMLImageElement;
-    const title=document.getElementById('preview-title');
+    e.dataTransfer.setData("text/plain",JSON.stringify(recipe));
+    const preview=document.getElementById("drag-preview");
+    const image = document.getElementById("preview-image") as HTMLImageElement;
+    const title=document.getElementById("preview-title");
 
     image.src=recipe.image;
     title.textContent=recipe.title;
 
-    preview.style.display='block';
+    preview.style.display="block";
     e.dataTransfer.setDragImage(preview,50,50);
 
-    setTimeout(()=>preview.style.display='none',0);
+    setTimeout(()=>preview.style.display="none",0);
 
   }
   const hasRecipeInSlot=(date,status)=>{
@@ -157,7 +157,7 @@ const GroupCalendar=()=>{
     return calendar.some(event=>formatDateToYYYYMMDD(new Date(event.date)) === formattedDate && event.status === status);
   }
   const handleDrop=async (e,date,status)=>{
-    const recipeString = e.dataTransfer.getData('text/plain');
+    const recipeString = e.dataTransfer.getData("text/plain");
     const recipe = JSON.parse(recipeString);
     e.preventDefault();
 

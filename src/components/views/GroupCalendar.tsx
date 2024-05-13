@@ -316,7 +316,7 @@ const GroupCalendar=()=>{
                   backgroundSize: "80% 80%",
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
-                  backgroundImage: `url(${rightArrow})`,
+                  backgroundImage: `url(${leftArrow})`,
                 }}
                 onClick={handlePrevWeek}>
               </Button>
@@ -326,7 +326,7 @@ const GroupCalendar=()=>{
                   backgroundSize: "80% 80%",
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
-                  backgroundImage: `url(${leftArrow})`,
+                  backgroundImage: `url(${rightArrow})`,
                 }}
                 onClick={handleNextWeek}>
               </Button>

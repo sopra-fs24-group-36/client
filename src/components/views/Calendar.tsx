@@ -208,6 +208,7 @@ const Calendar = () =>{
 
 
   useEffect(()=>{
+    let intervalId;
     async function fetchData(){
       try{
         const responseRecipe=await api.get(`/users/${userID}/cookbooks`);
@@ -228,6 +229,8 @@ const Calendar = () =>{
     if (shouldFetchCalendar) {
       fetchData();
     }
+    intervalId = setInterval(fetchData, 1000);
+    return () => clearInterval(intervalId);
   },[shouldFetchCalendar]);
   if (loading) {
 

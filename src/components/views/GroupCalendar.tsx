@@ -231,6 +231,7 @@ const GroupCalendar=()=>{
       fetchData();
     }
     intervalId = setInterval(fetchData, 1000);
+
     return () => clearInterval(intervalId);
   },[shouldFetchCalendar]);
 

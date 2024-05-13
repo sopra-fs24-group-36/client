@@ -123,7 +123,7 @@ const GroupCookbook = () => {
     }
   };
 
-  const handleClickEdit=(event,recipeId:string,autherID)=>{
+  const handleClickEdit=(event,recipeId:string,autherID:string)=>{
     event.stopPropagation();
     navigate(`/users/${autherID}/cookbooks/${recipeId}/edit`);
   }
@@ -228,7 +228,7 @@ const GroupCookbook = () => {
   };
 
 
-  const Recipe = ({ id, title, description, time, tag, imageUrl, authorImg, autherID,onClick }: any) => {
+  const Recipe = ({ id, title, description, time, tag, imageUrl, authorImg, authorID,onClick }: any) => {
     const isSelected = selectedRecipeList.includes(id);
 
     return (
@@ -247,7 +247,7 @@ const GroupCookbook = () => {
             <p className="cookbook recipeTags">Tags: {tag.join(",")}</p>
           </div>
           <div className="cookbook editButtonContainer">
-            <Button className="cookbook editRecipeButton" onClick={(event) => handleClickEdit(event, id,autherID)}>Edit
+            <Button className="cookbook editRecipeButton" onClick={(event) => handleClickEdit(event, id,authorID)}>Edit
               Recipe</Button>
           </div>
         </button>

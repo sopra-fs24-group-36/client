@@ -206,6 +206,7 @@ const GroupCalendar=()=>{
 
 
   useEffect(()=>{
+    let intervalId;
     async function fetchData(){
       try{
         const responseRecipe=await api.get(`/groups/${groupID}/cookbooks`);
@@ -229,6 +230,8 @@ const GroupCalendar=()=>{
     if (shouldFetchCalendar) {
       fetchData();
     }
+    intervalId = setInterval(fetchData, 1000);
+    return () => clearInterval(intervalId);
   },[shouldFetchCalendar]);
 
   if (loading) {

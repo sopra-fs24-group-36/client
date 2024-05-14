@@ -36,8 +36,8 @@ const Footer = () => {
 
   const [searchQuery, set_search_query] = useState<string>("");
   const [searchResults, setSearchResults] = useState<object[]>([]);
-  const appID = process.env.REACT_APP_API_ID;
-  const appKEY = process.env.REACT_APP_API_KEY;
+  const appID = "20ac2f64";
+  const appKEY = "ddfd58f4ebe2f9da56a714e0c7aa4054";
 
   const toString = async (ingredients) => {
     return ingredients.map(item => item.replace(/\\/g, ""));
@@ -90,14 +90,14 @@ const Footer = () => {
           <div className="footer recipeContent">
             <div className="footer recipeTitleContainer">
               <p className="footer recipeTitle">
-                {recipe.recipe.label}
+                {(recipe.recipe.label)}
               </p>
             </div>
             <div className="footer recipeImageContainer">
               <img src={recipe.recipe.image} alt="recipeImage" className="footer recipeImage" />
             </div>
-            <div className="footer recipeDescriptionContainer">
-              <p><strong>Source:</strong> {recipe.recipe.source}</p>
+            <div className="footer recipeSourceContainer">
+              <p className="footer recipeSource"><strong>Source:</strong> {recipe.recipe.source}</p>
             </div>
             <div className="footer recipeButton">
               <Button className="footer-footerButton" onClick={() => doLink(recipe.recipe.url)}>

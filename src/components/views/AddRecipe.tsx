@@ -93,11 +93,11 @@ const addRecipe = () => {
   const [groups, set_groups] = useState<Int16Array[]>([]);
 
   const handleDescriptionChange = (value: string) => {
-    if (value.length <= 100) { // Check if the length of the description is within the limit
-      set_recipe_description(value); // Update the description state if within limit
-      setDescriptionError(false); // Clear any previous error message
+    if (value.length <= 100) { 
+      set_recipe_description(value); 
+      setDescriptionError(false); 
     } else {
-      setDescriptionError(true); // Set error message if exceeded limit
+      setDescriptionError(true);
     }
   };
 
@@ -125,8 +125,8 @@ const addRecipe = () => {
         </div>
       </>,
       document.getElementById("portal-invite-user"),
-    )
-  }
+    );
+  };
 
   LengthExceedModal.propTypes = {
     open: PropTypes.bool.isRequired,

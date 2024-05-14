@@ -36,8 +36,8 @@ const Footer = () => {
 
   const [searchQuery, set_search_query] = useState<string>("");
   const [searchResults, setSearchResults] = useState<object[]>([]);
-  const appID = "20ac2f64";
-  const appKEY = "ddfd58f4ebe2f9da56a714e0c7aa4054";
+  const appID = process.env.REACT_APP_API_ID;
+  const appKEY = process.env.REACT_APP_API_KEY;
 
   const toString = async (ingredients) => {
     return ingredients.map(item => item.replace(/\\/g, ""));

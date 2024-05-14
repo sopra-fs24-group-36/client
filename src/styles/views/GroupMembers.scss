@@ -68,7 +68,6 @@
     justify-content: center;
     text-align: center;
     width: 100%;
-    overflow: auto;
   }
 }
 
@@ -128,5 +127,11 @@
   &.email {
     text-align: center;
     width: 200px;
+  }
+
+  &.useremail {
+    text-align: center;
+    width: 200px;
+    font-size: 15px;
   }
 }

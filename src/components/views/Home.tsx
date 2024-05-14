@@ -45,6 +45,17 @@ const Home = () => {
     return webpageTags;
   };
 
+  const doDescription = (description) =>{
+    if(description){
+      if(description.length < 50){
+        return description
+      }
+      else{
+        return `${description.substring(0, 50)}...`;
+      }
+    }
+  }
+
   const doNoRecipe = () => {
     return <p className="Home noRecipeText">no recipes saved yet</p>;
   };
@@ -125,8 +136,8 @@ const Home = () => {
           <img src={recipe.image} alt="Recipe" className="Home recipeImage" />
           <div className="Home recipeInfo">
             <h3 className="Home recipeTitle">{recipe.title}</h3>
-            <p className="Home recipeDescription">{recipe.shortDescription}</p>
-            <p className="Home recipeTime">{recipe.cookingTime}</p>
+            <p className="Home recipeDescription">{doDescription(recipe.shortDescription)}</p>
+            <p className="Home recipeTime"><strong>Total time: </strong>{recipe.cookingTime}</p>
             <p className="Home recipeTags"><strong>Tags: </strong>{doTags(recipe.tags)}</p>
           </div>
         </Button>

@@ -90,14 +90,14 @@ const Footer = () => {
           <div className="footer recipeContent">
             <div className="footer recipeTitleContainer">
               <p className="footer recipeTitle">
-                {recipe.recipe.label}
+                {(recipe.recipe.label)}
               </p>
             </div>
             <div className="footer recipeImageContainer">
               <img src={recipe.recipe.image} alt="recipeImage" className="footer recipeImage" />
             </div>
-            <div className="footer recipeDescriptionContainer">
-              <p><strong>Source:</strong> {recipe.recipe.source}</p>
+            <div className="footer recipeSourceContainer">
+              <p className="footer recipeSource"><strong>Source:</strong> {recipe.recipe.source}</p>
             </div>
             <div className="footer recipeButton">
               <Button className="footer-footerButton" onClick={() => doLink(recipe.recipe.url)}>

@@ -78,7 +78,7 @@ const GroupMembers = () => {
             <td className="members id">{member.id}</td>
             <td className="members username">{member.username}</td>
             <td className="members name">{member.name}</td>
-            <td className="members email">{member.email}</td>
+            <td className="members useremail">{(member.email)}</td>
           </Button>
         ))}
       </tbody>

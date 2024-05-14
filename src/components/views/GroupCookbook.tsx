@@ -155,6 +155,17 @@ const GroupCookbook = () => {
     navigate(`/groups/${groupID}/members`);
   };
 
+  const doDescription = (description) =>{
+    if(description){
+      if(description.length < 20){
+        return description
+      }
+      else{
+        return `${description.substring(0, 20)}...`;
+      }
+    }
+  }
+
   const ConsentModal = ({ open, onClose }) => {
     if (!open) return null;
 
@@ -198,7 +209,7 @@ const GroupCookbook = () => {
         <div className="modal backdrop"></div>
         ;
         <div className="modal conatiner">
-          <div className="modal title">Warnning</div>
+          <div className="modal title">Warning</div>
           <div className="modal text">
             All the recipes you selected will be removed from this group cookbook
           </div>
@@ -227,6 +238,22 @@ const GroupCookbook = () => {
     onClose: PropTypes.func.isRequired,
   };
 
+  const doTags = (recipeTags) => {
+    let webpageTags = "";
+    if (recipeTags.length === 0) {
+      webpageTags += "no tags set";
+    }
+    recipeTags.forEach(tag => {
+      webpageTags += tag.toLowerCase() + ", "; // Add each tag to the webpageTags string
+    });
+    // Remove the trailing comma and space
+    if (webpageTags !== "no tags set") {
+      webpageTags = webpageTags.slice(0, -2);
+    }
+
+    return webpageTags;
+  };
+
 
   const Recipe = ({ id, title, description, time, tag, imageUrl, authorImg, authorID,onClick }: any) => {
     const isSelected = selectedRecipeList.includes(id);
@@ -242,9 +269,9 @@ const GroupCookbook = () => {
           </div>
           <div className="cookbook recipeContent">
             <h2 className="cookbook recipeTitle">{title}</h2>
-            <p className="cookbook recipeDescription">Description: {description}</p>
-            <p className="cookbook recipeTime">Total Time: {time}</p>
-            <p className="cookbook recipeTags">Tags: {tag.join(",")}</p>
+            <p className="cookbook recipeDescription">{doDescription(description)}</p>
+            <p className="cookbook recipeTime"><strong>Total Time: </strong>{time}</p>
+            <p className="cookbook recipeTags"><strong>Tags: </strong>{doTags(tag)}</p>
           </div>
           <div className="cookbook editButtonContainer">
             <Button className="cookbook editRecipeButton" onClick={(event) => handleClickEdit(event, id,authorID)}>Edit

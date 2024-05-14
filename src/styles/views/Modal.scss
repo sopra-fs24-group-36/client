@@ -103,6 +103,16 @@
     color: $container_dark;
   }
 
+  &.button-center {
+    width: 100%;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25em;
+    background-color: $light_green;
+    color: $container_dark;
+  }
+
   &.highlight {
     width: 45%;
     height: 30px;

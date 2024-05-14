@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { api, handleError } from "helpers/api";
 import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
+import ReactDOM from "react-dom";
 import "styles/views/AddRecipe.scss";
 import PropTypes from "prop-types";
 import Dashboard from "components/ui/Dashboard";
@@ -83,6 +84,7 @@ const addRecipe = () => {
   const [amounts, set_recipe_amount] = useState<string[]>([]);
   const [instructions, set_recipe_steps] = useState<string[]>([]);
   const [tags, set_recipe_tags] = useState<string[]>([]);
+  const [descriptionError, setDescriptionError] = useState(false);
 
   const [showHelp, setShowHelp] = useState(false);
 
@@ -90,6 +92,46 @@ const addRecipe = () => {
   const [groupState, setGroupState] = useState(false);
   const [groups, set_groups] = useState<Int16Array[]>([]);
 
+  const handleDescriptionChange = (value: string) => {
+    if (value.length <= 100) { // Check if the length of the description is within the limit
+      set_recipe_description(value); // Update the description state if within limit
+      setDescriptionError(false); // Clear any previous error message
+    } else {
+      setDescriptionError(true); // Set error message if exceeded limit
+    }
+  };
+
+  const LengthExceedModal = ({open, onClose}) =>{
+    if (!open) return null; 
+
+    const handleCancel = () => {
+      onClose();
+    };
+
+    return ReactDOM.createPortal(
+      <>
+        <div className="modal backdrop"></div>
+        ;
+        <div className="modal conatiner">
+          <div className="modal title">Warning</div>
+          <div className="modal text">
+          Recipe description has exceeded maximum length of 100 characters
+          </div>
+          <div className="modal button-container">
+            <Button className="modal button-center" onClick={handleCancel}>
+              Close
+            </Button>
+          </div>
+        </div>
+      </>,
+      document.getElementById("portal-invite-user"),
+    )
+  }
+
+  LengthExceedModal.propTypes = {
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+  };
 
   const addField = () => { /*to add a field for adding ingredients and their amount*/
     if (ingredients.some(ingredient => ingredient.trim() === "")){
@@ -306,8 +348,12 @@ const addRecipe = () => {
               <FormField
                 label="Description:"
                 value={shortDescription}
-                onChange={(rd: string) => set_recipe_description(rd)}>
+                onChange={(rd: string) => handleDescriptionChange(rd)}>
               </FormField>
+              <LengthExceedModal
+                open={descriptionError}
+                onClose={() => setDescriptionError(false)}>
+              </LengthExceedModal>
               <FormField
                 label="Preparation time:"
                 value={cookingTime}

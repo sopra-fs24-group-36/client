@@ -198,7 +198,7 @@ const GroupCookbook = () => {
         <div className="modal backdrop"></div>
         ;
         <div className="modal conatiner">
-          <div className="modal title">Warnning</div>
+          <div className="modal title">Warning</div>
           <div className="modal text">
             All the recipes you selected will be removed from this group cookbook
           </div>

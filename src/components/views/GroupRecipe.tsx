@@ -182,6 +182,7 @@ const GroupRecipe = () => {
         {isHovered && commentUserName === currentUserName && (
           // {isHovered &&  && (
           <div className="comment button-container">
+            <li>{comment.text}</li>
             <Button
               className="comment editButton"
               onClick={() => setIsEditModalOpen(true)}>

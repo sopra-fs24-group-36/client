@@ -48,7 +48,18 @@ const Register = () => {
   const [password, setPassword] = useState<string>(null);
   const [name, setName] = useState<string>(null);
 
+
+  const validateEmail = (email) => {
+    const re = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;//email format:x@x.x
+    return re.test(String(email).toLowerCase());
+  };
+
   const doRegister = async () => {
+    if (!validateEmail(email)) {
+      alert("Please enter a valid email address in the format x@x.x");
+      return;
+    }
+
     try {
       const requestBody = JSON.stringify({
         username: username,

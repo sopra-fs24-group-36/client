@@ -13,7 +13,7 @@
     margin-right: 20px;
     justify-content: center;
     padding-bottom: 10px;
-    height: 75%;
+    height: 69%;
     margin-left: 17%;
   }
 
@@ -25,7 +25,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 75%;
+    height: 69%;
     padding-bottom: 20px;
   }
 
@@ -36,6 +36,7 @@
     position: sticky;
     z-index: 1;
     height: 80px;
+    max-width: 100%;
     margin: -0px 20px 0px 20px;
   }
 
@@ -49,18 +50,40 @@
 
   &.titleContainer {
     text-align: center;
-    margin-left: 15%;
+    max-width: 70%;
+    max-height: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    margin-left: 2%;
   }
 
-  &.title1 {
+  &.title1 ,&.titleGroupName1{
     color: $textColor;
     font-size: 33px;
+    max-width: 80%;
+    max-height: 80%;
   }
-
-  &.title2 {
+  &.titleGroupName1{
+    width:60%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+  }
+  &.title2 ,&.titleGroupName2{
     color: $textColor;
     font-size: 40px;
   }
+  &.titleGroupName2{
+    width: 43%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+  }
+
+
   &.noRecipeText {
     font-weight: bold;
     color: $light_pink;
@@ -209,7 +232,7 @@
     font-weight: bold;
     color: $container_dark;
     font-size: 20px;
-    max-width: 68%;
+    max-width: 60%;
     white-space: normal;
     overflow-wrap: break-word;
     word-wrap: break-word;

@@ -83,14 +83,16 @@ const Calendar = () =>{
   const [loading, setLoading] = useState(true);
 
   const searchRecipe=()=>{
-    if(!searchedRecipes){
+    if(filterKeyword===""){
       setSearchedRecipes(allRecipes);
+    }else{
+      const lowerCaseFilterKeyword = filterKeyword.toLowerCase();
+      const filtered=allRecipes.filter(recipe=>
+        recipe.title.toLowerCase().includes(lowerCaseFilterKeyword)
+      );
+      setSearchedRecipes(filtered);
     }
-    const lowerCaseFilterKeyword = filterKeyword.toLowerCase();
-    const filtered=allRecipes.filter(recipe=>
-      recipe.title.toLowerCase().includes(lowerCaseFilterKeyword)
-    );
-    setSearchedRecipes(filtered);
+    setFilterKeyword("");
   }
   const handlePrevWeek=()=>{
     const newDate = new Date(currentWeek);
@@ -206,15 +208,24 @@ const Calendar = () =>{
     return calendar.filter(event => formatDateToYYYYMMDD(event.date) === formatDateToYYYYMMDD(date) && event.status === status);
   }
 
-
-  useEffect(()=>{
-    let intervalId;
-    async function fetchData(){
+  //fetch personal recipes
+  useEffect(() => {
+    const fetchRecipes=async ()=>{
       try{
         const responseRecipe=await api.get(`/users/${userID}/cookbooks`);
         setAllRecipes(responseRecipe.data);
         setSearchedRecipes(responseRecipe.data);
+      }catch (error){
+        alert("Something when wrong while fetching the recipes");
+      }
+    }
+    fetchRecipes();
+  }, []);
 
+  //fetch calendar and refresh calendar after removing a recipe
+  useEffect(()=>{
+    async function fetchData(){
+      try{
         const responseCalendar=await api.get(`/users/${userID}/calendars`);
         setCalendar(responseCalendar.data);
         setLoading(false);
@@ -229,9 +240,7 @@ const Calendar = () =>{
     if (shouldFetchCalendar) {
       fetchData();
     }
-    intervalId = setInterval(fetchData, 1000);
 
-    return () => clearInterval(intervalId);
   },[shouldFetchCalendar]);
   if (loading) {
 

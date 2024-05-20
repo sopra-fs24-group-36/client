@@ -75,20 +75,26 @@ const GroupCalendar=()=>{
   const[group,setGroup]=useState([]);
 
   const [currentWeek,setCurrentWeek]=useState((new Date()));
+
+  const [refreshState, setRefreshState] = useState(false);      // false = can refresh, true = do not refresh
   const [shouldFetchCalendar, setShouldFetchCalendar] = useState(true);
 
   const [showReplaceModal, setShowReplaceModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const searchRecipe=()=>{
-    if(!searchedRecipes){
+    if(filterKeyword===""){
+      setRefreshState(false);
       setSearchedRecipes(allRecipes);
+    }else{
+      setRefreshState(true);
+      const lowerCaseFilterKeyword = filterKeyword.toLowerCase();
+      const filtered=allRecipes.filter(recipe=>
+        recipe.title.toLowerCase().includes(lowerCaseFilterKeyword)
+      );
+      setSearchedRecipes(filtered);
     }
-    const lowerCaseFilterKeyword = filterKeyword.toLowerCase();
-    const filtered=allRecipes.filter(recipe=>
-      recipe.title.toLowerCase().includes(lowerCaseFilterKeyword)
-    );
-    setSearchedRecipes(filtered);
+    setFilterKeyword("");
   }
   const handlePrevWeek=()=>{
     const newDate = new Date(currentWeek);
@@ -204,36 +210,78 @@ const GroupCalendar=()=>{
     return calendar.filter(event => formatDateToYYYYMMDD(event.date) === formatDateToYYYYMMDD(date) && event.status === status);
   }
 
-
-  useEffect(()=>{
-    let intervalId;
-    async function fetchData(){
+  //fetch groupInfo and group recipes
+  useEffect(() => {
+    const fetchGroupInfo=async ()=>{
+      try{
+        const responseGroup=await api.get(`/groups/${groupID}`);
+        setGroup(responseGroup.data);
+        setLoading(false);
+      }catch (error){
+        alert("Something went wrong while fetching the group");
+      }
+    }
+    const fetchGroupRecipes=async ()=>{
       try{
         const responseRecipe=await api.get(`/groups/${groupID}/cookbooks`);
         setAllRecipes(responseRecipe.data);
         setSearchedRecipes(responseRecipe.data);
+      }catch (error){
+        alert("Something went wrong while fetching the group recipes")
+      }
+    };
+    fetchGroupRecipes();
+    fetchGroupInfo();
+  }, []);
 
+  //fetch calendar and refresh calendar after removing a r
+  useEffect(()=>{
+    const fetchCalendar=async ()=>{
+      try{
         const responseCalendar=await api.get(`/groups/${groupID}/calendars`);
         setCalendar(responseCalendar.data)
-
-        const responseGroup=await api.get(`/groups/${groupID}`);
-        setGroup(responseGroup.data);
-        setLoading(false);
-      }catch(error){
-        console.error("Details:", error);
-        alert(
-          "Something went wrong while fetching the data! See the console for details.");
-      }finally {
-        setShouldFetchCalendar(false);
+      }catch (error){
+        alert("Something went wrong while fetching the calendar");
       }
     }
+    setShouldFetchCalendar(false);
     if (shouldFetchCalendar) {
-      fetchData();
+      fetchCalendar();
     }
-    intervalId = setInterval(fetchData, 1000);
-
-    return () => clearInterval(intervalId);
   },[shouldFetchCalendar]);
+
+  //polling, refresh the calendar and the group recipes
+  useEffect(() => {
+    let calendarInterval;
+    let recipeInterval;
+    const fetchCalendar=async ()=>{
+      try{
+        const responseCalendar=await api.get(`/groups/${groupID}/calendars`);
+        setCalendar(responseCalendar.data)
+      }catch (error){
+        alert("Something went wrong while fetching the calendar");
+      }
+    };
+    const fetchGroupRecipes=async ()=>{
+      try{
+        const responseRecipe=await api.get(`/groups/${groupID}/cookbooks`);
+        setAllRecipes(responseRecipe.data);
+        setSearchedRecipes(responseRecipe.data);
+      }catch (error){
+        alert("Something went wrong while fetching the group recipes")
+      }
+    }
+    if(refreshState){
+      calendarInterval = setInterval(fetchCalendar, 3000);
+    }else{
+      calendarInterval = setInterval(fetchCalendar, 3000);
+      recipeInterval = setInterval(fetchGroupRecipes, 3000);
+    }
+    return () => {
+      if (calendarInterval) clearInterval(calendarInterval);
+      if (recipeInterval) clearInterval(recipeInterval);
+    };
+  }, [refreshState, groupID]);
 
   if (loading) {
 
@@ -247,6 +295,7 @@ const GroupCalendar=()=>{
             home: true,
             cookbook: true,
             recipe: true,
+            group: true,
             groupCalendar: true,
             groupShoppinglist: true,
             invitations: true,
@@ -258,7 +307,8 @@ const GroupCalendar=()=>{
           {/*group recipes field*/}
           <BaseContainer className="calendar baseContainerLeft">
             <div className="calendar headContainer1">
-              <h2 className="calendar title1">{group.name} - Recipes</h2>
+              <h2 className="calendar titleGroupName1">{group.name}</h2>
+              <h2 className="calendar titleGroupName1">- Recipes</h2>
             </div>
             <div className="calendar searchContainer">
               <FormField
@@ -310,11 +360,12 @@ const GroupCalendar=()=>{
                 </Button>
               </div>
               <div className="calendar titleContainer">
-                <h2 className="calendar title2">{group.name} - Calendar</h2>
+                <h2 className="calendar titleGroupName2">{group.name}</h2>
+                <h2 className="calendar title2">- Calendar</h2>
               </div>
             </div>
             <div className="calendar arrowButtonContainer">
-              <Button
+            <Button
                 className="calendar arrowButton"
                 style={{
                   backgroundSize: "80% 80%",

@@ -403,6 +403,7 @@ const GroupRecipe = () => {
             home: true,
             cookbook: true,
             recipe: true,
+            group: true,
             groupCalendar: true,
             groupShoppinglist: true,
             leaveGroup: true,

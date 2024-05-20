@@ -134,6 +134,7 @@ const GroupShoppinglist = () => {
             home: true,
             cookbook: true,
             recipe: true,
+            group: true,
             groupCalendar: true,
             groupShoppinglist: true,
             invitations: true,

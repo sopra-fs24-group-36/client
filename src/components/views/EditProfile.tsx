@@ -86,12 +86,14 @@ const EditProfile = () => {
 
   const validateEmail = (email) => {
     const re = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;//email format:x@x.x
+
     return re.test(email);
   };
 
   const saveChanges = async () => {
     if (!validateEmail(email)) {
       alert("Please enter a valid email address in the format x@x.x");
+
       return;
     }
     try {
@@ -119,6 +121,7 @@ const EditProfile = () => {
       if (file) {
         if(file.size>MAX_SIZE){
           alert("Picture is too big. Please upload a picture smaller than 200KB!");
+
           return;
         }
         const reader = new FileReader();

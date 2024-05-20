@@ -277,6 +277,7 @@ const GroupCalendar=()=>{
       calendarInterval = setInterval(fetchCalendar, 3000);
       recipeInterval = setInterval(fetchGroupRecipes, 3000);
     }
+
     return () => {
       if (calendarInterval) clearInterval(calendarInterval);
       if (recipeInterval) clearInterval(recipeInterval);
@@ -365,7 +366,7 @@ const GroupCalendar=()=>{
               </div>
             </div>
             <div className="calendar arrowButtonContainer">
-            <Button
+              <Button
                 className="calendar arrowButton"
                 style={{
                   backgroundSize: "80% 80%",

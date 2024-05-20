@@ -178,6 +178,7 @@ const PersonalRecipe = () => {
       >
         {isHovered && commentUserName === currentUserName && (
           <div className="comment button-container">
+            <li>{comment.text}</li>
             <Button
               className="comment editButton"
               onClick={() => setIsEditModalOpen(true)}>

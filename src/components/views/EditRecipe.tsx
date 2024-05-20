@@ -4,6 +4,7 @@ import { useNavigate, useParams} from "react-router-dom";
 import { Button } from "components/ui/Button";
 import "styles/views/EditRecipe.scss";
 import PropTypes from "prop-types";
+import ReactDOM from "react-dom";
 import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import BaseContainer from "components/ui/BaseContainer_new";
@@ -85,6 +86,8 @@ const editRecipe = () => {
   let [instructions, set_recipe_steps] = useState<string[]>([]);
   let [tags, set_recipe_tags] = useState<string[]>([]);
 
+  const [descriptionError, setDescriptionError] = useState(false);
+
   const [groupList, setGroupList] = useState<object[]>([]);
   const [groupState, setGroupState] = useState(false); 
   let [groups, set_groups] = useState<Int16Array[]>([])
@@ -105,8 +108,45 @@ const editRecipe = () => {
   }
 
   const handleDescriptionChange = (value) => {
-    setCurrentRecipe({...currentRecipe, shortDescription:value});
+    if (value.length <= 100) { 
+      setCurrentRecipe({...currentRecipe, shortDescription:value}); 
+      setDescriptionError(false); 
+    } else {
+      setDescriptionError(true); 
+    }
   }
+
+  const LengthExceedModal = ({open, onClose}) =>{
+    if (!open) return null; 
+
+    const handleCancel = () => {
+      onClose();
+    };
+
+    return ReactDOM.createPortal(
+      <>
+        <div className="modal backdrop"></div>
+        ;
+        <div className="modal conatiner">
+          <div className="modal title">Warning</div>
+          <div className="modal text">
+          Recipe description has exceeded maximum length of 100 characters
+          </div>
+          <div className="modal button-container">
+            <Button className="modal button-center" onClick={handleCancel}>
+              Close
+            </Button>
+          </div>
+        </div>
+      </>,
+      document.getElementById("portal-invite-user"),
+    );
+  };
+
+  LengthExceedModal.propTypes = {
+    open: PropTypes.bool.isRequires, 
+    onClose: PropTypes.func.isRequired,
+  };
 
   const handleTimeChange = (value) => {
     setCurrentRecipe({...currentRecipe, cookingTime:value});
@@ -134,6 +174,7 @@ const editRecipe = () => {
     };
     input.click();
   }
+
 
   const handleAmountChange = (value) => {
     setCurrentRecipe(prevRecipe => ({
@@ -360,6 +401,10 @@ const editRecipe = () => {
               value = {currentRecipe.shortDescription}
               onChange={(value) => handleDescriptionChange(value)}>
             </FormField>
+            <LengthExceedModal
+              open={descriptionError}
+              onClose={() => setDescriptionError(false)}>
+            </LengthExceedModal>
             <FormField
               label ="Edit preparation time:"
               value = {currentRecipe.cookingTime}

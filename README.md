@@ -1,6 +1,6 @@
 # 🥦 Virtual Cookbook 🥦
-Save recipes, find inspiration and plan for future meals. Your cooking dilemmas solved with the virtual cookbook. 
-The backend implementation can be found [here](https://github.com/sopra-fs24-group-36/server). 
+Save recipes, find inspiration and plan your future meals. Your cooking dilemmas solved with the virtual cookbook. 
+Click [here](https://github.com/sopra-fs24-group-36/server) to find the backend implementation. 
 
 ## 🥦 Table of contents 
 1. [Introduction](#introduction) 
@@ -14,9 +14,9 @@ The backend implementation can be found [here](https://github.com/sopra-fs24-gro
 9. [License](#license)
 
 ## 🥦 Introduction
-We are confronted with one of life's most difficult decisions every day, what to eat? Living alone we quickly run out of inspiration. Living with friends or family leads to discussions and disagreements on what to eat. Often we receive a recipe recommendation, but that gets lost or forgotten. Often we turn to the internet for inspiration, but how do we navigate the endless information? 
+Every day we are confronted with one of life's most difficult decisions, what to eat? Living alone we quickly run out of ideas. Living with friends or family leads to discussions and disagreements on what to eat. We receive recipe recommendations, but they get lost or forgotten. Often we turn to the internet for inspiration, but how do we navigate the endless information? 
 
-With the virtual cookbook these problems are solved. Save your personal recipes to a personal cookbook. Create groups with whoever you live with and add recipes to the group cookbook. Use the calendar for meal planning and the shopping list to keep track of items you need. And if you ever run out of inspiration, the built in search-function helps you find new recipes which can directly be saved. 
+With the virtual cookbook these problems are solved. Save your personal recipes to a personal cookbook. Create groups with your household and add recipes to your group cookbook. Use the calendar for meal planning and the shopping list to keep track of items you need. And if you ever run out of inspiration, the built in search-function helps you find new recipes which can directly be saved. 
 
 ## 🥦 Technologies 
 The following technologies were used for front-end development: 
@@ -29,7 +29,7 @@ The following technologies were used for front-end development:
 ## 🥦 High-level components 
 
 ### 🏠 Home page
-Upon successful login or registration the user is redirected to the [home page](https://github.com/sopra-fs24-group-36/client/blob/main/src/components/views/Home.tsx). Here the user can see the recipes they have created and the groups they are part of. The dashboard facilitates the navigation to the most important pages of the application and the log out function. The [user profile](https://github.com/sopra-fs24-group-36/client/blob/main/src/components/views/UserProfile.tsx) can be access and edited in the header.  
+Upon successful login or registration the user is redirected to the [home page](https://github.com/sopra-fs24-group-36/client/blob/main/src/components/views/Home.tsx). Here the user can see the recipes they have created and the groups they are member of. The dashboard facilitates the navigation to the most important pages of the application as well as the log out function. The [user profile](https://github.com/sopra-fs24-group-36/client/blob/main/src/components/views/UserProfile.tsx) can be accessed and edited in the header.  
 
 ### 👨‍🍳 Add recipe 
 Recipes can be added on the [add recipe page](https://github.com/sopra-fs24-group-36/client/blob/main/src/components/views/AddRecipe.tsx) and are saved to the server with a REST POST request. A recipe can either be added with a link to an external webpage or by manually entering the instructions and ingredients. There is also the option to add tags to a recipe. If the user is part of a group, the group can be selected to add the recipe to the corresponding group cookbook. Recipes will automatically be saved to the personal cookbook. Upon saving a recipe it is displayed and there is the option to [edit the recipe's](https://github.com/sopra-fs24-group-36/client/blob/main/src/components/views/EditRecipe.tsx) details. 
@@ -41,10 +41,10 @@ Each user has a [personal cookbook](https://github.com/sopra-fs24-group-36/clien
 The [footer](https://github.com/sopra-fs24-group-36/client/blob/main/src/components/ui/footer.tsx) is displayed on every page and consists of a search bar to look up external recipes using the [Edamam recipe search API](https://developer.edamam.com/edamam-recipe-api). Upon entering a search term 24 results are fetched from the API and displayed at the bottom of the page. The user can view the recipes with the external link or can save them to their cookbooks. When saving an Edamam recipe, the user is redirected to the add recipe page where they can add or edit any details before saving. 
 
 ### 🗓️ Calendar 
-A calendar is present for the [user](https://github.com/sopra-fs24-group-36/client/blob/main/src/components/views/Calendar.tsx) and for each [group](https://github.com/sopra-fs24-group-36/client/blob/main/src/components/views/GroupCalendar.tsx). All recipes saved to the corresponding cookbook can be searched and inserted into the calendar for either breakfast, lunch or dinner. In group cookbooks the calendar represents a real-time interaction feature using polling to show recipes added to the calendar by other group members in real time. 
+A calendar is present for the [user](https://github.com/sopra-fs24-group-36/client/blob/main/src/components/views/Calendar.tsx) and for each [group](https://github.com/sopra-fs24-group-36/client/blob/main/src/components/views/GroupCalendar.tsx). All recipes saved to the corresponding cookbook can be searched and inserted into the calendar for either breakfast, lunch or dinner. In group cookbooks the calendar represents an interaction feature using polling to show recipes added to the calendar by other group members in real time. 
 
 ### 🛒 Shopping List
-User's have their own [shopping list](https://github.com/sopra-fs24-group-36/client/blob/main/src/components/views/Shoppinglist.tsx) and each group has a [group shopping list](https://github.com/sopra-fs24-group-36/client/blob/main/src/components/views/GroupShoppinglist.tsx). Here items that need purchasing can be added. If an item has been bought, it can be crossed off. Items that have been purchased can then also be removed from the shopping list. Polling is also used here for the group shopping list so each group member can access the shopping list's status in real time. 
+User's have their own [shopping list](https://github.com/sopra-fs24-group-36/client/blob/main/src/components/views/Shoppinglist.tsx) and each group has a [group shopping list](https://github.com/sopra-fs24-group-36/client/blob/main/src/components/views/GroupShoppinglist.tsx). Here items that need purchasing can be added. If an item has been bought, it can be crossed off. Items that have been purchased can then also be removed from the shopping list. Polling is also used here so each group member can access the shopping list's status in real time. 
 
 ## 🥦 Launch and Deployment 
 
@@ -77,18 +77,21 @@ To build the app, use the command:
 The application will automatically be deployed to the Google App Engine when code is pushed to the main branch. 
 
 ### External Dependencies 
-The client and the [server](https://github.com/sopra-fs24-group-36/server) applications both have to be running for the application to function. Note that the external Edamam Recipe Search API and the database will not be accessible when developing locally due to protection of secrets. 
+The client and the [server](https://github.com/sopra-fs24-group-36/server) applications both have to be running for the application to function. Note that the external Edamam Recipe Search API and the database will not be accessible when developing locally due to protection of secrets. Please create your own account to use your own credentials [here](https://developer.edamam.com/edamam-recipe-api).
 
 ### Contributions 
-Contributions are very welcome but please contact the authors before contributing to this project. Make sure that the added features run successfully and function as intended on your local machine and test thouroughly before creating a pull request to the main repository. 
+Contributions are very welcome, though please contact the authors before contributing to this project. Make sure that the added features run successfully and function as intended on your local machine and test thouroughly before creating a pull request to the main repository. 
 
 ### Releases 
 ???
 
 ## 🥦 Illustrations 
+*todo*
 
 ## 🥦 Roadmap 
 - *AI extension*: add an AI feature which allows recipe images to optionally be created by AI
+- *Recipe Filter*: allow recipes to be filtered by rating in the group cookbooks. 
+- 
 
 ## 🥦 Authors
 - [Marko Cerkez](https://github.com/markocerkez) - server
@@ -98,7 +101,7 @@ Contributions are very welcome but please contact the authors before contributin
 - [Xiaying Ji](https://github.com/shalynjjj) - client
 
 ## 🥦 Acknowledgements 
-Many thanks to our teaching assistant [Marion Andermatt](https://github.com/marion-an) for her help, support and guidance during this project. 
+Many thanks to our teaching assistant [Marion Andermatt](https://github.com/marion-an) for her help, support and guidance during this project. :)
 
 ## 🥦 License
 

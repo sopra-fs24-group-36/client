@@ -33,39 +33,6 @@ FormField.propTypes = {
   onClick: PropTypes.func,
 };
 
-const ItemField = (props) => {
-  const { userID } = useParams();
-  const [isChecked, set_isChecked] = useState(false);
-
-  const removeItem = async () => {
-    set_isChecked(!isChecked);
-    try {
-      const requestBody = JSON.stringify({
-        "item": props.value,
-      });
-      await api.put(`/users/${userID}/shoppinglists`, requestBody);
-    } catch (error) {
-      alert("An error occurred while remove items");
-    }
-  };
-
-  return (
-    <div className="shoppinglist itemsField">
-      <input className="shoppinglist itemsInput" value={props.value} readOnly />
-      <Button
-        className={`shoppinglist check ${isChecked ? "checked" : ""}`}
-        onClick={removeItem}
-      >
-        {isChecked ? "×" : ""}
-      </Button>
-    </div>
-  );
-};
-
-ItemField.propTypes = {
-  value: PropTypes.string,
-};
-
 const Shoppinglist = () => {
   const navigate = useNavigate();
   const { userID } = useParams();
@@ -111,6 +78,43 @@ const Shoppinglist = () => {
       alert("An error occurred while clear all items");
     }
   };
+
+  const ItemField = (props) => {
+    const { userID } = useParams();
+    const [isChecked, set_isChecked] = useState(false);
+
+    const removeItem = async () => {
+      set_isChecked(!isChecked);
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      const updatedItems = items.filter(item => item !== props.value);
+      set_items(updatedItems);
+      try {
+        const requestBody = JSON.stringify({
+          "item": props.value,
+        });
+        await api.put(`/users/${userID}/shoppinglists`, requestBody);
+      } catch (error) {
+        alert("An error occurred while remove items");
+      }
+    };
+
+    return (
+      <div className="shoppinglist itemsField">
+        <input className="shoppinglist itemsInput" value={props.value} readOnly />
+        <Button
+          className={`shoppinglist check ${isChecked ? "checked" : ""}`}
+          onClick={removeItem}
+        >
+          {isChecked ? "×" : ""}
+        </Button>
+      </div>
+    );
+  };
+
+  ItemField.propTypes = {
+    value: PropTypes.string,
+  };
+
 
   if (loading) {
 

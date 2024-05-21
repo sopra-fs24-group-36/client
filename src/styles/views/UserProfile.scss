@@ -66,18 +66,18 @@ body {
     margin-bottom: 20px;
   }
   &.button-lightgreen {
+    width: 45%;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 150px;
     background-color: $light_green;
     color:$container_dark;
   }
   &.button-darkpink {
+    width: 45%;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 150px;
     background-color: $dark_pink;
     color:$textColor;
   }

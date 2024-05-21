@@ -105,6 +105,8 @@ const EditProfile = () => {
         "profilePicture": profilepicture,
       });
       await api.put(`/users/${userID}`, requestBody);
+      localStorage.setItem("userEmail", email);
+      localStorage.setItem("userName", username);
       navigate("/home");
     } catch (error) {
       console.error("An error occurred while saving changes:", error);
@@ -201,14 +203,12 @@ const EditProfile = () => {
             <div className="userprofile button-container">
               <Button
                 className="userprofile button-lightgreen"
-                width="50%"
-                onClick={() => navigate("/home")}>
+                onClick={() => navigate(-1)}>
                 Back
               </Button>
               <Button
                 className="userprofile button-darkpink"
                 disabled={user.id !== loggedInUser}
-                width="50%"
                 onClick={() => saveChanges()}>
                 Save
               </Button>

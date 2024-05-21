@@ -39,8 +39,6 @@ const AppRouter = () => {
     <BrowserRouter>
       <Routes>
 
-        <Route path="*" element={<Navigate to="/home" replace />} />
-
         <Route path="/home" element={<Home />} />
 
         <Route path="/recipes" element={<AddRecipe />} />
@@ -104,6 +102,8 @@ const AppRouter = () => {
         <Route path="/" element={
           <Navigate to="/users/login" replace />
         } />
+
+        <Route path="*" element={<Navigate to="/home" replace />} />
 
       </Routes>
     </BrowserRouter>

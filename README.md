@@ -82,16 +82,13 @@ The client and the [server](https://github.com/sopra-fs24-group-36/server) appli
 ### Contributions 
 Contributions are very welcome, though please contact the authors before contributing to this project. Make sure that the added features run successfully and function as intended on your local machine and test thouroughly before creating a pull request to the main repository. 
 
-### Releases 
-???
-
 ## 🥦 Illustrations 
 *todo*
 
 ## 🥦 Roadmap 
 - *AI extension*: add an AI feature which allows recipe images to optionally be created by AI
 - *Recipe Filter*: allow recipes to be filtered by rating in the group cookbooks. 
-- 
+- *Group Chat*: create a group chat function for the group cookbooks. 
 
 ## 🥦 Authors
 - [Marko Cerkez](https://github.com/markocerkez) - server
@@ -104,6 +101,7 @@ Contributions are very welcome, though please contact the authors before contrib
 Many thanks to our teaching assistant [Marion Andermatt](https://github.com/marion-an) for her help, support and guidance during this project. :)
 
 ## 🥦 License
+This project is licensed under the Apache License, Version 2.0, January 2004
 
 
 

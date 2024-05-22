@@ -41,13 +41,24 @@
   }
 
   &.filterButton {
-    width: 80px;
-    height: 30px;
+    width: 47%;
+    height: 2em;
     background-color: $dark_green;
     color: $textColor;
+    font-size: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  &.clearButton{
+    width: 45%;
+    height: 2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 5%;
+    font-size: 14px;
+
   }
 
   &.field {

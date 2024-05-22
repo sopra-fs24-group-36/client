@@ -101,6 +101,10 @@ const AddGroup = () => {
     const userEmail = localStorage.getItem("userEmail");
     const userID = localStorage.getItem("userID");
     const updatedMembersNames = membersNames.filter(email => email !== userEmail);
+    if (name.length > 15) {
+      alert("The group name cannot exceed 15 characters.");
+      return;
+    }
     try {
       const requestBody = JSON.stringify({
         name: name,
@@ -170,7 +174,7 @@ const AddGroup = () => {
                 onChange={(rl: string) => set_group_name(rl)}
               ></FormField>
             </div>
-
+            <p className="groups hint">(max 15 characters)</p>
             <p className="groups p">Add group members:</p>
             {membersNames.map((new_member, index) => (
               <MembersField

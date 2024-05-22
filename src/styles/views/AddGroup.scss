@@ -117,4 +117,9 @@
   &.tags{
     margin-bottom: 15px; 
   }
+  &.hint{
+    font-size: 0.875rem;
+    color: $container_dark;
+    margin:-5% 0 0 2%;
+  }
 }

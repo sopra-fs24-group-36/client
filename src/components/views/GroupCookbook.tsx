@@ -45,6 +45,8 @@ const GroupCookbook = () => {
   const [originalRecipeList, setOriginalRecipeList] = useState<object[]>([]); // List of recipes from backend
   const [selectedRecipeList, setSelectedRecipeList] = useState<object[]>([]); // List of recipes to remove
 
+  const userID = localStorage.getItem("userID");
+
   // only load once, when open the page
   useEffect(() => {
     const fetchGroupInfo = async () => {
@@ -142,7 +144,20 @@ const GroupCookbook = () => {
   };
 
   const filterRecipe = () => {
-    if (filterKeyword === "") {
+    if(filterKeyword){
+      setRefreshState(true);
+      const lowerCaseFilterKeyword = filterKeyword.toLowerCase();
+      const filteredRecipes = originalRecipeList.filter(recipe => {
+        const lowerCaseTitle = recipe.title.toLowerCase();
+        const lowerCaseTags = recipe.tags.map(tag => tag.toLowerCase());
+
+        return lowerCaseTitle.includes(lowerCaseFilterKeyword) || lowerCaseTags.some(tag => tag.includes(lowerCaseFilterKeyword));
+      });
+      setDisplayRecipeList(filteredRecipes);
+    }else{
+      alert('Filter keyword cannot be empty');
+    }
+    /*if (filterKeyword === "") {
       setRefreshState(false);
       setDisplayRecipeList(originalRecipeList);
     } else {
@@ -156,8 +171,13 @@ const GroupCookbook = () => {
       });
       setDisplayRecipeList(filteredRecipes);
     }
-    setFilterKeyword("");
+    setFilterKeyword("");*/
   };
+  const clearRecipe=()=>{
+    setFilterKeyword("");
+    setRefreshState(false);
+    setDisplayRecipeList(originalRecipeList);
+  }
 
   const handelSelectRecipe = () => {
     setRemoveState(!removeState);
@@ -206,6 +226,7 @@ const GroupCookbook = () => {
           recipe => !selectedRecipeList.includes(recipe.id),
         );
         setDisplayRecipeList(filteredRecipes);
+        setOriginalRecipeList(filteredRecipes);
         setSelectedRecipeList([]);
 
         onClose();
@@ -286,6 +307,9 @@ const GroupCookbook = () => {
 
   const Recipe = ({ id, title, description, time, tag, imageUrl, authorImg, authorID, onClick }: any) => {
     const isSelected = selectedRecipeList.includes(id);
+    const isDisabled=String(userID) !== String(authorID);
+    console.log(`Recipe ID: ${id}, Author ID: ${authorID}, User ID: ${userID}, isDisabled: ${isDisabled}`);
+
 
     return (
       <div className="cookbook recipeContainer">
@@ -303,8 +327,16 @@ const GroupCookbook = () => {
             <p className="cookbook recipeTags"><strong>Tags: </strong>{doTags(tag)}</p>
           </div>
           <div className="cookbook editButtonContainer">
-            <Button className="cookbook editRecipeButton" onClick={(event) => handleClickEdit(event, id, authorID)}>Edit
-              Recipe</Button>
+            <Button
+              className="cookbook editRecipeButton"
+              onClick={(event) => {
+                if (!isDisabled){
+                  handleClickEdit(event, id, authorID)
+                }
+              }}
+              disabled={isDisabled}
+            >
+              Edit Recipe</Button>
           </div>
         </button>
       </div>
@@ -376,7 +408,8 @@ const GroupCookbook = () => {
           </div>
           <div className="cookbook filterContainer">
             <div className="cookbook filterButtonContainer">
-              <Button className="cookbook filterButton" onClick={filterRecipe}>filter</Button>
+              <Button className="cookbook filterButton" onClick={filterRecipe}disabled={!filterKeyword}>filter</Button>
+              <Button className="cookbook clearButton" onClick={clearRecipe} disabled={!filterKeyword && displayRecipeList.length === originalRecipeList.length}>clear</Button>
             </div>
             <FormField
               className="cookbook input"

@@ -13,7 +13,7 @@ export const LoginGuard = () => {
     return <Outlet />;
   }
   
-  return <Navigate to="/game" replace />;
+  return <Navigate to="/users/login" replace />;
 };
 
 LoginGuard.propTypes = {

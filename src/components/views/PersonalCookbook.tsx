@@ -139,7 +139,7 @@ const PersonalCookbook = () => {
       });
       setRecipeList(filteredRecipes);
     }else{
-      alert('Filter keyword cannot be empty');
+      alert("Filter keyword cannot be empty");
     }
   };
   const clearRecipe=()=>{

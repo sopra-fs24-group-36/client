@@ -89,7 +89,7 @@ const Calendar = () =>{
       );
       setSearchedRecipes(filtered);
     }else{
-      alert('Filter keyword cannot be empty');
+      alert("Filter keyword cannot be empty");
     }
   }
   const clearSearchRecipe=()=>{
@@ -278,8 +278,7 @@ const Calendar = () =>{
                 <Button
                   className="calendar searchButton"
                   onClick={searchRecipe}
-                  disabled={!filterKeyword}
-                  >
+                  disabled={!filterKeyword}>
                   filter
                 </Button>
                 <Button className="calendar clearSearchButton"

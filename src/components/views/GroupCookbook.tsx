@@ -155,7 +155,7 @@ const GroupCookbook = () => {
       });
       setDisplayRecipeList(filteredRecipes);
     }else{
-      alert('Filter keyword cannot be empty');
+      alert("Filter keyword cannot be empty");
     }
     /*if (filterKeyword === "") {
       setRefreshState(false);

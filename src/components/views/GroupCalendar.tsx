@@ -90,7 +90,7 @@ const GroupCalendar = () => {
       );
       setSearchedRecipes(filtered);
     }else{
-      alert('Filter keyword cannot be empty');
+      alert("Filter keyword cannot be empty");
     }
   };
   const clearSearchRecipe=()=>{
@@ -324,8 +324,7 @@ const GroupCalendar = () => {
                   disabled={!filterKeyword}>
                   filter
                 </Button>
-                <Button className="calendar clearSearchButton"
-                        onClick={clearSearchRecipe} disabled={!filterKeyword && allRecipes.length === searchedRecipes.length}>
+                <Button className="calendar clearSearchButton" onClick={clearSearchRecipe} disabled={!filterKeyword && allRecipes.length === searchedRecipes.length}>
                   clear
                 </Button>
               </div>

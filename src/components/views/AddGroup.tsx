@@ -103,6 +103,7 @@ const AddGroup = () => {
     const updatedMembersNames = membersNames.filter(email => email !== userEmail);
     if (name.length > 15) {
       alert("The group name cannot exceed 15 characters.");
+      
       return;
     }
     try {

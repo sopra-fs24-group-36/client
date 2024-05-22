@@ -51,7 +51,11 @@ const GroupMembers = () => {
 
 
   useEffect(() => {
-    fetchGroupInfo();
+    const interval = setInterval(() => {
+      fetchGroupInfo();
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, [groupID]);
 
   const handelClickMember = (id: number) => {
@@ -99,6 +103,7 @@ const GroupMembers = () => {
           home: true,
           cookbook: true,
           recipe: true,
+          group: true,
           groupCalendar: true,
           groupShoppinglist: true,
           invitations: true,

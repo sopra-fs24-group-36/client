@@ -91,7 +91,6 @@ const UserProfile = () => {
                 </Button>
                 <Button
                   className="userprofile button-darkpink"
-                  width="50%"
                   onClick={() => navigate(`/users/${userID}/edit`)}>
                   Edit
                 </Button>

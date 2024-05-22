@@ -81,8 +81,12 @@ const GroupRecipe = () => {
   }
 
   useEffect(() => {
-    fetchData()
-  }, [recipeID]);
+    const interval = setInterval(() => {
+      fetchData();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [groupID]);
 
 
   const editRecipe = () => {
@@ -297,7 +301,7 @@ const GroupRecipe = () => {
         <div className="modal backdrop"></div>
         ;
         <div className="modal conatiner">
-          <div className="modal title">Leave a Comment</div>
+          <div className="modal title">Leave a Review</div>
           <div className="star-rating">
             {[1, 2, 3, 4, 5].map((star) => (
               <span
@@ -403,6 +407,7 @@ const GroupRecipe = () => {
             home: true,
             cookbook: true,
             recipe: true,
+            group: true,
             groupCalendar: true,
             groupShoppinglist: true,
             leaveGroup: true,
@@ -455,7 +460,7 @@ const GroupRecipe = () => {
                 <Button
                   className="recipe commentButton"
                   onClick={() => setIsModalOpen(true)}>
-                  Leave a Comment
+                  Leave a Review
                 </Button>
                 <CommentModal
                   open={isModalOpen}

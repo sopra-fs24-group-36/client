@@ -4,8 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import ReactDOM from "react-dom";
 import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
-import "styles/views/Calendar.scss"
-import Recipe from "models/Recipe"
+import "styles/views/Calendar.scss";
+import Recipe from "models/Recipe";
 import Dashboard from "components/ui/Dashboard";
 import Footer from "components/ui/footer";
 import Header_new from "components/ui/Header_new";
@@ -15,179 +15,185 @@ import { Spinner } from "../ui/Spinner";
 // @ts-ignore
 import search from "../../assets/search.png";
 // @ts-ignore
-import leftArrow from "../../assets/leftArrow.png"
+import leftArrow from "../../assets/leftArrow.png";
 // @ts-ignore
-import rightArrow from "../../assets/rightArrow.png"
+import rightArrow from "../../assets/rightArrow.png";
 
-const FormField=(props)=>{
-  return(
+const FormField = (props) => {
+  return (
     <div className="calendar input">
       <input
         className="calendar input"
         placeholder="Search for your recipes..."
         value={props.value}
-        onChange={(e)=>props.onChange(e.target.value)}
+        onChange={(e) => props.onChange(e.target.value)}
       />
     </div>
-  )
-}
+  );
+};
 FormField.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 
 const ReplaceModal = ({ show, message, onClose }) => {
-  const [isVisible,setIsVisible]=useState(show);
-  useEffect(()=>{
-    console.log( "Modal visibility state changed:", show);
-    if(show){
+  const [isVisible, setIsVisible] = useState(show);
+  useEffect(() => {
+    console.log("Modal visibility state changed:", show);
+    if (show) {
       setIsVisible(true);
-      const timer=setTimeout(()=>{
+      const timer = setTimeout(() => {
         setIsVisible(false);
-        setTimeout(onClose,500);
-      },1000);
+        setTimeout(onClose, 500);
+      }, 1000);
 
-      return()=>clearTimeout(timer);
+      return () => clearTimeout(timer);
     }
-  }, [show, onClose])
+  }, [show, onClose]);
 
-  return isVisible?ReactDOM.createPortal(
+  return isVisible ? ReactDOM.createPortal(
     <div className="calendar modal-backdrop">
       <div className="calendar modal-content">
         {message}
       </div>
     </div>,
-    document.body
-  ):null;
-}
+    document.body,
+  ) : null;
+};
 ReplaceModal.propTypes = {
   show: PropTypes.bool.isRequired,
   message: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
 };
-const GroupCalendar=()=>{
+const GroupCalendar = () => {
   const navigate = useNavigate();
   const { groupID } = useParams();
-  const [filterKeyword, setFilterKeyword]=useState<string>(null)
-  const [calendar,setCalendar]=useState(null);
-  const[allRecipes,setAllRecipes]=useState<Recipe[]>(null);
-  const [searchedRecipes,setSearchedRecipes]=useState<Recipe[]>(null);
-  const[group,setGroup]=useState([]);
+  const [filterKeyword, setFilterKeyword] = useState<string>(null);
+  const [calendar, setCalendar] = useState(null);
+  const [allRecipes, setAllRecipes] = useState<Recipe[]>(null);
+  const [searchedRecipes, setSearchedRecipes] = useState<Recipe[]>(null);
+  const [group, setGroup] = useState([]);
 
-  const [currentWeek,setCurrentWeek]=useState((new Date()));
+  const [currentWeek, setCurrentWeek] = useState((new Date()));
+
+  const [refreshState, setRefreshState] = useState(false);      // false = can refresh, true = do not refresh
   const [shouldFetchCalendar, setShouldFetchCalendar] = useState(true);
 
   const [showReplaceModal, setShowReplaceModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const searchRecipe=()=>{
-    if(!searchedRecipes){
+  const searchRecipe = () => {
+    if (filterKeyword === "") {
+      setRefreshState(false);
       setSearchedRecipes(allRecipes);
+    } else {
+      setRefreshState(true);
+      const lowerCaseFilterKeyword = filterKeyword.toLowerCase();
+      const filtered = allRecipes.filter(recipe =>
+        recipe.title.toLowerCase().includes(lowerCaseFilterKeyword),
+      );
+      setSearchedRecipes(filtered);
     }
-    const lowerCaseFilterKeyword = filterKeyword.toLowerCase();
-    const filtered=allRecipes.filter(recipe=>
-      recipe.title.toLowerCase().includes(lowerCaseFilterKeyword)
-    );
-    setSearchedRecipes(filtered);
-  }
-  const handlePrevWeek=()=>{
+    setFilterKeyword("");
+  };
+  const handlePrevWeek = () => {
     const newDate = new Date(currentWeek);
     newDate.setDate(newDate.getDate() - 7); // Subtracts 7 days
     setCurrentWeek(newDate);
-  }
-  const handleNextWeek=()=>{
+  };
+  const handleNextWeek = () => {
     const newDate = new Date(currentWeek);
     newDate.setDate(newDate.getDate() + 7); // Adds 7 days
     setCurrentWeek(newDate);
-  }
+  };
 
-  const getDatesOfWeek=(date)=>{
-    const result=[];
-    const start=new Date(date);
+  const getDatesOfWeek = (date) => {
+    const result = [];
+    const start = new Date(date);
     /*    getDate() returns the date of start(which day of the month is
         getDay() returns the day of the week of 'start', 0 means sunday, 1 means monday
         the following line sets 'start' to the first day of this week(sunday)*/
-    start.setDate(start.getDate()-start.getDay());
-    for(let i =0;i<7;i++){
-      const current=new Date(start);
-      current.setDate(current.getDate()+i);
+    start.setDate(start.getDate() - start.getDay());
+    for (let i = 0; i < 7; i++) {
+      const current = new Date(start);
+      current.setDate(current.getDate() + i);
       result.push(current);
     }
 
     return result;
-  }
-  const getDayOfWeek=(date)=>{
+  };
+  const getDayOfWeek = (date) => {
     const dayOfWeek = new Date(date).getDay();
 
     return isNaN(dayOfWeek) ? null : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][dayOfWeek].slice(0, 2);
-  }
-  const formatDate=(date)=>{
+  };
+  const formatDate = (date) => {
     //Display only the month and date of the date, without showing the year.
-    const d=new Date(date);
+    const d = new Date(date);
 
-    return isNaN(d.getTime())? null:d.toLocaleDateString("de-CH",{month: "2-digit", day: "2-digit"});
-  }
-  const formatDateToYYYYMMDD=(date)=>{
+    return isNaN(d.getTime()) ? null : d.toLocaleDateString("de-CH", { month: "2-digit", day: "2-digit" });
+  };
+  const formatDateToYYYYMMDD = (date) => {
     const d = new Date(date);
     const year = d.getFullYear();
-    const month = ("0" + (d.getMonth()+1)).slice(-2); // Months are 0 based. Add leading 0.
+    const month = ("0" + (d.getMonth() + 1)).slice(-2); // Months are 0 based. Add leading 0.
     const day = ("0" + d.getDate()).slice(-2); // Add leading 0.
 
     return `${year}-${month}-${day}`;
-  }
+  };
 
-  const handleDragStart=(e,recipe)=>{
-    e.dataTransfer.setData("text/plain",JSON.stringify(recipe));
-    const preview=document.getElementById("drag-preview");
+  const handleDragStart = (e, recipe) => {
+    e.dataTransfer.setData("text/plain", JSON.stringify(recipe));
+    const preview = document.getElementById("drag-preview");
     const image = document.getElementById("preview-image") as HTMLImageElement;
-    const title=document.getElementById("preview-title");
+    const title = document.getElementById("preview-title");
 
-    image.src=recipe.image;
-    title.textContent=recipe.title;
+    image.src = recipe.image;
+    title.textContent = recipe.title;
 
-    preview.style.display="block";
-    e.dataTransfer.setDragImage(preview,50,50);
+    preview.style.display = "block";
+    e.dataTransfer.setDragImage(preview, 50, 50);
 
-    setTimeout(()=>preview.style.display="none",0);
+    setTimeout(() => preview.style.display = "none", 0);
 
-  }
-  const hasRecipeInSlot=(date,status)=>{
-    const formattedDate=formatDateToYYYYMMDD(date)
+  };
+  const hasRecipeInSlot = (date, status) => {
+    const formattedDate = formatDateToYYYYMMDD(date);
 
-    return calendar.some(event=>formatDateToYYYYMMDD(new Date(event.date)) === formattedDate && event.status === status);
-  }
-  const handleDrop=async (e,date,status)=>{
+    return calendar.some(event => formatDateToYYYYMMDD(new Date(event.date)) === formattedDate && event.status === status);
+  };
+  const handleDrop = async (e, date, status) => {
     const recipeString = e.dataTransfer.getData("text/plain");
     const recipe = JSON.parse(recipeString);
     e.preventDefault();
 
-    if(hasRecipeInSlot(date,status)){
-      const existingEvent=getEventsOfStatus(calendar,date,status)[0];
+    if (hasRecipeInSlot(date, status)) {
+      const existingEvent = getEventsOfStatus(calendar, date, status)[0];
       const requestBody1 = JSON.stringify(existingEvent.eventId);
-      await api.delete(`/groups/${groupID}/calendars/${existingEvent.eventId}`,requestBody1);
+      await api.delete(`/groups/${groupID}/calendars/${existingEvent.eventId}`, requestBody1);
       setShowReplaceModal(true);
     }
-    const requestBody2={
-      date:date,
-      recipeID:recipe.id,
-      status:status,
-    }
+    const requestBody2 = {
+      date: date,
+      recipeID: recipe.id,
+      status: status,
+    };
 
     await api.post(`/groups/${groupID}/calendars`, requestBody2)
-      .then(()=>{
+      .then(() => {
         setShouldFetchCalendar(true);
       })
       .catch(err => console.error(err));
-  }
+  };
 
-  const handleRemove= async (eventId)=>{
-    try{
+  const handleRemove = async (eventId) => {
+    try {
       const requestBody = JSON.stringify(eventId);
-      await api.delete(`groups/${groupID}/calendars/${eventId}`,requestBody)
+      await api.delete(`groups/${groupID}/calendars/${eventId}`, requestBody);
       setShouldFetchCalendar(true);
-      const updatedCalendar=calendar.filter(event=>!(event.id===eventId))
+      const updatedCalendar = calendar.filter(event => !(event.id === eventId));
       setCalendar(updatedCalendar);
-    }catch (error){
+    } catch (error) {
       console.error(
         `Something went wrong while removing the recipe: \n${handleError(
           error,
@@ -199,47 +205,90 @@ const GroupCalendar=()=>{
       );
     }
   };
-  const getEventsOfStatus=(calendar,date,status)=>{
+  const getEventsOfStatus = (calendar, date, status) => {
 
     return calendar.filter(event => formatDateToYYYYMMDD(event.date) === formatDateToYYYYMMDD(date) && event.status === status);
-  }
+  };
 
-
-  useEffect(()=>{
-    let intervalId;
-    async function fetchData(){
-      try{
-        const responseRecipe=await api.get(`/groups/${groupID}/cookbooks`);
-        setAllRecipes(responseRecipe.data);
-        setSearchedRecipes(responseRecipe.data);
-
-        const responseCalendar=await api.get(`/groups/${groupID}/calendars`);
-        setCalendar(responseCalendar.data)
-
-        const responseGroup=await api.get(`/groups/${groupID}`);
+  //fetch groupInfo and group recipes
+  useEffect(() => {
+    const fetchGroupInfo = async () => {
+      try {
+        const responseGroup = await api.get(`/groups/${groupID}`);
         setGroup(responseGroup.data);
         setLoading(false);
-      }catch(error){
-        console.error("Details:", error);
-        alert(
-          "Something went wrong while fetching the data! See the console for details.");
-      }finally {
-        setShouldFetchCalendar(false);
+      } catch (error) {
+        alert("Something went wrong while fetching the group");
       }
-    }
-    if (shouldFetchCalendar) {
-      fetchData();
-    }
-    intervalId = setInterval(fetchData, 1000);
+    };
+    const fetchGroupRecipes = async () => {
+      try {
+        const responseRecipe = await api.get(`/groups/${groupID}/cookbooks`);
+        setAllRecipes(responseRecipe.data);
+        setSearchedRecipes(responseRecipe.data);
+      } catch (error) {
+        alert("Something went wrong while fetching the group recipes");
+      }
+    };
+    fetchGroupRecipes();
+    fetchGroupInfo();
+  }, []);
 
-    return () => clearInterval(intervalId);
-  },[shouldFetchCalendar]);
+  //fetch calendar and refresh calendar after removing a r
+  useEffect(() => {
+    const fetchCalendar = async () => {
+      try {
+        const responseCalendar = await api.get(`/groups/${groupID}/calendars`);
+        setCalendar(responseCalendar.data);
+      } catch (error) {
+        alert("Something went wrong while fetching the calendar");
+      }
+    };
+    setShouldFetchCalendar(false);
+    if (shouldFetchCalendar) {
+      fetchCalendar();
+    }
+  }, [shouldFetchCalendar]);
+
+  //polling, refresh the calendar and the group recipes
+  useEffect(() => {
+    let calendarInterval;
+    let recipeInterval;
+    const fetchCalendar = async () => {
+      try {
+        const responseCalendar = await api.get(`/groups/${groupID}/calendars`);
+        setCalendar(responseCalendar.data);
+      } catch (error) {
+        alert("Something went wrong while fetching the calendar");
+      }
+    };
+    const fetchGroupRecipes = async () => {
+      try {
+        const responseRecipe = await api.get(`/groups/${groupID}/cookbooks`);
+        setAllRecipes(responseRecipe.data);
+        setSearchedRecipes(responseRecipe.data);
+      } catch (error) {
+        alert("Something went wrong while fetching the group recipes");
+      }
+    };
+    if (refreshState) {
+      calendarInterval = setInterval(fetchCalendar, 3000);
+    } else {
+      calendarInterval = setInterval(fetchCalendar, 3000);
+      recipeInterval = setInterval(fetchGroupRecipes, 3000);
+    }
+
+    return () => {
+      if (calendarInterval) clearInterval(calendarInterval);
+      if (recipeInterval) clearInterval(recipeInterval);
+    };
+  }, [refreshState, groupID]);
 
   if (loading) {
 
     return <Spinner />;
-  }else{
-    return(
+  } else {
+    return (
       <div>
         <Header_new></Header_new>
         <Dashboard
@@ -247,6 +296,7 @@ const GroupCalendar=()=>{
             home: true,
             cookbook: true,
             recipe: true,
+            group: true,
             groupCalendar: true,
             groupShoppinglist: true,
             invitations: true,
@@ -254,11 +304,12 @@ const GroupCalendar=()=>{
           }}
           activePage="groupCalendar"
         />
-        <div className="calendar container" >
+        <div className="calendar container">
           {/*group recipes field*/}
           <BaseContainer className="calendar baseContainerLeft">
             <div className="calendar headContainer1">
-              <h2 className="calendar title1">{group.name} - Recipes</h2>
+              <h2 className="calendar titleGroupName1">{group.name}</h2>
+              <h2 className="calendar titleGroupName1">- Recipes</h2>
             </div>
             <div className="calendar searchContainer">
               <FormField
@@ -278,7 +329,7 @@ const GroupCalendar=()=>{
               </div>
             </div>
             <div className="calendar recipeListContainer">
-              {searchedRecipes && searchedRecipes.length > 0 ?(searchedRecipes.map((recipe) => (
+              {searchedRecipes && searchedRecipes.length > 0 ? (searchedRecipes.map((recipe) => (
                 <div
                   className="calendar recipeContainer"
                   key={recipe.id}
@@ -310,7 +361,8 @@ const GroupCalendar=()=>{
                 </Button>
               </div>
               <div className="calendar titleContainer">
-                <h2 className="calendar title2">{group.name} - Calendar</h2>
+                <h2 className="calendar titleGroupName2">{group.name}</h2>
+                <h2 className="calendar title2">- Calendar</h2>
               </div>
             </div>
             <div className="calendar arrowButtonContainer">
@@ -342,12 +394,12 @@ const GroupCalendar=()=>{
                     {`${getDayOfWeek(date)}.${formatDate(date)}`}
                   </div>
                 ))}
-                {["BREAKFAST","LUNCH","DINNER"].map((status)=>(
-                  getDatesOfWeek(currentWeek).map(date=>(
+                {["BREAKFAST", "LUNCH", "DINNER"].map((status) => (
+                  getDatesOfWeek(currentWeek).map(date => (
                     <div
                       key={date}
-                      onDragOver={(e)=>e.preventDefault()}
-                      onDrop={(e)=>handleDrop(e,date,status)}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={(e) => handleDrop(e, date, status)}
                       className={`calendar status ${status.toLowerCase()}`}
                     >
                       {
@@ -381,9 +433,9 @@ const GroupCalendar=()=>{
           <Footer></Footer>
         </div>
       </div>
-    )
+    );
   }
 
-}
+};
 
 export default GroupCalendar;

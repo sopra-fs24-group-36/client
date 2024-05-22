@@ -63,6 +63,8 @@ const EditProfile = () => {
   const [profilepicture, setProfilepicture] = useState(null);
   const loggedInUser = parseInt(localStorage.getItem("userID")); /*getting the ID of the currently logged in user*/
 
+  const MAX_SIZE=200*1024;//200KB
+
   if (parseInt(userID) !== loggedInUser) {
     // alert("Unauthorized Access!!");
     navigate(`/users/${userID}`);
@@ -82,7 +84,18 @@ const EditProfile = () => {
     fetchData();
   }, [userID]);
 
+  const validateEmail = (email) => {
+    const re = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;//email format:x@x.x
+
+    return re.test(email);
+  };
+
   const saveChanges = async () => {
+    if (!validateEmail(email)) {
+      alert("Please enter a valid email address in the format x@x.x");
+
+      return;
+    }
     try {
       const requestBody = JSON.stringify({
         "id": userID,
@@ -92,6 +105,8 @@ const EditProfile = () => {
         "profilePicture": profilepicture,
       });
       await api.put(`/users/${userID}`, requestBody);
+      localStorage.setItem("userEmail", email);
+      localStorage.setItem("userName", username);
       navigate("/home");
     } catch (error) {
       console.error("An error occurred while saving changes:", error);
@@ -106,6 +121,11 @@ const EditProfile = () => {
     input.onchange = async (e) => {
       const file = (e.target as HTMLInputElement).files[0];
       if (file) {
+        if(file.size>MAX_SIZE){
+          alert("Picture is too big. Please upload a picture smaller than 200KB!");
+
+          return;
+        }
         const reader = new FileReader();
         reader.onload = (event) => {
           const dataURL = event.target.result;
@@ -183,14 +203,12 @@ const EditProfile = () => {
             <div className="userprofile button-container">
               <Button
                 className="userprofile button-lightgreen"
-                width="50%"
-                onClick={() => navigate("/home")}>
+                onClick={() => navigate(-1)}>
                 Back
               </Button>
               <Button
                 className="userprofile button-darkpink"
                 disabled={user.id !== loggedInUser}
-                width="50%"
                 onClick={() => saveChanges()}>
                 Save
               </Button>

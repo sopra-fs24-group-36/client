@@ -32,18 +32,22 @@ FormField.propTypes = {
 
 const GroupCookbook = () => {
   const navigate = useNavigate();
-  const [filterKeyword, setFilterKeyword] = useState<string>("");
   const { groupID } = useParams();
   const [groupInfo, setGroupInfo] = useState<any[]>([]);
-  const [recipeState, setRecipeState] = useState(false);
-  const [recipeList, setRecipeList] = useState<any[]>([]);
-  const [originalRecipeList, setOriginalRecipeList] = useState<object[]>([]);
-  const [removeState, setRemoveState] = useState(false);
-  const [selectedRecipeList, setSelectedRecipeList] = useState<object[]>([]);
+  const [filterKeyword, setFilterKeyword] = useState<string>("");
+
+  const [recipeState, setRecipeState] = useState(false);        // false = loading, true = loaded
+  const [removeState, setRemoveState] = useState(false);        // false = normal, true = remove
+  const [refreshState, setRefreshState] = useState(false);      // false = can refresh, true = do not refresh
   const [isConsentModalOpen, setIsConsentModalOpen] = useState(false);
 
+  const [displayRecipeList, setDisplayRecipeList] = useState<any[]>([]);  // List of recipes to display
+  const [originalRecipeList, setOriginalRecipeList] = useState<object[]>([]); // List of recipes from backend
+  const [selectedRecipeList, setSelectedRecipeList] = useState<object[]>([]); // List of recipes to remove
+
+  // only load once, when open the page
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchGroupInfo = async () => {
       try {
         const response = await api.get(`/groups/${groupID}`);
         setGroupInfo(response.data);
@@ -51,15 +55,32 @@ const GroupCookbook = () => {
         alert("Something went wrong while fetching the group");
       }
     };
+    const fetchData = async () => {
+      setDisplayRecipeList(await fetchRecipes());
+      setRecipeState(true);
+    };
+
+    fetchGroupInfo();
     fetchData();
   }, [groupID]);
 
 
-  const fetchData = async () => {
+  // polling, refresh the recipes
+  // start after the first fetch when recipeState is true
+  // if in filter mode or remove mode, do not refresh
+  useEffect(() => {
+    if (recipeState && !refreshState && !removeState) {
+      const interval = setInterval(async () => {
+        setDisplayRecipeList(await fetchRecipes());
+      }, 5000);
+
+      return () => clearInterval(interval);
+    }
+  }, [groupID, refreshState, removeState]);
+
+  const fetchRecipes = async () => {
     try {
       const response = await api.get(`/groups/${groupID}/cookbooks`);
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
       const formattedRecipes = response.data.map((recipe: any) => ({
         id: recipe.id,
         title: recipe.title,
@@ -69,22 +90,19 @@ const GroupCookbook = () => {
         image: recipe.image,
         authorID: recipe.authorID,
       }));
-      await fetchUserImages(formattedRecipes);
+      const recipeList = await fetchUserImages(formattedRecipes);
+      setOriginalRecipeList(recipeList);
+
+      return recipeList;
     } catch (error) {
-      console.error(
-        `Something went wrong while fetching the groups: \n${handleError(
-          error,
-        )}`,
-      );
+      console.error(`Something went wrong while fetching the groups: \n${handleError(error)}`);
       console.error("Details:", error);
-      alert(
-        "Something went wrong while fetching the recipes! See the console for details.",
-      );
+      alert("Something went wrong while fetching the recipes! See the console for details.");
     }
   };
 
   const fetchUserImages = async (recipes: any[]) => {
-    const updatedRecipeList = await Promise.all(
+    return await Promise.all(
       recipes.map(async (recipe) => {
         try {
           const response = await api.get(`/users/${recipe.authorID}`);
@@ -98,16 +116,7 @@ const GroupCookbook = () => {
         }
       }),
     );
-    setRecipeList(updatedRecipeList);
-    setOriginalRecipeList(updatedRecipeList);
-    setRecipeState(true);
   };
-
-  useEffect(() => {
-    fetchData();
-    setSelectedRecipeList([]);
-  }, [groupID]);
-
 
   const handleClickRecipe = (recipeId: string) => {
     if (!removeState) {
@@ -123,51 +132,62 @@ const GroupCookbook = () => {
     }
   };
 
-  const handleClickEdit=(event,recipeId:string,autherID:string)=>{
+  const handleClickEdit = (event, recipeId: string, autherID: string) => {
     event.stopPropagation();
     navigate(`/users/${autherID}/cookbooks/${recipeId}/edit`);
-  }
+  };
+
   const handleFilterChange = (newValue) => {
     setFilterKeyword(newValue);
   };
 
   const filterRecipe = () => {
-    const lowerCaseFilterKeyword = filterKeyword.toLowerCase();
-    const filteredRecipes = originalRecipeList.filter(recipe => {
-      const lowerCaseTitle = recipe.title.toLowerCase();
-      const lowerCaseTags = recipe.tags.map(tag => tag.toLowerCase());
+    if (filterKeyword === "") {
+      setRefreshState(false);
+      setDisplayRecipeList(originalRecipeList);
+    } else {
+      setRefreshState(true);
+      const lowerCaseFilterKeyword = filterKeyword.toLowerCase();
+      const filteredRecipes = originalRecipeList.filter(recipe => {
+        const lowerCaseTitle = recipe.title.toLowerCase();
+        const lowerCaseTags = recipe.tags.map(tag => tag.toLowerCase());
 
-      return lowerCaseTitle.includes(lowerCaseFilterKeyword) || lowerCaseTags.some(tag => tag.includes(lowerCaseFilterKeyword));
-    });
-    setRecipeList(filteredRecipes);
+        return lowerCaseTitle.includes(lowerCaseFilterKeyword) || lowerCaseTags.some(tag => tag.includes(lowerCaseFilterKeyword));
+      });
+      setDisplayRecipeList(filteredRecipes);
+    }
     setFilterKeyword("");
   };
-
 
   const handelSelectRecipe = () => {
     setRemoveState(!removeState);
     if (removeState === true && selectedRecipeList.length > 0) {
       setIsConsentModalOpen(true);
     }
+    if (removeState === false || (removeState === true && selectedRecipeList.length > 0)) {
+      setRefreshState(true);
+    } else {
+      setRefreshState(false);
+    }
   };
 
-  const handelMemberlist = () => {
+  const handelMembers = () => {
     navigate(`/groups/${groupID}/members`);
   };
 
-  const doDescription = (description) =>{
-    if(description){
-      if(description.length < 20){
-        return description
-      }
-      else{
-        return `${description.substring(0, 20)}...`;
-      }
+  const doDescription = (description) => {
+    if (description) {
+      return description.length < 20 ? description : `${description.substring(0, 20)}...`;
     }
-  }
+  };
+
 
   const ConsentModal = ({ open, onClose }) => {
-    if (!open) return null;
+    if (!open) {
+      return null;
+    } else {
+      setRefreshState(true);
+    }
 
     const removeRecipe = async () => {
       if (selectedRecipeList.length === 0) {
@@ -175,32 +195,41 @@ const GroupCookbook = () => {
 
         return;
       }
-      for (const recipeid of selectedRecipeList) {
-        try {
-          const requestBody = JSON.stringify(recipeid);
-          const response = await api.put(`/groups/${groupID}/cookbooks/${recipeid}`, requestBody);
-          await new Promise((resolve) => setTimeout(resolve, 500));
-          if (!response) {
-            alert("Something went wrong while removing the recipes!");
-          }
-        } catch (error) {
-          console.error(
-            `Something went wrong while removing the recipes: \n${handleError(
-              error,
-            )}`,
-          );
-          console.error("Details:", error);
-          alert(
-            "Something went wrong while removing the recipe! See the console for details.",
-          );
+
+      try {
+        for (const recipeId of selectedRecipeList) {
+          const requestBody = JSON.stringify(recipeId);
+          api.put(`/groups/${groupID}/cookbooks/${recipeId}`, requestBody);
         }
+        // Remove selectedRecipeList from originalRecipeList
+        const filteredRecipes = originalRecipeList.filter(
+          recipe => !selectedRecipeList.includes(recipe.id),
+        );
+        setDisplayRecipeList(filteredRecipes);
+        setSelectedRecipeList([]);
+
+        onClose();
+
+        // Wait for few seconds before setting refreshState to false, make the page not refresh immediately
+        setTimeout(() => {
+          setRefreshState(false);
+        }, 10000);
+      } catch (error) {
+        console.error(
+          `Something went wrong while removing the recipes: \n${handleError(
+            error,
+          )}`,
+        );
+        console.error("Details:", error);
+        alert(
+          "Something went wrong while removing the recipe! See the console for details.",
+        );
       }
-      fetchData();
-      onClose();
     };
 
     const handleCancel = () => {
       setSelectedRecipeList([]);
+      setRefreshState(false);
       onClose();
     };
 
@@ -255,7 +284,7 @@ const GroupCookbook = () => {
   };
 
 
-  const Recipe = ({ id, title, description, time, tag, imageUrl, authorImg, authorID,onClick }: any) => {
+  const Recipe = ({ id, title, description, time, tag, imageUrl, authorImg, authorID, onClick }: any) => {
     const isSelected = selectedRecipeList.includes(id);
 
     return (
@@ -274,7 +303,7 @@ const GroupCookbook = () => {
             <p className="cookbook recipeTags"><strong>Tags: </strong>{doTags(tag)}</p>
           </div>
           <div className="cookbook editButtonContainer">
-            <Button className="cookbook editRecipeButton" onClick={(event) => handleClickEdit(event, id,authorID)}>Edit
+            <Button className="cookbook editRecipeButton" onClick={(event) => handleClickEdit(event, id, authorID)}>Edit
               Recipe</Button>
           </div>
         </button>
@@ -314,6 +343,7 @@ const GroupCookbook = () => {
             home: true,
             cookbook: true,
             recipe: true,
+            group: true,
             groupCalendar: true,
             groupShoppinglist: true,
             leaveGroup: true,
@@ -330,7 +360,7 @@ const GroupCookbook = () => {
               <h2 className="cookbook title">{groupInfo.name} - Cookbook</h2>
             </div>
             <div className="cookbook backButtonContainer">
-              <Button className="cookbook groupButton" onClick={handelMemberlist}>
+              <Button className="cookbook groupButton" onClick={handelMembers}>
                 Members
               </Button>
               <Button
@@ -354,7 +384,7 @@ const GroupCookbook = () => {
               onChange={handleFilterChange}>
             </FormField>
           </div>
-          <RecipeList recipes={recipeList} onClickRecipe={handleClickRecipe} />
+          <RecipeList recipes={displayRecipeList} onClickRecipe={handleClickRecipe} />
         </BaseContainer>
         <Footer>
         </Footer>

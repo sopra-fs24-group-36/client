@@ -78,8 +78,12 @@ const PersonalRecipe = () => {
   }
 
   useEffect(() => {
-    fetchData();
-  }, [recipeID]);
+    const interval = setInterval(() => {
+      fetchData();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [authorID]);
 
 
   const editRecipe = () => {
@@ -293,7 +297,7 @@ const PersonalRecipe = () => {
         <div className="modal backdrop"></div>
         ;
         <div className="modal conatiner">
-          <div className="modal title">Leave a Comment</div>
+          <div className="modal title">Leave a Review</div>
           <div className="star-rating">
             {[1, 2, 3, 4, 5].map((star) => (
               <span
@@ -452,7 +456,7 @@ const PersonalRecipe = () => {
                 <Button
                   className="recipe commentButton"
                   onClick={() => setIsModalOpen(true)}>
-                  Leave a Comment
+                  Leave a Review
                 </Button>
                 <CommentModal
                   open={isModalOpen}

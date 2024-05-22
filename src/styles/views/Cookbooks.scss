@@ -137,6 +137,7 @@
     text-align: left;
     position: relative;
     max-width:50%;
+    position: relative;
   }
 
   &.recipeTitle {
@@ -148,9 +149,16 @@
     text-overflow: ellipsis;
   }
 
-  &.recipeDescription,
-  &.recipeTotalTime,
+  &.recipeDescription,&.recipeTotalTime{
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 50%;
+  }
   &.recipeTags {
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
     color: $container-dark;
   }
 
@@ -163,6 +171,11 @@
     padding-top: 100px;
     padding-bottom: 60px;
   }
-  &.editButtonContainer{}
+  &.editButtonContainer{
+    position: absolute;
+    z-index: 10;
+    top:40%;
+    right:2%;
+  }
   &.editRecipeButton{}
 }

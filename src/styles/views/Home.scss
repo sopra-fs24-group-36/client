@@ -129,9 +129,9 @@
 
   &.groupImage {
     width: 60px;
-    height: 60px; 
-    padding-left: 15px;
+    height: 60px;
     border-radius: 50%;
+    margin-left: 10px;
     margin-right: 15px;
   }
 
@@ -142,10 +142,7 @@
   }
 
   &.buttonContainer {
-    padding-left: 6px;
-    padding-right: 6px;
-    padding-top: 12px;
-    padding-bottom: 12px;
+    padding: 12px 6px;
     margin-left: 15px;
     margin-right: 15px;
     align-items: center;
@@ -155,7 +152,6 @@
 
   &.recipeTitle {
     overflow: hidden;
-    white-space: nowrap;
     text-overflow: ellipsis;
     color: $container_dark;
     text-align: left;
@@ -169,17 +165,14 @@
   &.recipeTags,
   &.recipeTime {
     overflow: hidden;
-    white-space: nowrap;
     text-overflow: ellipsis;
     color: $container_dark;
     font-size: 16px;
     text-align: left;
-    font-weight: 400px;
-    white-space:normal; 
+    white-space:normal;
   }
 
   &.recipesButtonContainer {
-    padding: 30px 0px 30px 0px;
+    padding: 30px 0 30px 0;
   }
-
 }

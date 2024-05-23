@@ -1,4 +1,4 @@
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { api, handleError } from "helpers/api";
 import User from "models/User";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +12,7 @@ import rightBrok from "../../assets/rightBrok.png";
 
 const Icon = ({ flip }) => {
   const iconClass = flip ? "icon flip-horizontal" : "icon";
-  
+
   return <img src={rightBrok} alt="Icon" className={iconClass} />;
 };
 Icon.propTypes = {
@@ -27,7 +27,7 @@ const FormField = (props) => {
         className="login input"
         placeholder="type here..."
         value={props.value}
-        type = {props.type}
+        type={props.type}
         onChange={(e) => props.onChange(e.target.value)}
       />
     </div>
@@ -45,19 +45,20 @@ const Login = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState<string>(null);
   const [password, setPassword] = useState<string>(null);
-  const [cookingFact,setCookingFact]=useState<string>(null);
+  const [cookingFact, setCookingFact] = useState<string>(null);
+
   const handleRegisterClick = () => {
     navigate("/users");
   };
 
   useEffect(() => {
-    const fetchCookingFact=async ()=>{
-      try{
-        const responseCookingFact=await api.get("/randomCookingFact");
+    const fetchCookingFact = async () => {
+      try {
+        const responseCookingFact = await api.get("/randomCookingFact");
         setCookingFact(responseCookingFact.data);
         console.log(responseCookingFact.data);
         console.log(cookingFact);
-      }catch(error){
+      } catch (error) {
         console.error(`Failed to fetch cooking fact: ${error}`);
       }
     };
@@ -134,7 +135,6 @@ const Login = () => {
           <div className="login cookingFactContent">{cookingFact}</div>
         </div>
       </div>
-
     </BaseContainer>
 
   );

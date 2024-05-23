@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { api } from "helpers/api";
+import { api, handleError } from "helpers/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import "styles/views/Shoppinglist.scss";
@@ -57,16 +57,18 @@ const Shoppinglist = () => {
 
   const addItem = async () => {
     if (new_item.trim() !== "") { // Make sure the input is not empty
-      set_items([...items, new_item]);
-      set_new_item("");
       try {
         const requestBody = JSON.stringify({
           "item": new_item,
         });
         await api.post(`/users/${userID}/shoppinglists`, requestBody);
+        set_items([...items, new_item]);
       } catch (error) {
-        alert("An error occurred while adding items");
+        alert(
+          `An error occurred while adding items:  \n${handleError(error)}`,
+        );
       }
+      set_new_item("");
     }
   };
 

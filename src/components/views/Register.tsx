@@ -4,11 +4,12 @@ import User from "models/User";
 import { Form, useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import "styles/views/Login.scss";
+import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
 // @ts-ignore
 import rightBrok from "../../assets/rightBrok.png";
 // @ts-ignore
-import defaultUser from "../../assets/defaultUser.png";
+import defaultUser from "../../assets/images.jpg";
 
 const Icon = ({ flip }) => {
   const iconClass = flip ? "icon flip-horizontal" : "icon";
@@ -27,7 +28,7 @@ const FormField = (props) => {
         className="login input"
         placeholder="type here..."
         value={props.value}
-        type = {props.type}
+        type={props.type}
         onChange={(e) => props.onChange(e.target.value)}
       />
     </div>
@@ -90,7 +91,7 @@ const Register = () => {
   };
 
   return (
-    <div>
+    <BaseContainer>
       <div className="login container">
         <div className="login form">
           <div className="login title">
@@ -139,7 +140,7 @@ const Register = () => {
           </div>
         </div>
       </div>
-    </div>
+    </BaseContainer>
   );
 
 };

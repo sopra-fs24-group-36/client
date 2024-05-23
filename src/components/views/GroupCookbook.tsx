@@ -144,7 +144,7 @@ const GroupCookbook = () => {
   };
 
   const filterRecipe = () => {
-    if(filterKeyword){
+    if (filterKeyword) {
       setRefreshState(true);
       const lowerCaseFilterKeyword = filterKeyword.toLowerCase();
       const filteredRecipes = originalRecipeList.filter(recipe => {
@@ -154,7 +154,7 @@ const GroupCookbook = () => {
         return lowerCaseTitle.includes(lowerCaseFilterKeyword) || lowerCaseTags.some(tag => tag.includes(lowerCaseFilterKeyword));
       });
       setDisplayRecipeList(filteredRecipes);
-    }else{
+    } else {
       alert("Filter keyword cannot be empty");
     }
     /*if (filterKeyword === "") {
@@ -173,11 +173,11 @@ const GroupCookbook = () => {
     }
     setFilterKeyword("");*/
   };
-  const clearRecipe=()=>{
+  const clearRecipe = () => {
     setFilterKeyword("");
     setRefreshState(false);
     setDisplayRecipeList(originalRecipeList);
-  }
+  };
 
   const handelSelectRecipe = () => {
     setRemoveState(!removeState);
@@ -307,7 +307,7 @@ const GroupCookbook = () => {
 
   const Recipe = ({ id, title, description, time, tag, imageUrl, authorImg, authorID, onClick }: any) => {
     const isSelected = selectedRecipeList.includes(id);
-    const isDisabled=String(userID) !== String(authorID);
+    const isDisabled = String(userID) !== String(authorID);
     console.log(`Recipe ID: ${id}, Author ID: ${authorID}, User ID: ${userID}, isDisabled: ${isDisabled}`);
 
 
@@ -330,8 +330,8 @@ const GroupCookbook = () => {
             <Button
               className="cookbook editRecipeButton"
               onClick={(event) => {
-                if (!isDisabled){
-                  handleClickEdit(event, id, authorID)
+                if (!isDisabled) {
+                  handleClickEdit(event, id, authorID);
                 }
               }}
               disabled={isDisabled}
@@ -408,8 +408,9 @@ const GroupCookbook = () => {
           </div>
           <div className="cookbook filterContainer">
             <div className="cookbook filterButtonContainer">
-              <Button className="cookbook filterButton" onClick={filterRecipe}disabled={!filterKeyword}>filter</Button>
-              <Button className="cookbook clearButton" onClick={clearRecipe} disabled={!filterKeyword && displayRecipeList.length === originalRecipeList.length}>clear</Button>
+              <Button className="cookbook filterButton" onClick={filterRecipe} disabled={!filterKeyword}>filter</Button>
+              <Button className="cookbook clearButton" onClick={clearRecipe}
+                disabled={!filterKeyword && displayRecipeList.length === originalRecipeList.length}>clear</Button>
             </div>
             <FormField
               className="cookbook input"

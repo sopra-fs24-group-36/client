@@ -3,6 +3,7 @@ import "../../styles/ui/Header_new.scss";
 import { Button } from "components/ui/Button";
 import { useNavigate } from "react-router-dom";
 import { api } from "helpers/api";
+import { Spinner } from "./Spinner";
 
 /**
  * This is an example of a Functional and stateless component (View) in React. Functional components are not classes and thus don't handle internal state changes.
@@ -36,19 +37,16 @@ const Header_new = () => {
     fetchData();
   }, [userID]);
 
-  let content;
+  let content: any;
   if (!user) {
     content = <div className="header_new container">Loading...</div>;
   } else {
     content = (
-      <div >
+      <div>
         <Button className="header_new userProfile" onClick={doProfile}>
           <img src={user.profilePicture} alt="Profile Picture" className="header_new profileImage" />
           <h2 className="header_new title">{user.username}</h2>
         </Button>
-        {/*<Button className="header_new button-container" onClick={doHome}>*/}
-        {/*  Home*/}
-        {/*</Button>*/}
       </div>
     );
   }

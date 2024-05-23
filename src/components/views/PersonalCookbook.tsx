@@ -237,7 +237,7 @@ const PersonalCookbook = () => {
         <div className="modal backdrop"></div>
         ;
         <div className="modal conatiner">
-          <div className="modal title">Warnning</div>
+          <div className="modal title">Warning</div>
           <div className="modal text">
             All the recipes you selected will be deleted from your personal cookbook and all the associated group
             cookbooks

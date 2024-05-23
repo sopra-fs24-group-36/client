@@ -13,7 +13,7 @@
     margin-right: 20px;
     justify-content: center;
     padding-bottom: 10px;
-    height: 69%;
+    min-height: 300px; 
     margin-left: 17%;
   }
 
@@ -25,7 +25,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 69%;
+    min-height: 300px; 
     padding-bottom: 20px;
   }
 
@@ -259,10 +259,11 @@
   &.calendarContainer {
     background-color: $light_green;
     padding: 10px;
-    height: 78%;
+    height: 68%;
     width: 95%;
     max-height: 700px;
     border-radius: 0.75em;
+    margin-bottom: 15%
   }
 
   &.calendarForm {

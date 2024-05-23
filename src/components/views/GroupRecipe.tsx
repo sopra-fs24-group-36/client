@@ -407,7 +407,7 @@ const GroupRecipe = () => {
     content = <Spinner />; //had to use the spinner because it takes a while to render the content
   } else if (recipe.link) {
     window.open(recipe.link);
-    navigate("/home"); //potentially needs taking out when we connect to cookbooks
+    navigate(-1); 
   } else {
     const canEdit = parseInt(userID) === parseInt(authorID);
     content = (

@@ -26,7 +26,6 @@ export const GroupGuard = ({ children }) => {
   }, [userID, group_ID]);
 
   if (isUserInGroup === null) {
-    // Loading state, you may want to render a spinner or a loading indicator here
     return <Spinner/>;
   }
 

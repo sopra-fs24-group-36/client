@@ -195,8 +195,9 @@ const addRecipe = () => {
     return (
       <div className="recipes popupContainer">
         <div className="recipes popup">
-          <p>Recipes must have a title, description and preparation time.</p>
+          <p>Recipes must have a title, and either a URL link or steps to be saved.</p>
           <p>Recipes can either be added with a URL link or by manually typing in ingredients and steps.</p>
+          <p>Please ensure you enter a valid URL for the link.</p>
           <p>Recipe tags can be added.</p>
           <p>Recipes will automatically be added to your personal cookbook and can also be added to group cookbooks.</p>
           <Button
@@ -237,11 +238,27 @@ const addRecipe = () => {
     }
   };
 
+  const isValidUrl = (string) => {
+    try {
+      new URL(string);
+
+      return true;
+    } catch (_) {
+
+      return false;  
+    }
+  };
+
   const saveChanges = async () => {
     try {
       const filteredInstructions = instructions.filter(step => step.trim() !== "");
       const filteredAmounts = amounts.filter(amount => amount.trim() !== "");
       const filteredIngredients = ingredients.filter(amount => amount.trim() !== "");
+      if (link && !isValidUrl(link.trim())) {
+        alert("Please enter a valid URL for the recipe link.");
+
+        return;
+      }
       const requestBody2 = JSON.stringify({/*if we have no link, we have steps and ingredients and save the following information*/
         title, shortDescription, cookingTime, image, link, amounts:filteredAmounts, ingredients:filteredIngredients, instructions:filteredInstructions, tags, groups,
       });
@@ -327,7 +344,7 @@ const addRecipe = () => {
               <Button
                 /*button is disabled unless we have a link or we have some steps*/
                 className="recipes add"
-                disabled={!link && !instructions.some(step => step.trim() !== "")} /*checks if there are no recipe steps with content -> curtesy of chatGPT*/
+                disabled={!title || !link && !instructions.some(step => step.trim() !== "")} /*checks if there are no recipe steps with content -> curtesy of chatGPT*/
                 onClick={() => saveChanges()}>
                 Create Recipe
               </Button>

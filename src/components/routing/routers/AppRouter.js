@@ -22,6 +22,7 @@ import { EditRecipeGuard } from "../routeProtectors/EditRecipeGuard";
 import { GroupGuard } from "../routeProtectors/GroupGuard";
 import { RecipeGuard } from "../routeProtectors/RecipeGuard";
 import { ProfileGuard } from "../routeProtectors/ProfileGuard";
+import { EditRecipeGuardGroup } from "../routeProtectors/EditRecipeGuardGroup";
 import GroupMembers from "../../views/GroupMembers";
 
 /**
@@ -53,6 +54,10 @@ const AppRouter = () => {
 
         <Route path="/users/:authorID/cookbooks/:recipeID/edit" element={<EditRecipeGuard />}>
           <Route path="/users/:authorID/cookbooks/:recipeID/edit" element={<RecipeEdit />} />
+        </Route>
+
+        <Route path="/groups/:groupID/cookbooks/:recipeID/edit" element={<EditRecipeGuardGroup />}>
+          <Route path="/groups/:groupID/cookbooks/:recipeID/edit" element={<RecipeEdit />} />
         </Route>
 
         <Route path="/users" element={<Register />} />

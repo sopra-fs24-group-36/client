@@ -72,8 +72,8 @@ const Calendar = () =>{
   const userID = localStorage.getItem("userID"); /*getting the ID of the currently logged in user*/
   const [filterKeyword, setFilterKeyword]=useState<string>(null)
   const [calendar,setCalendar]=useState(null);
-  const[allRecipes,setAllRecipes]=useState<Recipe[]>(null);
-  const [searchedRecipes,setSearchedRecipes]=useState<Recipe[]>(null);
+  const[allRecipes,setAllRecipes]=useState<Recipe[]>([]);
+  const [searchedRecipes, setSearchedRecipes] = useState<Recipe[]>([]);
 
   const [currentWeek,setCurrentWeek]=useState((new Date()));
   const [shouldFetchCalendar, setShouldFetchCalendar] = useState(true);
@@ -282,7 +282,7 @@ const Calendar = () =>{
                   filter
                 </Button>
                 <Button className="calendar clearSearchButton"
-                  onClick={clearSearchRecipe} disabled={!filterKeyword && allRecipes.length === searchedRecipes.length}>
+                  onClick={clearSearchRecipe}disabled={!filterKeyword && allRecipes.length === searchedRecipes.length}>
                   clear
                 </Button>
               </div>

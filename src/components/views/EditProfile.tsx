@@ -91,7 +91,7 @@ const EditProfile = () => {
   };
 
   const saveChanges = async () => {
-    if (!validateEmail(email)) {
+    if (email !== user.email && email && !validateEmail(email)) {
       alert("Please enter a valid email address in the format x@x.x");
 
       return;

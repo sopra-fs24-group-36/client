@@ -33,6 +33,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
     position: sticky;
     z-index: 1;
     height: 80px;
@@ -49,38 +50,28 @@
   }
 
   &.titleContainer {
-    text-align: center;
-    max-width: 70%;
-    max-height: 90%;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    margin-left: 2%;
+    text-align: center;
+    justify-content: center;
+    width:100%;
+    max-height: 90%;
+    max-width: 100%;
+    margin:1% 0 0 0;
   }
 
-  &.title1 ,&.titleGroupName1{
+  &.title1 {
     color: $textColor;
-    font-size: 33px;
-    max-width: 80%;
+    font-size: 30px;
     max-height: 80%;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
-  &.titleGroupName1{
-    width:60%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: inline-block;
-  }
-  &.title2 ,&.titleGroupName2{
+  &.title2 {
     color: $textColor;
-    font-size: 40px;
-  }
-  &.titleGroupName2{
-    width: 43%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: inline-block;
+    font-size: 36px;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
 
@@ -97,7 +88,7 @@
   }
 
   &.arrowButtonContainer {
-    margin: -1% 0 0 83%;
+    margin: 0 0 0 83%;
     display: flex;
     width: 12%;
     height: 10%;
@@ -135,8 +126,7 @@
     background-color: $textColor;
     text-align: left;
     align-items: center;
-    justify-content: center;
-    width: 90%;
+    width: 70%;
     display: flex;
     margin: 0px 0px 0px 5px;
   }
@@ -151,7 +141,7 @@
   }
 
   &.searchButtonContainer {
-    width: 25px;
+    width: 30%;
     height: 25px;
     display: flex;
     justify-content: center;
@@ -161,14 +151,23 @@
   }
 
   &.searchButton {
-    width: 25px;
-    height: 25px;
+    width: 45%;
+    height: 100%;
     background-color: $dark_green;
     color: $textColor;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 10px;
+  }
+  &.clearSearchButton{
+    margin-left: 5%;
+    width:45%;
+    height: 100%;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
   }
 
   //styles related to recipe

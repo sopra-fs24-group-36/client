@@ -12,8 +12,7 @@ import Header_new from "components/ui/Header_new";
 import BaseContainer from "../ui/BaseContainer_new";
 import { Spinner } from "../ui/Spinner";
 
-// @ts-ignore
-import search from "../../assets/search.png";
+
 // @ts-ignore
 import leftArrow from "../../assets/leftArrow.png"
 // @ts-ignore
@@ -71,10 +70,10 @@ ReplaceModal.propTypes = {
 const Calendar = () =>{
   const navigate = useNavigate();
   const userID = localStorage.getItem("userID"); /*getting the ID of the currently logged in user*/
-  const [filterKeyword, setFilterKeyword]=useState<string>(null)
+  const [filterKeyword, setFilterKeyword]=useState<string>("");
   const [calendar,setCalendar]=useState(null);
-  const[allRecipes,setAllRecipes]=useState<Recipe[]>(null);
-  const [searchedRecipes,setSearchedRecipes]=useState<Recipe[]>(null);
+  const[allRecipes,setAllRecipes]=useState<Recipe[]>([]);
+  const [searchedRecipes, setSearchedRecipes] = useState<Recipe[]>([]);
 
   const [currentWeek,setCurrentWeek]=useState((new Date()));
   const [shouldFetchCalendar, setShouldFetchCalendar] = useState(true);
@@ -83,16 +82,19 @@ const Calendar = () =>{
   const [loading, setLoading] = useState(true);
 
   const searchRecipe=()=>{
-    if(filterKeyword===""){
-      setSearchedRecipes(allRecipes);
-    }else{
+    if(filterKeyword){
       const lowerCaseFilterKeyword = filterKeyword.toLowerCase();
       const filtered=allRecipes.filter(recipe=>
         recipe.title.toLowerCase().includes(lowerCaseFilterKeyword)
       );
       setSearchedRecipes(filtered);
+    }else{
+      alert("Filter keyword cannot be empty");
     }
+  }
+  const clearSearchRecipe=()=>{
     setFilterKeyword("");
+    setSearchedRecipes(allRecipes);
   }
   const handlePrevWeek=()=>{
     const newDate = new Date(currentWeek);
@@ -275,13 +277,14 @@ const Calendar = () =>{
               <div className="calendar searchButtonContainer">
                 <Button
                   className="calendar searchButton"
-                  style={{
-                    backgroundSize: "80% 80%",
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat",
-                    backgroundImage: `url(${search})`,
-                  }}
-                  onClick={searchRecipe}></Button>
+                  onClick={searchRecipe}
+                  disabled={!filterKeyword}>
+                  filter
+                </Button>
+                <Button className="calendar clearSearchButton"
+                  onClick={clearSearchRecipe}disabled={!filterKeyword && allRecipes.length === searchedRecipes.length}>
+                  clear
+                </Button>
               </div>
             </div>
             <div className="calendar recipeListContainer">

@@ -12,8 +12,7 @@ import Header_new from "components/ui/Header_new";
 import BaseContainer from "../ui/BaseContainer_new";
 import { Spinner } from "../ui/Spinner";
 
-// @ts-ignore
-import search from "../../assets/search.png";
+
 // @ts-ignore
 import leftArrow from "../../assets/leftArrow.png";
 // @ts-ignore
@@ -68,10 +67,10 @@ ReplaceModal.propTypes = {
 const GroupCalendar = () => {
   const navigate = useNavigate();
   const { groupID } = useParams();
-  const [filterKeyword, setFilterKeyword] = useState<string>(null);
+  const [filterKeyword, setFilterKeyword] = useState<string>("");
   const [calendar, setCalendar] = useState(null);
-  const [allRecipes, setAllRecipes] = useState<Recipe[]>(null);
-  const [searchedRecipes, setSearchedRecipes] = useState<Recipe[]>(null);
+  const [allRecipes, setAllRecipes] = useState<Recipe[]>([]);
+  const [searchedRecipes, setSearchedRecipes] = useState<Recipe[]>([]);
   const [group, setGroup] = useState([]);
 
   const [currentWeek, setCurrentWeek] = useState((new Date()));
@@ -83,19 +82,22 @@ const GroupCalendar = () => {
   const [loading, setLoading] = useState(true);
 
   const searchRecipe = () => {
-    if (filterKeyword === "") {
-      setRefreshState(false);
-      setSearchedRecipes(allRecipes);
-    } else {
+    if(filterKeyword){
       setRefreshState(true);
       const lowerCaseFilterKeyword = filterKeyword.toLowerCase();
       const filtered = allRecipes.filter(recipe =>
         recipe.title.toLowerCase().includes(lowerCaseFilterKeyword),
       );
       setSearchedRecipes(filtered);
+    }else{
+      alert("Filter keyword cannot be empty");
     }
-    setFilterKeyword("");
   };
+  const clearSearchRecipe=()=>{
+    setFilterKeyword("");
+    setRefreshState(false);
+    setSearchedRecipes(allRecipes);
+  }
   const handlePrevWeek = () => {
     const newDate = new Date(currentWeek);
     newDate.setDate(newDate.getDate() - 7); // Subtracts 7 days
@@ -308,8 +310,7 @@ const GroupCalendar = () => {
           {/*group recipes field*/}
           <BaseContainer className="calendar baseContainerLeft">
             <div className="calendar headContainer1">
-              <h2 className="calendar titleGroupName1">{group.name}</h2>
-              <h2 className="calendar titleGroupName1">- Recipes</h2>
+              <h2 className="calendar title1">{group.name}-Recipes</h2>
             </div>
             <div className="calendar searchContainer">
               <FormField
@@ -319,13 +320,13 @@ const GroupCalendar = () => {
               <div className="calendar searchButtonContainer">
                 <Button
                   className="calendar searchButton"
-                  style={{
-                    backgroundSize: "100% 100%",
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat",
-                    backgroundImage: `url(${search})`,
-                  }}
-                  onClick={searchRecipe}></Button>
+                  onClick={searchRecipe}
+                  disabled={!filterKeyword}>
+                  filter
+                </Button>
+                <Button className="calendar clearSearchButton" onClick={clearSearchRecipe} disabled={!filterKeyword && allRecipes.length === searchedRecipes.length}>
+                  clear
+                </Button>
               </div>
             </div>
             <div className="calendar recipeListContainer">
@@ -361,8 +362,7 @@ const GroupCalendar = () => {
                 </Button>
               </div>
               <div className="calendar titleContainer">
-                <h2 className="calendar titleGroupName2">{group.name}</h2>
-                <h2 className="calendar title2">- Calendar</h2>
+                <h2 className="calendar title2">{group.name}- Calendar</h2>
               </div>
             </div>
             <div className="calendar arrowButtonContainer">

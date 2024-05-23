@@ -91,7 +91,7 @@ const Dashboard = ({ showButtons, activePage }) => {
         <div className="modal backdrop"></div>
         ;
         <div className="modal conatiner">
-          <div className="modal title">Warnning</div>
+          <div className="modal title">Warning</div>
           <div className="modal text">
             You will leave this group
           </div>

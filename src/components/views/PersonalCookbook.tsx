@@ -42,6 +42,7 @@ const PersonalCookbook = () => {
   const [selectedRecipeList, setSelectedRecipeList] = useState<object[]>([]);
   const [isConsentModalOpen, setIsConsentModalOpen] = useState(false);
 
+
   const fetchData = async () => {
     try {
       const response = await api.get(`/users/${userID}/cookbooks`);
@@ -128,16 +129,23 @@ const PersonalCookbook = () => {
   }
 
   const filterRecipe = () => {
-    const lowerCaseFilterKeyword = filterKeyword.toLowerCase();
-    const filteredRecipes = originalRecipeList.filter(recipe => {
-      const lowerCaseTitle = recipe.title.toLowerCase();
-      const lowerCaseTags = recipe.tags.map(tag => tag.toLowerCase());
+    if(filterKeyword){
+      const lowerCaseFilterKeyword = filterKeyword.toLowerCase();
+      const filteredRecipes = originalRecipeList.filter(recipe => {
+        const lowerCaseTitle = recipe.title.toLowerCase();
+        const lowerCaseTags = recipe.tags.map(tag => tag.toLowerCase());
 
-      return lowerCaseTitle.includes(lowerCaseFilterKeyword) || lowerCaseTags.some(tag => tag.includes(lowerCaseFilterKeyword));
-    });
-    setRecipeList(filteredRecipes);
-    setFilterKeyword("");
+        return lowerCaseTitle.includes(lowerCaseFilterKeyword) || lowerCaseTags.some(tag => tag.includes(lowerCaseFilterKeyword));
+      });
+      setRecipeList(filteredRecipes);
+    }else{
+      alert("Filter keyword cannot be empty");
+    }
   };
+  const clearRecipe=()=>{
+    setRecipeList(originalRecipeList);
+    setFilterKeyword("");
+  }
 
   const Recipe = ({ id, title, description, time, tag, imageUrl,onClick}: any) => {
     const isSelected = selectedRecipeList.includes(id);
@@ -229,7 +237,7 @@ const PersonalCookbook = () => {
         <div className="modal backdrop"></div>
         ;
         <div className="modal conatiner">
-          <div className="modal title">Warnning</div>
+          <div className="modal title">Warning</div>
           <div className="modal text">
             All the recipes you selected will be deleted from your personal cookbook and all the associated group
             cookbooks
@@ -298,7 +306,8 @@ const PersonalCookbook = () => {
 
           <div className="cookbook filterContainer">
             <div className="cookbook filterButtonContainer">
-              <Button className="cookbook filterButton" onClick={filterRecipe}>filter</Button>
+              <Button className="cookbook filterButton" onClick={filterRecipe} disabled={!filterKeyword}>filter</Button>
+              <Button className="cookbook clearButton" onClick={clearRecipe} disabled={!filterKeyword && recipeList.length === originalRecipeList.length}>clear</Button>
             </div>
             <FormField
               value={filterKeyword}

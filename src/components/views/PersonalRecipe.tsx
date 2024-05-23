@@ -37,6 +37,7 @@ const PersonalRecipe = () => {
   const [comments, setComments] = useState<object[]>([]);
   const [rating, setRating] = useState(0.0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   async function fetchData() {
     try {
@@ -62,12 +63,15 @@ const PersonalRecipe = () => {
         text: comment.text,
         username: comment.username,
       }));
-      setComments(commentsList);
-
       const responseRate = await api.get(`/votes/recipes/${recipeID}`);
       await new Promise((resolve) => setTimeout(resolve, 500));
       const rating = responseRate.data.vote;
-      setRating(rating);
+
+      if (!isModalOpen && !isEditModalOpen) {
+        setComments(commentsList);
+        setRating(rating);
+      }
+
     } catch (error) {
       console.error(
         `Something went wrong while fetching the comments: \n${handleError(error)}`,
@@ -78,12 +82,18 @@ const PersonalRecipe = () => {
   }
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      fetchData();
-    }, 5000);
+    fetchData();
+  }, [authorID, recipeID]);
 
-    return () => clearInterval(interval);
-  }, [authorID]);
+  useEffect(() => {
+    if (!isModalOpen && !isEditModalOpen) {
+      const interval = setInterval(() => {
+        fetchComment();
+      }, 5000);
+
+      return () => clearInterval(interval);
+    }
+  }, [authorID, recipeID, isModalOpen, isEditModalOpen]);
 
 
   const editRecipe = () => {
@@ -174,7 +184,6 @@ const PersonalRecipe = () => {
     const [isHovered, setIsHovered] = useState(false);
     const currentUserName = localStorage.getItem("userName");
     const commentUserName = comment.username;
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     return (
       <div className="comment container" onMouseEnter={() => setIsHovered(true)}
@@ -267,29 +276,32 @@ const PersonalRecipe = () => {
 
     if (!open) return null;
     const leaveComment = async () => {
-      if (comment === "") {
-        alert("Please enter a comment.");
-
-        return;
+      if (comment.length !== 0) {
+        try {
+          const requestBody = JSON.stringify({
+            text: comment,
+            userID: parseInt(userID),
+          });
+          await api.post(`/comments/recipes/${recipeID}`, requestBody);
+        } catch (error) {
+          console.error("An error occurred while leaving a comment:", error);
+          alert("Leaving a comment failed.");
+        }
       }
-      try {
-        const requestBody = JSON.stringify({
-          text: comment,
-          userID: parseInt(userID),
-        });
-        await api.post(`/comments/recipes/${recipeID}`, requestBody);
-
-        const starRating = JSON.stringify({
-          vote: rating,
-        });
-        await api.post(`/votes/recipes/${recipeID}`, starRating);
-
-      } catch (error) {
-        console.error("An error occurred while leaving a comment:", error);
-        alert("Leaving a comment failed.");
+      if (rating !== 0) {
+        try {
+          const requestBody = JSON.stringify({
+            vote: rating,
+            userID: parseInt(userID),
+          });
+          await api.post(`/votes/recipes/${recipeID}`, requestBody);
+        } catch (error) {
+          console.error("An error occurred while leaving a rating:", error);
+          alert("Leaving a rating failed.");
+        }
       }
-      await fetchComment();
       onClose();
+      fetchComment();
     };
 
     return ReactDOM.createPortal(
@@ -395,7 +407,7 @@ const PersonalRecipe = () => {
   } else {
     const userID = localStorage.getItem("userID");
     const canEdit = userID === authorID;
-    
+
     return (
       <div>
         <Header_new></Header_new>

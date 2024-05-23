@@ -70,7 +70,7 @@ ReplaceModal.propTypes = {
 const Calendar = () =>{
   const navigate = useNavigate();
   const userID = localStorage.getItem("userID"); /*getting the ID of the currently logged in user*/
-  const [filterKeyword, setFilterKeyword]=useState<string>(null)
+  const [filterKeyword, setFilterKeyword]=useState<string>("");
   const [calendar,setCalendar]=useState(null);
   const[allRecipes,setAllRecipes]=useState<Recipe[]>([]);
   const [searchedRecipes, setSearchedRecipes] = useState<Recipe[]>([]);

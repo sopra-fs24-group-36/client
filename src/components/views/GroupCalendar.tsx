@@ -67,7 +67,7 @@ ReplaceModal.propTypes = {
 const GroupCalendar = () => {
   const navigate = useNavigate();
   const { groupID } = useParams();
-  const [filterKeyword, setFilterKeyword] = useState<string>(null);
+  const [filterKeyword, setFilterKeyword] = useState<string>("");
   const [calendar, setCalendar] = useState(null);
   const [allRecipes, setAllRecipes] = useState<Recipe[]>([]);
   const [searchedRecipes, setSearchedRecipes] = useState<Recipe[]>([]);

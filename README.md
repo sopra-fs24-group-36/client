@@ -87,27 +87,33 @@ Contributions are very welcome, though please contact the authors before contrib
 
 ## Home Page 
 Upon successfully logging in the user is redirected to the home page. The dashboard contains buttons to the most important pages. The homepage displays the most recently added recipes, allows access to the group cookbooks and the personal cookbook.
-![Home Page](\src\assets\home_page.png)
+
+![Home Page](https://github.com/sopra-fs24-group-36/client/blob/jasmineNew/src/assets/home_page.png) 
 
 ## Adding a recipe 
 A recipe can be added on this page by entering the desired details. 
-![Add Recipe](\src\assets\add_recipe.png)
+
+![Add Recipe](https://github.com/sopra-fs24-group-36/client/blob/jasmineNew/src/assets/add_recipe.png)
 
 ## Cookbook 
 Each user has a personal cookbook and each group has a group cookbook where the recipes saved to that cookbook are displayed. By clicking on the recipe, the user is directed to the recipe's page.
-![Cookbook](\src\assets\group_cookbook.png)
+
+![Cookbook](https://github.com/sopra-fs24-group-36/client/blob/jasmineNew/src/assets/group_cookbook.png)
 
 ## Calendar 
 The calendar is where users and groups can add the recipes they want to cook on a certain day. 
-![Calendar](\src\assets\calendar.png)
+
+![Calendar](https://github.com/sopra-fs24-group-36/client/blob/jasmineNew/src/assets/calendar.png)
 
 ## Shopping List 
 Items that need purchasing can be added to the shopping list and ticked off when they have been bought.
-![Shopping List](\src\assets\shoppingList.png)
+
+![Shopping List](https://github.com/sopra-fs24-group-36/client/blob/jasmineNew/src/assets/shoppingList.png)
 
 ## Recipe Search 
 In the footer, the user can use the external recipe search to find new recipes, view them and add them to their cookbooks. 
-![Recipe Search](\src\assets\image.png)
+
+![Recipe Search](https://github.com/sopra-fs24-group-36/client/blob/jasmineNew/src/assets/image.png)
 
 ## 🥦 Roadmap 
 - *AI extension*: add an AI feature which allows recipe images to optionally be created by AI

@@ -259,6 +259,21 @@ const addRecipe = () => {
 
         return;
       }
+      if (!title || title.trim().length === 0) {
+        alert("Please enter a valid name for the recipe.");
+
+        return;
+      }
+      if (!shortDescription || shortDescription.trim().length === 0) {
+        alert("Please enter a valid description for the recipe.");
+        
+        return;
+      }
+      if (!cookingTime || cookingTime.trim().length === 0) {
+        alert("Please enter a valid preparation time for the recipe.");
+        
+        return;
+      }
       const requestBody2 = JSON.stringify({/*if we have no link, we have steps and ingredients and save the following information*/
         title, shortDescription, cookingTime, image, link, amounts:filteredAmounts, ingredients:filteredIngredients, instructions:filteredInstructions, tags, groups,
       });

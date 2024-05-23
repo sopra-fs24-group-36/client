@@ -69,8 +69,8 @@ const GroupCalendar = () => {
   const { groupID } = useParams();
   const [filterKeyword, setFilterKeyword] = useState<string>(null);
   const [calendar, setCalendar] = useState(null);
-  const [allRecipes, setAllRecipes] = useState<Recipe[]>(null);
-  const [searchedRecipes, setSearchedRecipes] = useState<Recipe[]>(null);
+  const [allRecipes, setAllRecipes] = useState<Recipe[]>([]);
+  const [searchedRecipes, setSearchedRecipes] = useState<Recipe[]>([]);
   const [group, setGroup] = useState([]);
 
   const [currentWeek, setCurrentWeek] = useState((new Date()));

@@ -260,7 +260,7 @@ const addRecipe = () => {
         return;
       }
       if (!title || title.trim().length === 0) {
-        alert("Please enter a valid name for the recipe.");
+        alert("Please enter a valid title for the recipe.");
 
         return;
       }
